@@ -1,0 +1,155 @@
+.page {
+  display: grid;
+  gap: 8px;
+  padding-block: clamp(32px, 5vw, 64px) 0;
+}
+
+.head {
+  display: grid;
+  gap: 14px;
+  max-width: 48rem;
+  padding-bottom: 24px;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: clamp(16px, 4vw, 64px);
+  padding-block: clamp(28px, 4vw, 48px);
+  border-top: 1px solid var(--line);
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+.section h2 {
+  font-size: var(--step-3);
+}
+
+.body {
+  display: grid;
+  gap: 14px;
+  max-width: 44rem;
+}
+
+.body ul {
+  display: grid;
+  gap: 8px;
+  padding-left: 1.2em;
+}
+
+.figureRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.figureRow figure {
+  flex: 1;
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  font-size: var(--step--1);
+  color: var(--ink-3);
+  text-align: center;
+}
+
+.figureRow svg {
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+}
+
+.faq {
+  display: grid;
+  gap: 8px;
+}
+
+.faq details {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 0 18px;
+}
+
+.faq summary {
+  cursor: pointer;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.faq details > div {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 16px;
+  color: var(--ink-2);
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  font-weight: 400;
+}
+
+.form .btn {
+  justify-self: start;
+}
+
+.small {
+  font-size: var(--step--1);
+  color: var(--ink-3);
+}
+
+@media (max-width: 860px) {
+  .section {
+    grid-template-columns: 1fr;
+  }
+
+  .figureRow {
+    flex-wrap: wrap;
+  }
+
+  .figureRow figure {
+    flex-basis: 40%;
+  }
+}
+
+.check span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.check input {
+  width: 20px;
+  min-height: 0;
+  height: 20px;
+  accent-color: var(--accent);
+}

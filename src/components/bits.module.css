@@ -1,0 +1,44 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.mark {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+.status[data-status="configurable"] {
+  color: var(--accent);
+}
+
+.status[data-status="configurable"] .mark {
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.status[data-status="concept"] {
+  color: var(--concept);
+}
+
+.status[data-status="concept"] .mark {
+  border: 1.5px dashed var(--concept);
+  border-radius: 50%;
+}
+
+.price {
+  font-weight: 600;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.renderNote {
+  font-size: var(--step--1);
+  color: var(--ink-3);
+}

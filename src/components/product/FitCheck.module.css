@@ -1,0 +1,63 @@
+.fit {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.fields legend {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.fields label {
+  display: grid;
+  gap: 4px;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.fields input {
+  min-height: 44px;
+  width: 100%;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  font-variant-numeric: tabular-nums;
+}
+
+.result {
+  display: grid;
+  gap: 10px;
+  font-size: var(--step--1);
+}
+
+.result li[data-ok="true"] strong {
+  color: var(--accent);
+}
+
+.result li[data-ok="false"] strong {
+  color: var(--warn-ink);
+}
+
+.note {
+  color: var(--ink-3);
+}
+
+@media (max-width: 520px) {
+  .fields {
+    grid-template-columns: 1fr;
+  }
+}

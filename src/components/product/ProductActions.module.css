@@ -1,0 +1,26 @@
+.save {
+  display: grid;
+  gap: 6px;
+}
+
+.status {
+  font-size: var(--step--1);
+  min-height: 1.5em;
+}
+
+.status a {
+  font-weight: 600;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+}

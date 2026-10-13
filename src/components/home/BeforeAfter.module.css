@@ -1,0 +1,62 @@
+.figure {
+  display: grid;
+  gap: 8px;
+}
+
+.frame {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 8 / 5;
+  background: var(--sunken);
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.before {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc(100% - var(--split)) 0 0);
+}
+
+.before::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--split);
+  width: 2px;
+  background: var(--surface);
+}
+
+.tag {
+  position: absolute;
+  top: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+.left {
+  left: 12px;
+}
+
+.right {
+  right: 12px;
+}
+
+.label {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.range {
+  width: 100%;
+  accent-color: var(--accent);
+}
