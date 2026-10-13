@@ -25,7 +25,11 @@
   justify-content: center;
   height: 260px;
   padding: 16px 16px 20px;
-  background: linear-gradient(to bottom, var(--stage) 0 86%, var(--sunken) 86% 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--stage) 0 86%,
+    var(--sunken) 86% 100%
+  );
 }
 
 .card[data-status="concept"] .stage {
@@ -80,7 +84,7 @@
 }
 
 .reasons li::before {
-  content: "✓ ";
+  content: "✓ " / "";
   font-weight: 700;
 }
 

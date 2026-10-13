@@ -10,11 +10,16 @@ export async function generateMetadata(
   const { id } = await props.params;
   const d = getDesign(id);
   return d
-    ? { title: `Customize the ${d.name}`, robots: { index: false, follow: true } }
+    ? {
+        title: `Customize the ${d.name}`,
+        robots: { index: false, follow: true },
+      }
     : {};
 }
 
-export default async function CustomizePage(props: PageProps<"/furniture/[id]/customize">) {
+export default async function CustomizePage(
+  props: PageProps<"/furniture/[id]/customize">,
+) {
   const { id } = await props.params;
   const design = getDesign(id);
   if (!design) notFound();

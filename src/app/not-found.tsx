@@ -7,7 +7,8 @@ export default function NotFound() {
         <p className="eyebrow">Not found</p>
         <h1>We couldn&apos;t find that page.</h1>
         <p className="lede">
-          The design or page may have moved. Everything we make is on the furniture page.
+          The design or page may have moved. Everything we make is on the
+          furniture page.
         </p>
       </div>
       <p style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>

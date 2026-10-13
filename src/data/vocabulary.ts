@@ -66,11 +66,19 @@ export const activities: { id: ActivityId; name: string; fits: string }[] = [
 ];
 
 export const objects: { id: ObjectId; name: string; fits: string }[] = [
-  { id: "coats-bags", name: "Coats & bags", fits: "a place for coats and bags" },
+  {
+    id: "coats-bags",
+    name: "Coats & bags",
+    fits: "a place for coats and bags",
+  },
   { id: "keys-post", name: "Keys & post", fits: "a place for keys and post" },
   { id: "shoes", name: "Shoes", fits: "a place for shoes" },
   { id: "books", name: "Books", fits: "shelves for books" },
-  { id: "records", name: "Records & collections", fits: "room to show a collection" },
+  {
+    id: "records",
+    name: "Records & collections",
+    fits: "room to show a collection",
+  },
   {
     id: "headphones-cables",
     name: "Headphones & cables",
@@ -85,9 +93,17 @@ export const objects: { id: ObjectId; name: string; fits: string }[] = [
   { id: "towels", name: "Towels & toiletries", fits: "a place for towels" },
   { id: "toys", name: "Toys", fits: "somewhere for toys" },
   { id: "cups-coffee", name: "Cups & coffee", fits: "a place for cups" },
-  { id: "jars-tools", name: "Jars & kitchen tools", fits: "room for jars and tools" },
+  {
+    id: "jars-tools",
+    name: "Jars & kitchen tools",
+    fits: "room for jars and tools",
+  },
   { id: "plants", name: "Plants", fits: "a top for plants" },
-  { id: "tv-devices", name: "TV & devices", fits: "a place for the TV and devices" },
+  {
+    id: "tv-devices",
+    name: "TV & devices",
+    fits: "a place for the TV and devices",
+  },
   {
     id: "phone-glasses",
     name: "Phone, glasses, a book",

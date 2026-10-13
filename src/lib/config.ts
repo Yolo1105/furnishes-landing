@@ -59,20 +59,31 @@ export function parseConfig(
   if (finish !== undefined) {
     if (finish === "natural" || (finish === "orange" && r.orangeFace))
       config.finish = finish as Finish;
-    else issues.push("The finish in the link isn't offered on this piece, so it shows natural birch.");
+    else
+      issues.push(
+        "The finish in the link isn't offered on this piece, so it shows natural birch.",
+      );
   }
   const front = read(params, "front");
   if (front !== undefined) {
-    if (front === "open" || (front === "doors" && r.doors)) config.front = front as Front;
-    else issues.push("Doors aren't offered on this piece, so it shows an open front.");
+    if (front === "open" || (front === "doors" && r.doors))
+      config.front = front as Front;
+    else
+      issues.push(
+        "Doors aren't offered on this piece, so it shows an open front.",
+      );
   }
   const acc = read(params, "acc");
   if (acc !== undefined) {
     const allowed = allowedAccessories(r);
     const asked = acc.split(",").filter(Boolean);
-    const kept = asked.filter((a): a is AccessoryId => allowed.includes(a as AccessoryId));
+    const kept = asked.filter((a): a is AccessoryId =>
+      allowed.includes(a as AccessoryId),
+    );
     if (kept.length < asked.length)
-      issues.push("Some accessories in the link don't fit this piece and were left out.");
+      issues.push(
+        "Some accessories in the link don't fit this piece and were left out.",
+      );
     config.accessories = [...new Set(kept)].sort();
   }
   const qty = read(params, "qty");
@@ -108,7 +119,13 @@ export function configHref(c: Configuration, page: "product" | "customize") {
 
 /** A stable identity for an exact version, used to compare saved designs. */
 export function configKey(c: Configuration) {
-  return [c.design, c.finish, c.front, [...c.accessories].sort().join("+") || "-", c.quantity].join(":");
+  return [
+    c.design,
+    c.finish,
+    c.front,
+    [...c.accessories].sort().join("+") || "-",
+    c.quantity,
+  ].join(":");
 }
 
 export function sameVersion(a: Configuration, b: Configuration) {
@@ -118,7 +135,8 @@ export function sameVersion(a: Configuration, b: Configuration) {
 export const finishName = (f: Finish) =>
   f === "orange" ? "Birch with orange working face" : "Natural birch";
 
-export const frontName = (f: Front) => (f === "doors" ? "With doors" : "Open front");
+export const frontName = (f: Front) =>
+  f === "doors" ? "With doors" : "Open front";
 
 /** One line a person can read back: "Natural birch · Open front · Coat hooks, Small tray". */
 export function configSummary(c: Configuration): string {

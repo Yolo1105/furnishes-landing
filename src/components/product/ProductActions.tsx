@@ -23,11 +23,16 @@ export function SaveButton({
   className?: string;
 }) {
   const { items } = useSaved();
-  const [result, setResult] = useState<{ key: string; state: SaveState } | null>(null);
+  const [result, setResult] = useState<{
+    key: string;
+    state: SaveState;
+  } | null>(null);
   const already = items.find(
     (e) =>
       e.design === design &&
-      (config ? e.config && configKey(e.config) === configKey(config) : e.kind === "idea"),
+      (config
+        ? e.config && configKey(e.config) === configKey(config)
+        : e.kind === "idea"),
   );
 
   // a confirmation belongs to the version it was given for
@@ -39,7 +44,12 @@ export function SaveButton({
       <button
         type="button"
         className={className}
-        onClick={() => setResult({ key, state: saveDesign(design, config) ? "saved" : "failed" })}
+        onClick={() =>
+          setResult({
+            key,
+            state: saveDesign(design, config) ? "saved" : "failed",
+          })
+        }
       >
         {already ? "Save another copy" : label}
       </button>
@@ -48,11 +58,15 @@ export function SaveButton({
           "This browser won't let us save. Try a normal (not private) window, or copy the link."
         ) : state === "saved" || already ? (
           <>
-            {state === "saved" ? "Saved in this browser. " : "This version is in your saved designs. "}
+            {state === "saved"
+              ? "Saved in this browser. "
+              : "This version is in your saved designs. "}
             <Link href="/saved">View saved designs</Link>
           </>
         ) : (
-          <span className="muted">{claims.saved.label}. No account needed.</span>
+          <span className="muted">
+            {claims.saved.label}. No account needed.
+          </span>
         )}
       </p>
     </div>

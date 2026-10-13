@@ -75,7 +75,7 @@
 }
 
 .room[aria-current="true"] .roomName::before {
-  content: "✓ ";
+  content: "✓ " / "";
 }
 
 .chips {
@@ -107,7 +107,7 @@
 }
 
 .chip[aria-current="true"]::before {
-  content: "✓";
+  content: "✓" / "";
   margin-right: 8px;
   font-weight: 700;
 }

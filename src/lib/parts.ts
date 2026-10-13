@@ -11,7 +11,13 @@ import type { Configuration, Recipe } from "@/data/types";
  * Dropped on purpose: bolt counts, minutes, box weights and the price
  * formula, which looked exact but were not.
  */
-export type PartKind = "panel" | "base" | "caster" | "door" | "hardware" | "accessory";
+export type PartKind =
+  | "panel"
+  | "base"
+  | "caster"
+  | "door"
+  | "hardware"
+  | "accessory";
 
 export type PartGroup =
   | "Base"
@@ -182,8 +188,18 @@ export function parts(r: Recipe, c: Options): Part[] {
     add("bottom", "Bottom panel", [x + T, 0, baseZ, 564, 380, T]);
     if (r.shape === "organiser") {
       if (r.id === "entry") {
-        add("shoe-shelf", "Shoe shelf", [x + T, 0, baseZ + 240, 564, 330, T], "Shelves");
-        add("narrow-shelf", "Narrow shelf", [x + T, 180, baseZ + 780, 564, 190, T], "Shelves");
+        add(
+          "shoe-shelf",
+          "Shoe shelf",
+          [x + T, 0, baseZ + 240, 564, 330, T],
+          "Shelves",
+        );
+        add(
+          "narrow-shelf",
+          "Narrow shelf",
+          [x + T, 180, baseZ + 780, 564, 190, T],
+          "Shelves",
+        );
       } else if (r.id === "coat-rack")
         add("shelf", "Shelf", [x + T, 0, baseZ + 300, 564, 380, T], "Shelves");
       else
@@ -192,7 +208,12 @@ export function parts(r: Recipe, c: Options): Part[] {
     } else if (r.shape === "shelf") {
       for (let t = 1; t < r.tiers; t++)
         for (const y of [0, 209])
-          add("narrow-shelf", "Narrow shelf", [x + T, y, baseZ + t * 400, 564, 190, T], "Shelves");
+          add(
+            "narrow-shelf",
+            "Narrow shelf",
+            [x + T, y, baseZ + t * 400, 564, 190, T],
+            "Shelves",
+          );
     } else
       for (let t = 1; t < r.tiers; t++)
         add(
@@ -201,7 +222,8 @@ export function parts(r: Recipe, c: Options): Part[] {
           [x + T, 0, baseZ + t * (bodyH / r.tiers), 564, 380, T],
           "Shelves",
         );
-    const longTop = r.shape === "island" || (r.shape === "cabinet" && r.bays > 1);
+    const longTop =
+      r.shape === "island" || (r.shape === "cabinet" && r.bays > 1);
     if (r.shape !== "bench" && !longTop)
       add(
         r.id === "kitchen" ? "worktop" : "top",
@@ -248,7 +270,12 @@ export function parts(r: Recipe, c: Options): Part[] {
       "Connector and fixings not final",
     );
   if (r.shape === "desk") {
-    add("desk-top", "Desk surface", [0, -600, baseZ + 720, 1200, 600, T], "Desk");
+    add(
+      "desk-top",
+      "Desk surface",
+      [0, -600, baseZ + 720, 1200, 600, T],
+      "Desk",
+    );
     add(
       "desk-support",
       "Desk support",
@@ -273,14 +300,50 @@ export function parts(r: Recipe, c: Options): Part[] {
     const spec = accessories[id].description;
     if (id === "coat-hook")
       for (let k = 0; k < 3; k++)
-        add("coat-hook", "Coat hook", [135 + k * 125, 300, z, 18, 70, 40], "Accessories", "accessory", spec);
+        add(
+          "coat-hook",
+          "Coat hook",
+          [135 + k * 125, 300, z, 18, 70, 40],
+          "Accessories",
+          "accessory",
+          spec,
+        );
     else if (id === "clothes-rail")
-      add(id, "Clothes rail", [80, 170, baseZ + bodyH - 200, 440, 25, 25], "Accessories", "accessory", spec);
+      add(
+        id,
+        "Clothes rail",
+        [80, 170, baseZ + bodyH - 200, 440, 25, 25],
+        "Accessories",
+        "accessory",
+        spec,
+      );
     else if (id === "kitchen-rail")
-      add(id, "Side rail", [-32, 60, baseZ + bodyH - 70, 20, 270, 20], "Accessories", "accessory", spec);
+      add(
+        id,
+        "Side rail",
+        [-32, 60, baseZ + bodyH - 70, 20, 270, 20],
+        "Accessories",
+        "accessory",
+        spec,
+      );
     else if (id === "key-tray")
-      add(id, "Small tray", [180, 190, z, 210, 170, 30], "Accessories", "accessory", spec);
-    else add(id, "Utility hook", [300, 300, z, 20, 70, 50], "Accessories", "accessory", spec);
+      add(
+        id,
+        "Small tray",
+        [180, 190, z, 210, 170, 30],
+        "Accessories",
+        "accessory",
+        spec,
+      );
+    else
+      add(
+        id,
+        "Utility hook",
+        [300, 300, z, 20, 70, 50],
+        "Accessories",
+        "accessory",
+        spec,
+      );
   });
   return out;
 }
@@ -318,7 +381,9 @@ export type PartChange = {
 
 /** What stays, what comes off and what goes on between two parts lists. */
 export function compareParts(from: PartRow[], to: PartRow[]): PartChange[] {
-  const ids = [...new Set([...from.map((p) => p.partId), ...to.map((p) => p.partId)])];
+  const ids = [
+    ...new Set([...from.map((p) => p.partId), ...to.map((p) => p.partId)]),
+  ];
   return ids.map((partId) => {
     const a = from.find((p) => p.partId === partId);
     const b = to.find((p) => p.partId === partId);
@@ -358,7 +423,11 @@ const ORDER: PartGroup[] = [
   "Accessories",
 ];
 
-export type Step = { title: string; detail: string; parts: { name: string; quantity: number }[] };
+export type Step = {
+  title: string;
+  detail: string;
+  parts: { name: string; quantity: number }[];
+};
 
 /** The order the parts go together. Illustrative: not final instructions. */
 export function steps(r: Recipe, c: Options): Step[] {
@@ -375,21 +444,57 @@ export function steps(r: Recipe, c: Options): Step[] {
   const plan: [string, string, (p: Part) => boolean][] =
     r.shape === "folding"
       ? [
-          ["Lay out the leaves", "Three frames on the floor, nothing fixed yet.", (p) => p.group === "Screen frames"],
-          ["Slide the panels into the frames", "Each leaf takes three panels.", (p) => p.group === "Screen panels"],
-          ["Join the leaves", "The hinges connect neighbouring frames. Two people make this easier.", (p) => p.group === "Connections"],
+          [
+            "Lay out the leaves",
+            "Three frames on the floor, nothing fixed yet.",
+            (p) => p.group === "Screen frames",
+          ],
+          [
+            "Slide the panels into the frames",
+            "Each leaf takes three panels.",
+            (p) => p.group === "Screen panels",
+          ],
+          [
+            "Join the leaves",
+            "The hinges connect neighbouring frames. Two people make this easier.",
+            (p) => p.group === "Connections",
+          ],
         ]
       : [
-          ["Set the base where the piece will stand", "Pads or casters go on first.", (p) => p.group === "Base"],
-          ["Stand the side panels on the base", "Holes face the side you use.", (p) => p.partId.startsWith("side-")],
-          ["Fit the bottom panel", "It squares the two sides.", (p) => p.partId === "bottom"],
-          ["Fit the working face", "The panel with the holes for hooks and trays.", (p) => p.partId === "working-face"],
+          [
+            "Set the base where the piece will stand",
+            "Pads or casters go on first.",
+            (p) => p.group === "Base",
+          ],
+          [
+            "Stand the side panels on the base",
+            "Holes face the side you use.",
+            (p) => p.partId.startsWith("side-"),
+          ],
+          [
+            "Fit the bottom panel",
+            "It squares the two sides.",
+            (p) => p.partId === "bottom",
+          ],
+          [
+            "Fit the working face",
+            "The panel with the holes for hooks and trays.",
+            (p) => p.partId === "working-face",
+          ],
           ["Slide in the shelves", "", (p) => p.group === "Shelves"],
           ["Connect the bays", "", (p) => p.partId === "bay-connector"],
           ["Cap it with the top", "", (p) => p.group === "Top"],
-          ["Attach the desk", "", (p) => p.group === "Desk" || p.partId === "desk-bracket"],
+          [
+            "Attach the desk",
+            "",
+            (p) => p.group === "Desk" || p.partId === "desk-bracket",
+          ],
           ["Hang the doors", "", (p) => p.group === "Doors"],
-          ["Add the accessories", "Hooks and trays hang on the working face.", (p) => p.group === "Accessories"],
+          [
+            "Add the accessories",
+            "Hooks and trays hang on the working face.",
+            (p) => p.group === "Accessories",
+          ],
         ];
   return plan
     .map(([title, detail, pick]) => ({ title, detail, parts: tally(pick) }))
@@ -397,4 +502,3 @@ export function steps(r: Recipe, c: Options): Step[] {
 }
 
 export const groupOrder = ORDER;
-

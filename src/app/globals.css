@@ -38,10 +38,11 @@
   --warn-bg: #f6ead6;
   --warn-ink: #6b4a1c;
 
-  --font-sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif,
-    system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Instrument Serif", ui-serif, Georgia, "Times New Roman",
-    serif;
+  --font-sans:
+    "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+  --font-display:
+    "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
 
   --step--1: 0.875rem;
   --step-0: 1rem;

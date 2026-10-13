@@ -22,7 +22,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/furniture" },
 };
 
-const configurableCount = designs.filter((d) => d.status === "configurable").length;
+const configurableCount = designs.filter(
+  (d) => d.status === "configurable",
+).length;
 
 function hrefWith(f: ListFilters, patch: Partial<ListFilters>) {
   const q = filterParams({ ...f, ...patch }).toString();
@@ -57,7 +59,8 @@ function describe(f: ListFilters) {
   const parts: string[] = [];
   if (f.use) parts.push(uses.find((u) => u.id === f.use)!.name);
   if (f.family) parts.push(families[f.family].plural);
-  if (f.status) parts.push(f.status === "configurable" ? "Ready to configure" : "Concepts");
+  if (f.status)
+    parts.push(f.status === "configurable" ? "Ready to configure" : "Concepts");
   if (f.width) parts.push(widthBands[f.width].label);
   if (f.q) parts.push(`“${f.q}”`);
   return parts.join(" · ");
@@ -86,13 +89,18 @@ export default async function FurniturePage(props: PageProps<"/furniture">) {
         <h1>Every design, by room and use.</h1>
         <p className="lede">
           {designs.length} designs from one family of birch panels.{" "}
-          {configurableCount} are ready to configure and quote. The rest are concepts we are
-          still developing, marked as such.
+          {configurableCount} are ready to configure and quote. The rest are
+          concepts we are still developing, marked as such.
         </p>
       </header>
 
       <section className={styles.filters} aria-label="Filter furniture">
-        <Form action="/furniture" className={styles.search} scroll={false} replace>
+        <Form
+          action="/furniture"
+          className={styles.search}
+          scroll={false}
+          replace
+        >
           <label htmlFor="q" className="visually-hidden">
             Search furniture
           </label>
@@ -118,7 +126,12 @@ export default async function FurniturePage(props: PageProps<"/furniture">) {
             Any
           </Chip>
           {uses.map((u) => (
-            <Chip key={u.id} f={f} patch={{ use: u.id as UseId }} active={f.use === u.id}>
+            <Chip
+              key={u.id}
+              f={f}
+              patch={{ use: u.id as UseId }}
+              active={f.use === u.id}
+            >
               {u.name}
             </Chip>
           ))}
@@ -129,7 +142,12 @@ export default async function FurniturePage(props: PageProps<"/furniture">) {
             Any
           </Chip>
           {(Object.keys(families) as (keyof typeof families)[]).map((id) => (
-            <Chip key={id} f={f} patch={{ family: id }} active={f.family === id}>
+            <Chip
+              key={id}
+              f={f}
+              patch={{ family: id }}
+              active={f.family === id}
+            >
               {families[id].plural}
             </Chip>
           ))}
@@ -139,23 +157,33 @@ export default async function FurniturePage(props: PageProps<"/furniture">) {
           <Chip f={f} patch={{ status: null }} active={!f.status}>
             Any
           </Chip>
-          <Chip f={f} patch={{ status: "configurable" }} active={f.status === "configurable"}>
+          <Chip
+            f={f}
+            patch={{ status: "configurable" }}
+            active={f.status === "configurable"}
+          >
             Ready to configure
           </Chip>
-          <Chip f={f} patch={{ status: "concept" }} active={f.status === "concept"}>
+          <Chip
+            f={f}
+            patch={{ status: "concept" }}
+            active={f.status === "concept"}
+          >
             Concepts
           </Chip>
           <span className={styles.rowLabel}>Width</span>
-          {(Object.keys(widthBands) as (keyof typeof widthBands)[]).map((id) => (
-            <Chip
-              key={id}
-              f={f}
-              patch={{ width: f.width === id ? null : id }}
-              active={f.width === id}
-            >
-              {widthBands[id].label}
-            </Chip>
-          ))}
+          {(Object.keys(widthBands) as (keyof typeof widthBands)[]).map(
+            (id) => (
+              <Chip
+                key={id}
+                f={f}
+                patch={{ width: f.width === id ? null : id }}
+                active={f.width === id}
+              >
+                {widthBands[id].label}
+              </Chip>
+            ),
+          )}
         </div>
       </section>
 
@@ -174,7 +202,10 @@ export default async function FurniturePage(props: PageProps<"/furniture">) {
 
       {filtered.length === 0 && (
         <div className={styles.empty}>
-          <p>Nothing matches all of these. Try removing a filter, or start from a room.</p>
+          <p>
+            Nothing matches all of these. Try removing a filter, or start from a
+            room.
+          </p>
           <Link href="/furniture" className="btn btn-secondary">
             Clear filters
           </Link>
@@ -191,11 +222,19 @@ export default async function FurniturePage(props: PageProps<"/furniture">) {
         </ul>
       ) : (
         groups.map((g) => (
-          <section key={g.use.id} className={styles.group} aria-labelledby={`g-${g.use.id}`}>
+          <section
+            key={g.use.id}
+            className={styles.group}
+            aria-labelledby={`g-${g.use.id}`}
+          >
             <div className={styles.groupHead}>
               <h2 id={`g-${g.use.id}`}>{g.use.name}</h2>
               <p className="muted">{g.use.line}</p>
-              <Link href={hrefWith(f, { use: g.use.id })} className="text-link" scroll={false}>
+              <Link
+                href={hrefWith(f, { use: g.use.id })}
+                className="text-link"
+                scroll={false}
+              >
                 Everything for the {g.use.name.toLowerCase()}
               </Link>
             </div>

@@ -60,7 +60,10 @@ export function Gallery({ design, drawing }: Props) {
           />
         )}
         {view === "before" && (
-          <div className={styles.compare} style={{ "--split": `${split}%` } as React.CSSProperties}>
+          <div
+            className={styles.compare}
+            style={{ "--split": `${split}%` } as React.CSSProperties}
+          >
             <Image
               src={images.room(design.id)}
               alt={`The same spot with the ${design.name.toLowerCase()}`}
@@ -80,7 +83,9 @@ export function Gallery({ design, drawing }: Props) {
               />
             </div>
             <span className={`${styles.tag} ${styles.tagLeft}`}>Before</span>
-            <span className={`${styles.tag} ${styles.tagRight}`}>With the {design.name.toLowerCase()}</span>
+            <span className={`${styles.tag} ${styles.tagRight}`}>
+              With the {design.name.toLowerCase()}
+            </span>
           </div>
         )}
         {view === "drawing" && <div className={styles.drawing}>{drawing}</div>}

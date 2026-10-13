@@ -9,8 +9,8 @@ export function SiteFooter() {
         <div className={styles.brand}>
           <p className={styles.logo}>Furnishes</p>
           <p className="muted">
-            Finished birch plywood furniture for homes in {market.country}, built from one
-            family of panels and set up for where it stands.
+            Finished birch plywood furniture for homes in {market.country},
+            built from one family of panels and set up for where it stands.
           </p>
         </div>
         <nav aria-label="Footer">
@@ -37,8 +37,8 @@ export function SiteFooter() {
             <a href={`mailto:${market.email}`}>{market.email}</a>
           </p>
           <p className="muted">
-            Images are 3D renders of designs, not product photographs. Prices, lead times
-            and delivery are confirmed with each quote.
+            Images are 3D renders of designs, not product photographs. Prices,
+            lead times and delivery are confirmed with each quote.
           </p>
         </div>
       </div>

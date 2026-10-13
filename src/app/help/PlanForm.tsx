@@ -39,38 +39,70 @@ export function PlanForm() {
     <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
       <label htmlFor={`${id}-room`}>
         Which room?
-        <input id={`${id}-room`} value={room} onChange={(e) => setRoom(e.target.value)} placeholder="Shared bedroom, living room, studio…" />
+        <input
+          id={`${id}-room`}
+          value={room}
+          onChange={(e) => setRoom(e.target.value)}
+          placeholder="Shared bedroom, living room, studio…"
+        />
       </label>
       <label htmlFor={`${id}-goal`}>
         What would you like to happen there?
-        <textarea id={`${id}-goal`} rows={3} value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="Two children, one room, a line between them" />
+        <textarea
+          id={`${id}-goal`}
+          rows={3}
+          value={goal}
+          onChange={(e) => setGoal(e.target.value)}
+          placeholder="Two children, one room, a line between them"
+        />
       </label>
       <label htmlFor={`${id}-size`}>
         Rough size, if you know it <span className="muted">(optional)</span>
-        <input id={`${id}-size`} value={size} onChange={(e) => setSize(e.target.value)} placeholder="About 3 × 3.5 m" />
+        <input
+          id={`${id}-size`}
+          value={size}
+          onChange={(e) => setSize(e.target.value)}
+          placeholder="About 3 × 3.5 m"
+        />
       </label>
       <label htmlFor={`${id}-keep`}>
         What stays as it is? <span className="muted">(optional)</span>
-        <input id={`${id}-keep`} value={keep} onChange={(e) => setKeep(e.target.value)} placeholder="The beds and the desk" />
+        <input
+          id={`${id}-keep`}
+          value={keep}
+          onChange={(e) => setKeep(e.target.value)}
+          placeholder="The beds and the desk"
+        />
       </label>
       {saved.length > 0 && (
         <label className={styles.check}>
           <span>
-            <input type="checkbox" checked={include} onChange={(e) => setInclude(e.target.checked)} />{" "}
-            Include my {saved.length} saved {saved.length === 1 ? "design" : "designs"}
+            <input
+              type="checkbox"
+              checked={include}
+              onChange={(e) => setInclude(e.target.checked)}
+            />{" "}
+            Include my {saved.length} saved{" "}
+            {saved.length === 1 ? "design" : "designs"}
           </span>
         </label>
       )}
-      <a href={href} className="btn btn-primary" onClick={() => setOpened(true)}>
+      <a
+        href={href}
+        className="btn btn-primary"
+        onClick={() => setOpened(true)}
+      >
         Write the email
       </a>
       <p className={styles.small}>
-        {claims.quoteDraft.detail} No photos or measurements are needed to start.
+        {claims.quoteDraft.detail} No photos or measurements are needed to
+        start.
       </p>
       {opened && (
         <p className="notice" role="status">
-          We opened an email draft. It is not sent until you send it. If nothing opened, write to{" "}
-          <a href={`mailto:${market.email}`}>{market.email}</a>.
+          We opened an email draft. It is not sent until you send it. If nothing
+          opened, write to <a href={`mailto:${market.email}`}>{market.email}</a>
+          .
         </p>
       )}
     </form>

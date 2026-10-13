@@ -95,6 +95,19 @@
   color: var(--ink-3);
 }
 
+/* a one-line summary shown above the actions on small screens only */
+.quick {
+  display: none;
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+@media (max-width: 900px) {
+  .quick {
+    display: block;
+  }
+}
+
 .sections {
   margin-top: clamp(40px, 6vw, 80px);
 }
@@ -251,8 +264,10 @@
 }
 
 .siblingImg {
-  display: grid;
-  place-items: end center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
   height: 140px;
   background: var(--stage);
   border-radius: var(--radius-sm);
@@ -261,6 +276,8 @@
 
 .siblingImg img {
   max-width: 100%;
+  max-height: 100%;
+  width: auto;
   height: auto;
 }
 
@@ -278,14 +295,27 @@
 @media (max-width: 900px) {
   .top,
   .cols {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 520px) {
   .facts > div {
-    grid-template-columns: 1fr;
-    gap: 2px;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 8px;
+    padding-block: 8px;
+  }
+
+  .crumbs {
+    padding-block: 10px;
+  }
+
+  .decide {
+    gap: 12px;
+  }
+
+  .title {
+    font-size: var(--step-3);
   }
 
   .drawings {
@@ -298,10 +328,29 @@
   }
 
   .siblings {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
 .section > :global(.btn) {
   justify-self: start;
+}
+
+@media (max-width: 900px) {
+  .decide {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .facts {
+    order: 2;
+  }
+
+  .actionsTop {
+    order: 1;
+  }
+
+  .statusNote {
+    order: 3;
+  }
 }

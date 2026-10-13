@@ -224,7 +224,8 @@ export const accessories: Record<
   },
   "key-tray": {
     name: "Small tray",
-    description: "A shallow tray for keys, post and the things in your pockets.",
+    description:
+      "A shallow tray for keys, post and the things in your pockets.",
   },
   "headphone-hook": {
     name: "Utility hook",

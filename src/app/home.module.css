@@ -188,7 +188,11 @@
   justify-content: center;
   gap: 10px;
   padding: 24px 16px 18px;
-  background: linear-gradient(to bottom, var(--stage) 0 88%, var(--sunken) 88% 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--stage) 0 88%,
+    var(--sunken) 88% 100%
+  );
   border-radius: var(--radius);
 }
 
@@ -200,7 +204,7 @@
   .heroGrid,
   .realGrid,
   .system {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .heroMedia {
@@ -213,7 +217,7 @@
 
   .provide,
   .steps {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

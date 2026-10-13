@@ -14,7 +14,9 @@ export function askMail(design: Design, config?: Configuration | null) {
     "Hello Furnishes,",
     "",
     `I have a question about the ${design.name} (design ${design.record}).`,
-    config ? `Version: ${configSummary(config)}` : `Status: ${design.status === "concept" ? "concept" : "configurable"}`,
+    config
+      ? `Version: ${configSummary(config)}`
+      : `Status: ${design.status === "concept" ? "concept" : "configurable"}`,
     `Link: ${link(config ? configHref(config, "product") : `/furniture/${design.id}`)}`,
     "",
     "My question:",

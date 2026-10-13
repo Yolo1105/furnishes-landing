@@ -63,26 +63,28 @@
 
 .thumb,
 .thumbDrawing {
-  display: grid;
-  place-items: end center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
   width: 84px;
   height: 104px;
   padding: 6px;
+  overflow: hidden;
   border-radius: var(--radius-sm);
   background: var(--stage);
 }
 
 .thumbDrawing {
-  display: flex;
   align-items: center;
-  justify-content: center;
   background: var(--canvas);
   border: 1px solid var(--line);
 }
 
 .thumb img {
   max-height: 100%;
+  max-width: 100%;
   width: auto;
+  height: auto;
 }
 
 .thumbDrawing svg {
@@ -269,7 +271,7 @@
 
 @media (max-width: 1000px) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .quote {

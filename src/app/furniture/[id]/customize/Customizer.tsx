@@ -19,7 +19,13 @@ import {
   finishName,
   MAX_QUANTITY,
 } from "@/lib/config";
-import { compareParts, isMobile, partCount, partsList, type PartChange } from "@/lib/parts";
+import {
+  compareParts,
+  isMobile,
+  partCount,
+  partsList,
+  type PartChange,
+} from "@/lib/parts";
 import { saveDesign, updateSaved, useSaved } from "@/lib/saved";
 import styles from "./customize.module.css";
 
@@ -32,8 +38,12 @@ const GROUPS: { id: Group; label: string }[] = [
 ];
 
 function describeChanges(changes: PartChange[]) {
-  const on = changes.filter((c) => c.added).map((c) => `${c.added} × ${c.name.toLowerCase()}`);
-  const off = changes.filter((c) => c.removed).map((c) => `${c.removed} × ${c.name.toLowerCase()}`);
+  const on = changes
+    .filter((c) => c.added)
+    .map((c) => `${c.added} × ${c.name.toLowerCase()}`);
+  const off = changes
+    .filter((c) => c.removed)
+    .map((c) => `${c.removed} × ${c.name.toLowerCase()}`);
   return { on, off };
 }
 
@@ -51,17 +61,24 @@ export function Customizer({
   const design = getDesign(designId)!;
   const recipe = recipeOf(design)!;
   const { items } = useSaved();
-  const editing = savedId ? items.find((e) => e.id === savedId && e.design === designId) : undefined;
+  const editing = savedId
+    ? items.find((e) => e.id === savedId && e.design === designId)
+    : undefined;
 
-  const [history, setHistory] = useState<{ list: Configuration[]; at: number }>({
-    list: [initial],
-    at: 0,
-  });
+  const [history, setHistory] = useState<{ list: Configuration[]; at: number }>(
+    {
+      list: [initial],
+      at: 0,
+    },
+  );
   const config = history.list[history.at]!;
   const previous = history.at > 0 ? history.list[history.at - 1]! : null;
   const [group, setGroup] = useState<Group>("function");
   const [message, setMessage] = useState<string>("");
-  const [note, setNote] = useState<{ key: string; text: "saved" | "updated" | "failed" } | null>(null);
+  const [note, setNote] = useState<{
+    key: string;
+    text: "saved" | "updated" | "failed";
+  } | null>(null);
 
   const standard = useMemo(() => defaultConfig(design)!, [design]);
   const rows = useMemo(() => partsList(recipe, config), [recipe, config]);
@@ -89,20 +106,28 @@ export function Customizer({
 
   // a save confirmation belongs to the version it was given for
   const savedNote = note?.key === configKey(config) ? note.text : "";
-  const setSavedNote = (text: "saved" | "updated" | "failed") => setNote({ key: configKey(config), text });
+  const setSavedNote = (text: "saved" | "updated" | "failed") =>
+    setNote({ key: configKey(config), text });
 
   const apply = useCallback(
     (next: Configuration) => {
       if (configKey(next) === configKey(config)) return;
-      const { on, off } = describeChanges(compareParts(partsList(recipe, config), partsList(recipe, next)));
+      const { on, off } = describeChanges(
+        compareParts(partsList(recipe, config), partsList(recipe, next)),
+      );
       const parts = [
         on.length ? `Added ${on.join(", ")}` : "",
         off.length ? `Removed ${off.join(", ")}` : "",
-        next.finish !== config.finish ? `Finish: ${finishName(next.finish).toLowerCase()}` : "",
+        next.finish !== config.finish
+          ? `Finish: ${finishName(next.finish).toLowerCase()}`
+          : "",
         next.quantity !== config.quantity ? `Quantity ${next.quantity}` : "",
       ].filter(Boolean);
       setMessage(parts.join(". ") + ".");
-      setHistory((h) => ({ list: [...h.list.slice(0, h.at + 1), next], at: h.at + 1 }));
+      setHistory((h) => ({
+        list: [...h.list.slice(0, h.at + 1), next],
+        at: h.at + 1,
+      }));
     },
     [config, recipe],
   );
@@ -128,11 +153,17 @@ export function Customizer({
         : [...config.accessories, a].sort(),
     });
   const setQty = (quantity: number) =>
-    apply({ ...config, quantity: Math.min(MAX_QUANTITY, Math.max(1, quantity)) });
+    apply({
+      ...config,
+      quantity: Math.min(MAX_QUANTITY, Math.max(1, quantity)),
+    });
 
-  const isStandard = configKey({ ...config, quantity: 1 }) === configKey(standard);
+  const isStandard =
+    configKey({ ...config, quantity: 1 }) === configKey(standard);
   const offered = allowedAccessories(recipe);
-  const notOffered = (Object.keys(accessories) as AccessoryId[]).filter((a) => !offered.includes(a));
+  const notOffered = (Object.keys(accessories) as AccessoryId[]).filter(
+    (a) => !offered.includes(a),
+  );
   const groupIndex = GROUPS.findIndex((g) => g.id === group);
 
   return (
@@ -142,7 +173,12 @@ export function Customizer({
           ← Back to the {design.name.toLowerCase()}
         </Link>
         <div className={styles.history}>
-          <button type="button" className="btn btn-quiet" onClick={undo} disabled={history.at === 0}>
+          <button
+            type="button"
+            className="btn btn-quiet"
+            onClick={undo}
+            disabled={history.at === 0}
+          >
             Undo
           </button>
           <button
@@ -167,7 +203,13 @@ export function Customizer({
       <div className={styles.layout}>
         <section className={styles.preview} aria-label="Preview">
           <div className={styles.drawing}>
-            <Elevation recipe={recipe} config={config} uid="cz" fresh={fresh} title={`${design.name}, your version, front`} />
+            <Elevation
+              recipe={recipe}
+              config={config}
+              uid="cz"
+              fresh={fresh}
+              title={`${design.name}, your version, front`}
+            />
           </div>
           <div className={styles.previewMeta}>
             <div>
@@ -191,7 +233,7 @@ export function Customizer({
             </figure>
           </div>
           <p className={styles.live} role="status" aria-live="polite">
-            {message || "Choices update the drawing, the parts and the summary together."}
+            {message || "Your changes show in the drawing as you choose."}
           </p>
         </section>
 
@@ -205,12 +247,17 @@ export function Customizer({
           )}
           {editing && (
             <p className={styles.editing}>
-              Editing a saved design from {new Date(editing.savedAt).toLocaleDateString("en-SG")}.
-              Changes are kept only when you update it or save a copy.
+              Editing a saved design from{" "}
+              {new Date(editing.savedAt).toLocaleDateString("en-SG")}. Changes
+              are kept only when you update it or save a copy.
             </p>
           )}
 
-          <div className={styles.tabs} role="tablist" aria-label="Choice groups">
+          <div
+            className={styles.tabs}
+            role="tablist"
+            aria-label="Choice groups"
+          >
             {GROUPS.map((g, i) => (
               <button
                 key={g.id}
@@ -224,7 +271,11 @@ export function Customizer({
                 onClick={() => setGroup(g.id)}
                 onKeyDown={(e) => {
                   if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-                  const next = GROUPS[(i + (e.key === "ArrowRight" ? 1 : GROUPS.length - 1)) % GROUPS.length]!;
+                  const next =
+                    GROUPS[
+                      (i + (e.key === "ArrowRight" ? 1 : GROUPS.length - 1)) %
+                        GROUPS.length
+                    ]!;
                   setGroup(next.id);
                   document.getElementById(`tab-${next.id}`)?.focus();
                 }}
@@ -247,17 +298,23 @@ export function Customizer({
                 <dl className={styles.facts}>
                   <div>
                     <dt>Size</dt>
-                    <dd className="num">{sizeLabel(design.size)} (W × H × D, nominal)</dd>
+                    <dd className="num">
+                      {sizeLabel(design.size)} (W × H × D, nominal)
+                    </dd>
                   </div>
                   <div>
                     <dt>Base</dt>
-                    <dd>{isMobile(recipe) ? "On four casters" : "On adjustable pads"}</dd>
+                    <dd>
+                      {isMobile(recipe)
+                        ? "On four casters"
+                        : "On adjustable pads"}
+                    </dd>
                   </div>
                 </dl>
                 <div className={styles.unavailable}>
                   <p>
-                    <strong>Other sizes aren&apos;t offered yet.</strong> This piece comes in one
-                    size while its parts are being finalised.
+                    <strong>Other sizes aren&apos;t offered yet.</strong> This
+                    piece comes in one size while its parts are being finalised.
                   </p>
                 </div>
                 <p className="muted">{recipe.space}</p>
@@ -276,7 +333,11 @@ export function Customizer({
                     {(["open", "doors"] as Front[]).map((f) => {
                       const ok = f === "open" || recipe.doors;
                       return (
-                        <label key={f} className={styles.choice} data-disabled={!ok || undefined}>
+                        <label
+                          key={f}
+                          className={styles.choice}
+                          data-disabled={!ok || undefined}
+                        >
                           <input
                             type="radio"
                             name="front"
@@ -286,7 +347,9 @@ export function Customizer({
                             onChange={() => setFront(f)}
                           />
                           <span>
-                            <strong>{f === "open" ? "Open front" : "With doors"}</strong>
+                            <strong>
+                              {f === "open" ? "Open front" : "With doors"}
+                            </strong>
                             <span className={styles.hint}>
                               {f === "open"
                                 ? "Everything in view and in reach."
@@ -303,7 +366,9 @@ export function Customizer({
                 <fieldset className={styles.fieldset}>
                   <legend>Accessories</legend>
                   {offered.length === 0 && (
-                    <p className="muted">No accessories are offered on this piece yet.</p>
+                    <p className="muted">
+                      No accessories are offered on this piece yet.
+                    </p>
                   )}
                   <div className={styles.choices}>
                     {offered.map((a) => (
@@ -317,7 +382,9 @@ export function Customizer({
                           <strong>{accessories[a].name}</strong>
                           <span className={styles.hint}>
                             {accessories[a].description}
-                            {recipe.defaultAccessories.includes(a) ? " Part of the standard version." : ""}
+                            {recipe.defaultAccessories.includes(a)
+                              ? " Part of the standard version."
+                              : ""}
                           </span>
                         </span>
                       </label>
@@ -325,7 +392,8 @@ export function Customizer({
                   </div>
                   {notOffered.length > 0 && (
                     <p className={styles.notOffered}>
-                      Not for this piece: {notOffered.map((a) => accessories[a].name).join(", ")}.
+                      Not for this piece:{" "}
+                      {notOffered.map((a) => accessories[a].name).join(", ")}.
                       They are made for other frames.
                     </p>
                   )}
@@ -342,7 +410,11 @@ export function Customizer({
                     {(["natural", "orange"] as Finish[]).map((f) => {
                       const ok = f === "natural" || recipe.orangeFace;
                       return (
-                        <label key={f} className={styles.swatch} data-disabled={!ok || undefined}>
+                        <label
+                          key={f}
+                          className={styles.swatch}
+                          data-disabled={!ok || undefined}
+                        >
                           <input
                             type="radio"
                             name="finish"
@@ -351,7 +423,11 @@ export function Customizer({
                             disabled={!ok}
                             onChange={() => setFinish(f)}
                           />
-                          <span className={styles.chip} data-finish={f} aria-hidden="true" />
+                          <span
+                            className={styles.chip}
+                            data-finish={f}
+                            aria-hidden="true"
+                          />
                           <span>
                             <strong>{finishName(f)}</strong>
                             <span className={styles.hint}>
@@ -368,7 +444,8 @@ export function Customizer({
                   </div>
                 </fieldset>
                 <p className="muted">
-                  Screens show colour differently. Finish samples are not available to order yet.
+                  Screens show colour differently. Finish samples are not
+                  available to order yet.
                 </p>
               </div>
             )}
@@ -380,7 +457,8 @@ export function Customizer({
                   <div>
                     <dt>Piece</dt>
                     <dd>
-                      {design.name} <span className="muted">design {design.record}</span>
+                      {design.name}{" "}
+                      <span className="muted">design {design.record}</span>
                     </dd>
                   </div>
                   <div>
@@ -391,7 +469,11 @@ export function Customizer({
                     <dt>Finish</dt>
                     <dd>
                       {finishName(config.finish)}{" "}
-                      <button type="button" className={styles.edit} onClick={() => setGroup("finish")}>
+                      <button
+                        type="button"
+                        className={styles.edit}
+                        onClick={() => setGroup("finish")}
+                      >
                         Edit
                       </button>
                     </dd>
@@ -400,7 +482,11 @@ export function Customizer({
                     <dt>Function</dt>
                     <dd>
                       {configSummary(config).split(" · ").slice(1).join(" · ")}{" "}
-                      <button type="button" className={styles.edit} onClick={() => setGroup("function")}>
+                      <button
+                        type="button"
+                        className={styles.edit}
+                        onClick={() => setGroup("function")}
+                      >
                         Edit
                       </button>
                     </dd>
@@ -411,9 +497,15 @@ export function Customizer({
                       {isStandard
                         ? "This is the standard version."
                         : [
-                            vsStandard.on.length ? `Adds ${vsStandard.on.join(", ")}` : "",
-                            vsStandard.off.length ? `Leaves out ${vsStandard.off.join(", ")}` : "",
-                            config.finish !== standard.finish ? "Orange working face" : "",
+                            vsStandard.on.length
+                              ? `Adds ${vsStandard.on.join(", ")}`
+                              : "",
+                            vsStandard.off.length
+                              ? `Leaves out ${vsStandard.off.join(", ")}`
+                              : "",
+                            config.finish !== standard.finish
+                              ? "Orange working face"
+                              : "",
                           ]
                             .filter(Boolean)
                             .join(". ")}
@@ -423,7 +515,9 @@ export function Customizer({
                     <dt>Included</dt>
                     <dd>
                       {partCount(rows)} parts, listed on the product page.{" "}
-                      <span className="muted">Objects in the images are not included.</span>
+                      <span className="muted">
+                        Objects in the images are not included.
+                      </span>
                     </dd>
                   </div>
                   <div>
@@ -455,7 +549,8 @@ export function Customizer({
                   <div>
                     <dt>Price</dt>
                     <dd>
-                      <PriceState design={design} /> <span className="muted">· {claims.leadTime.label}</span>
+                      <PriceState design={design} />{" "}
+                      <span className="muted">· {claims.leadTime.label}</span>
                     </dd>
                   </div>
                 </dl>
@@ -476,7 +571,10 @@ export function Customizer({
           <div className={styles.outcome}>
             <p className={styles.outcomePrice}>
               <PriceState design={design} />
-              <span className="muted"> · Save this version, then ask for a quote from Saved designs.</span>
+              <span className="muted">
+                {" "}
+                · Save this version, then ask for a quote from Saved designs.
+              </span>
             </p>
             <div className={styles.outcomeActions}>
               {editing ? (
@@ -484,14 +582,22 @@ export function Customizer({
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={() => setSavedNote(updateSaved(editing.id, config) ? "updated" : "failed")}
+                    onClick={() =>
+                      setSavedNote(
+                        updateSaved(editing.id, config) ? "updated" : "failed",
+                      )
+                    }
                   >
                     Update saved design
                   </button>
                   <button
                     type="button"
                     className="btn btn-secondary"
-                    onClick={() => setSavedNote(saveDesign(design.id, config) ? "saved" : "failed")}
+                    onClick={() =>
+                      setSavedNote(
+                        saveDesign(design.id, config) ? "saved" : "failed",
+                      )
+                    }
                   >
                     Save as a new copy
                   </button>
@@ -500,7 +606,11 @@ export function Customizer({
                 <button
                   type="button"
                   className="btn btn-primary"
-                  onClick={() => setSavedNote(saveDesign(design.id, config) ? "saved" : "failed")}
+                  onClick={() =>
+                    setSavedNote(
+                      saveDesign(design.id, config) ? "saved" : "failed",
+                    )
+                  }
                 >
                   Save this version
                 </button>
@@ -509,18 +619,22 @@ export function Customizer({
             <p className={styles.savedNote} role="status" aria-live="polite">
               {savedNote === "saved" && (
                 <>
-                  Saved in this browser. <Link href="/saved">Go to saved designs</Link> to compare or
+                  Saved in this browser.{" "}
+                  <Link href="/saved">Go to saved designs</Link> to compare or
                   ask for a quote.
                 </>
               )}
               {savedNote === "updated" && (
                 <>
-                  Saved design updated. <Link href="/saved">Go to saved designs</Link>
+                  Saved design updated.{" "}
+                  <Link href="/saved">Go to saved designs</Link>
                 </>
               )}
               {savedNote === "failed" &&
                 "This browser won't let us save. Try a normal window, or copy the address of this page."}
-              {savedNote === "" && <span className="muted">{claims.saved.detail}</span>}
+              {savedNote === "" && (
+                <span className="muted">{claims.saved.detail}</span>
+              )}
             </p>
           </div>
         </section>

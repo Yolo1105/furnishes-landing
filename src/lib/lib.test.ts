@@ -19,7 +19,13 @@ import {
   parseExplore,
   parseFilters,
 } from "./explore";
-import { compareParts, changeTotals, partCount, partsList, steps } from "./parts";
+import {
+  compareParts,
+  changeTotals,
+  partCount,
+  partsList,
+  steps,
+} from "./parts";
 
 describe("catalogue", () => {
   it("has all 64 designs with unique ids and an object render each", () => {
@@ -54,8 +60,12 @@ describe("part model", () => {
   const base = { finish: "natural" as const, front: "open" as const };
 
   it("counts the entry organiser's parts from its drawing", () => {
-    const rows = partsList(entry, { ...base, accessories: ["coat-hook", "key-tray"] });
-    const qty = (id: string) => rows.find((r) => r.partId === id)?.quantity ?? 0;
+    const rows = partsList(entry, {
+      ...base,
+      accessories: ["coat-hook", "key-tray"],
+    });
+    const qty = (id: string) =>
+      rows.find((r) => r.partId === id)?.quantity ?? 0;
     expect(qty("side-full-1200")).toBe(2);
     expect(qty("working-face")).toBe(3);
     expect(qty("coat-hook")).toBe(3);
@@ -64,15 +74,27 @@ describe("part model", () => {
   });
 
   it("adds doors only where the recipe takes them", () => {
-    const withDoors = partsList(recipes.bedside, { ...base, front: "doors", accessories: [] });
+    const withDoors = partsList(recipes.bedside, {
+      ...base,
+      front: "doors",
+      accessories: [],
+    });
     expect(withDoors.some((r) => r.group === "Doors")).toBe(true);
-    const noDoors = partsList(entry, { ...base, front: "doors", accessories: [] });
+    const noDoors = partsList(entry, {
+      ...base,
+      front: "doors",
+      accessories: [],
+    });
     expect(noDoors.some((r) => r.group === "Doors")).toBe(false);
   });
 
   it("reports what stays, comes off and goes on between two versions", () => {
     const from = partsList(recipes.bedside, { ...base, accessories: [] });
-    const to = partsList(recipes.bedside, { ...base, front: "doors", accessories: ["key-tray"] });
+    const to = partsList(recipes.bedside, {
+      ...base,
+      front: "doors",
+      accessories: ["key-tray"],
+    });
     const t = changeTotals(compareParts(from, to));
     expect(t).toEqual({ kept: partCount(from), added: 2, removed: 0 });
   });
@@ -88,7 +110,12 @@ describe("configuration links", () => {
   const entry = getDesign("entry")!;
 
   it("round-trips through URL parameters", () => {
-    const c = { ...defaultConfig(entry)!, finish: "orange" as const, accessories: ["headphone-hook" as const], quantity: 2 };
+    const c = {
+      ...defaultConfig(entry)!,
+      finish: "orange" as const,
+      accessories: ["headphone-hook" as const],
+      quantity: 2,
+    };
     const back = parseConfig("entry", configParams(c));
     expect(back.issues).toEqual([]);
     expect(configKey(back.config!)).toBe(configKey(c));
@@ -96,12 +123,19 @@ describe("configuration links", () => {
 
   it("keeps an explicit 'no accessories' apart from the defaults", () => {
     const none = { ...defaultConfig(entry)!, accessories: [] };
-    expect(parseConfig("entry", configParams(none)).config!.accessories).toEqual([]);
-    expect(parseConfig("entry", new URLSearchParams()).config!.accessories).toEqual(["coat-hook", "key-tray"]);
+    expect(
+      parseConfig("entry", configParams(none)).config!.accessories,
+    ).toEqual([]);
+    expect(
+      parseConfig("entry", new URLSearchParams()).config!.accessories,
+    ).toEqual(["coat-hook", "key-tray"]);
   });
 
   it("drops unsupported options and says so", () => {
-    const r = parseConfig("entry", new URLSearchParams("front=doors&acc=kitchen-rail&qty=99"));
+    const r = parseConfig(
+      "entry",
+      new URLSearchParams("front=doors&acc=kitchen-rail&qty=99"),
+    );
     expect(r.config!.front).toBe("open");
     expect(r.config!.accessories).toEqual([]);
     expect(r.config!.quantity).toBe(1);
@@ -109,8 +143,12 @@ describe("configuration links", () => {
   });
 
   it("builds short links and a readable summary", () => {
-    expect(configHref(defaultConfig(entry)!, "customize")).toBe("/furniture/entry/customize");
-    expect(configSummary(defaultConfig(entry)!)).toBe("Natural birch · Coat hooks (set of 3), Small tray");
+    expect(configHref(defaultConfig(entry)!, "customize")).toBe(
+      "/furniture/entry/customize",
+    );
+    expect(configSummary(defaultConfig(entry)!)).toBe(
+      "Natural birch · Coat hooks (set of 3), Small tray",
+    );
   });
 
   it("has no configuration for a concept", () => {
@@ -121,13 +159,24 @@ describe("configuration links", () => {
 
 describe("explore and filters", () => {
   it("restores answers from the URL and ignores unknown values", () => {
-    const s = parseExplore(new URLSearchParams("room=entryway,nope&things=shoes&example=entry"));
-    expect(s).toEqual({ rooms: ["entryway"], doing: [], things: ["shoes"], example: "entry" });
+    const s = parseExplore(
+      new URLSearchParams("room=entryway,nope&things=shoes&example=entry"),
+    );
+    expect(s).toEqual({
+      rooms: ["entryway"],
+      doing: [],
+      things: ["shoes"],
+      example: "entry",
+    });
     expect(parseExplore(exploreParams(s))).toEqual(s);
   });
 
   it("matches across kinds of answer and explains why", () => {
-    const m = explore({ ...emptyExplore, rooms: ["entryway"], things: ["shoes"] });
+    const m = explore({
+      ...emptyExplore,
+      rooms: ["entryway"],
+      things: ["shoes"],
+    });
     expect(m[0]!.exact).toBe(true);
     expect(m.map((x) => x.design.id)).toContain("entry");
     expect(m[0]!.reasons.join(" ")).toMatch(/shoes|entryway/);
@@ -140,8 +189,18 @@ describe("explore and filters", () => {
   });
 
   it("filters the listing from URL parameters", () => {
-    const f = parseFilters(new URLSearchParams("use=kitchen&status=configurable"));
-    expect(filterDesigns(f).map((d) => d.id).sort()).toEqual(["kitchen"]);
-    expect(filterDesigns(parseFilters(new URLSearchParams("q=shoes"))).map((d) => d.id)).toContain("entry");
+    const f = parseFilters(
+      new URLSearchParams("use=kitchen&status=configurable"),
+    );
+    expect(
+      filterDesigns(f)
+        .map((d) => d.id)
+        .sort(),
+    ).toEqual(["kitchen"]);
+    expect(
+      filterDesigns(parseFilters(new URLSearchParams("q=shoes"))).map(
+        (d) => d.id,
+      ),
+    ).toContain("entry");
   });
 });

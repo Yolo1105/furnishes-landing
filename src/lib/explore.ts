@@ -1,5 +1,11 @@
 import { designs, problems } from "@/data/designs";
-import type { ActivityId, Design, FamilyId, ObjectId, UseId } from "@/data/types";
+import type {
+  ActivityId,
+  Design,
+  FamilyId,
+  ObjectId,
+  UseId,
+} from "@/data/types";
 import { activities, objects, uses } from "@/data/vocabulary";
 import { bySiteOrder } from "./catalog";
 
@@ -22,7 +28,10 @@ const ROOM_IDS = new Set(uses.map((u) => u.id));
 const ACT_IDS = new Set(activities.map((a) => a.id));
 const OBJ_IDS = new Set(objects.map((o) => o.id));
 
-function list<T extends string>(raw: string | null | undefined, ok: Set<T>): T[] {
+function list<T extends string>(
+  raw: string | null | undefined,
+  ok: Set<T>,
+): T[] {
   if (!raw) return [];
   return [...new Set(raw.split(",").filter((x): x is T => ok.has(x as T)))];
 }
@@ -99,7 +108,9 @@ export function explore(s: ExploreState): Match[] {
       if (r.length) {
         hit++;
         score += 3;
-        reasons.push(`For the ${uses.find((u) => u.id === r[0])!.name.toLowerCase()}`);
+        reasons.push(
+          `For the ${uses.find((u) => u.id === r[0])!.name.toLowerCase()}`,
+        );
       }
     }
     if (s.doing.length) {
@@ -146,7 +157,10 @@ export type ListFilters = {
 
 export const widthBands = {
   narrow: { label: "Up to 60 cm wide", test: (w: number) => w <= 600 },
-  medium: { label: "61–120 cm wide", test: (w: number) => w > 600 && w <= 1200 },
+  medium: {
+    label: "61–120 cm wide",
+    test: (w: number) => w > 600 && w <= 1200,
+  },
   wide: { label: "Over 120 cm wide", test: (w: number) => w > 1200 },
 } as const;
 
@@ -157,9 +171,15 @@ export function parseFilters(p: Params): ListFilters {
   const width = get(p, "width");
   return {
     use: use && ROOM_IDS.has(use as UseId) ? (use as UseId) : null,
-    family: family === "pieces" || family === "walls" || family === "screens" ? family : null,
+    family:
+      family === "pieces" || family === "walls" || family === "screens"
+        ? family
+        : null,
     status: status === "configurable" || status === "concept" ? status : null,
-    width: width === "narrow" || width === "medium" || width === "wide" ? width : null,
+    width:
+      width === "narrow" || width === "medium" || width === "wide"
+        ? width
+        : null,
     q: (get(p, "q") ?? "").slice(0, 80),
   };
 }
@@ -176,7 +196,10 @@ export function filterParams(f: ListFilters): URLSearchParams {
 
 /** Words people type, matched against names, lines, rooms, objects and situations. */
 export function matchesText(d: Design, q: string) {
-  const words = q.toLowerCase().split(/[\s,]+/).filter((w) => w.length > 1);
+  const words = q
+    .toLowerCase()
+    .split(/[\s,]+/)
+    .filter((w) => w.length > 1);
   if (!words.length) return true;
   const hay = [
     d.name,

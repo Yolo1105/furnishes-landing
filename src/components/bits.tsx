@@ -5,7 +5,13 @@ import type { Design, DesignStatus } from "@/data/types";
 import { images } from "@/lib/catalog";
 import styles from "./bits.module.css";
 
-export function StatusBadge({ status, long = false }: { status: DesignStatus; long?: boolean }) {
+export function StatusBadge({
+  status,
+  long = false,
+}: {
+  status: DesignStatus;
+  long?: boolean;
+}) {
   const info = statusInfo[status];
   return (
     <span className={styles.status} data-status={status}>
@@ -16,11 +22,22 @@ export function StatusBadge({ status, long = false }: { status: DesignStatus; lo
 }
 
 /** The price line: a confirmed SGD price, or an honest state. */
-export function PriceState({ design, compact = false }: { design: Design; compact?: boolean }) {
+export function PriceState({
+  design,
+  compact = false,
+}: {
+  design: Design;
+  compact?: boolean;
+}) {
   const price = prices[design.id];
   if (design.status === "concept")
-    return <span className={styles.price}>{compact ? "Not quoted yet" : "Concept: not quoted yet"}</span>;
-  if (price !== undefined) return <span className={styles.price}>{formatPrice(price)}</span>;
+    return (
+      <span className={styles.price}>
+        {compact ? "Not quoted yet" : "Concept: not quoted yet"}
+      </span>
+    );
+  if (price !== undefined)
+    return <span className={styles.price}>{formatPrice(price)}</span>;
   return <span className={styles.price}>{claims.price.label}</span>;
 }
 

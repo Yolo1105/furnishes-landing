@@ -38,10 +38,15 @@ function href(s: ExploreState, extra?: Record<string, string>) {
 function describe(s: ExploreState) {
   const parts = [
     ...s.rooms.map((r) => uses.find((u) => u.id === r)!.name),
-    ...s.doing.map((a) => activities.find((x) => x.id === a)!.name.toLowerCase()),
+    ...s.doing.map((a) =>
+      activities.find((x) => x.id === a)!.name.toLowerCase(),
+    ),
     ...s.things.map((o) => objects.find((x) => x.id === o)!.name.toLowerCase()),
   ];
-  if (s.example) parts.push(`like the ${examples.find((e) => e.design.id === s.example)?.design.name.toLowerCase() ?? "example"}`);
+  if (s.example)
+    parts.push(
+      `like the ${examples.find((e) => e.design.id === s.example)?.design.name.toLowerCase() ?? "example"}`,
+    );
   return parts.join(", ");
 }
 
@@ -55,12 +60,24 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
   const visible = showAll ? matches : matches.slice(0, SHOWN);
   const resultsLabel = `Explore: ${describe(s)}`;
   const featured = [...examples]
-    .sort((a, b) => (a.design.status === b.design.status ? 0 : a.design.status === "configurable" ? -1 : 1))
+    .sort((a, b) =>
+      a.design.status === b.design.status
+        ? 0
+        : a.design.status === "configurable"
+          ? -1
+          : 1,
+    )
     .slice(0, 8);
 
   const chip = (active: boolean, to: string, label: string, key: string) => (
     <li key={key}>
-      <Link href={to} className={styles.chip} aria-current={active ? "true" : undefined} scroll={false} replace>
+      <Link
+        href={to}
+        className={styles.chip}
+        aria-current={active ? "true" : undefined}
+        scroll={false}
+        replace
+      >
         {label}
       </Link>
     </li>
@@ -72,8 +89,8 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
         <p className="eyebrow">Explore</p>
         <h1>Start from the room, the thing, or a picture.</h1>
         <p className="lede">
-          Pick anything that sounds like you. Nothing is required, and nothing you pick here is
-          added to a design. It only narrows what we show.
+          Pick anything that sounds like you. Nothing is required, and nothing
+          you pick here is added to a design. It only narrows what we show.
         </p>
         <p>
           <Link href="/furniture" className="text-link">
@@ -98,7 +115,13 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
                   scroll={false}
                   replace
                 >
-                  <Image src={images.room(u.cover)} alt="" width={960} height={600} sizes="(max-width: 700px) 50vw, 240px" />
+                  <Image
+                    src={images.room(u.cover)}
+                    alt=""
+                    width={960}
+                    height={600}
+                    sizes="(max-width: 700px) 50vw, 240px"
+                  />
                   <span className={styles.roomName}>{u.name}</span>
                 </Link>
               </li>
@@ -113,7 +136,12 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
         </h2>
         <ul role="list" className={styles.chips}>
           {activities.map((a) =>
-            chip(s.doing.includes(a.id), href({ ...s, doing: toggle(s.doing, a.id as ActivityId) }), a.name, a.id),
+            chip(
+              s.doing.includes(a.id),
+              href({ ...s, doing: toggle(s.doing, a.id as ActivityId) }),
+              a.name,
+              a.id,
+            ),
           )}
         </ul>
       </section>
@@ -124,7 +152,12 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
         </h2>
         <ul role="list" className={styles.chips}>
           {objects.map((o) =>
-            chip(s.things.includes(o.id), href({ ...s, things: toggle(s.things, o.id as ObjectId) }), o.name, o.id),
+            chip(
+              s.things.includes(o.id),
+              href({ ...s, things: toggle(s.things, o.id as ObjectId) }),
+              o.name,
+              o.id,
+            ),
           )}
         </ul>
       </section>
@@ -137,33 +170,49 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
           {featured.map((e) => (
             <li key={e.design.id}>
               <Link
-                href={href({ ...s, example: s.example === e.design.id ? null : e.design.id })}
+                href={href({
+                  ...s,
+                  example: s.example === e.design.id ? null : e.design.id,
+                })}
                 className={styles.example}
                 aria-current={s.example === e.design.id ? "true" : undefined}
                 scroll={false}
                 replace
               >
-                <Image src={images.room(e.design.id)} alt="" width={960} height={600} sizes="(max-width: 700px) 50vw, 300px" />
+                <Image
+                  src={images.room(e.design.id)}
+                  alt=""
+                  width={960}
+                  height={600}
+                  sizes="(max-width: 700px) 50vw, 300px"
+                />
                 <span>“{e.text}”</span>
               </Link>
             </li>
           ))}
         </ul>
         <details className={styles.more}>
-          <summary>More situations ({examples.length - featured.length})</summary>
+          <summary>
+            More situations ({examples.length - featured.length})
+          </summary>
           <ul role="list" className={styles.moreList}>
-            {examples.slice().filter((e) => !featured.includes(e)).map((e) => (
-              <li key={e.design.id}>
-                <Link
-                  href={href({ ...s, example: e.design.id })}
-                  aria-current={s.example === e.design.id ? "true" : undefined}
-                  scroll={false}
-                  replace
-                >
-                  “{e.text}”
-                </Link>
-              </li>
-            ))}
+            {examples
+              .slice()
+              .filter((e) => !featured.includes(e))
+              .map((e) => (
+                <li key={e.design.id}>
+                  <Link
+                    href={href({ ...s, example: e.design.id })}
+                    aria-current={
+                      s.example === e.design.id ? "true" : undefined
+                    }
+                    scroll={false}
+                    replace
+                  >
+                    “{e.text}”
+                  </Link>
+                </li>
+              ))}
           </ul>
         </details>
       </section>
@@ -177,10 +226,19 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
         </div>
       )}
 
-      <section id="results" className={styles.results} aria-labelledby="results-title" aria-live="polite">
+      <section
+        id="results"
+        className={styles.results}
+        aria-labelledby="results-title"
+        aria-live="polite"
+      >
         <div className={styles.resultsHead}>
           <h2 id="results-title">
-            {answered ? (exact ? "Designs that fit" : "Closest designs") : "Your results appear here"}
+            {answered
+              ? exact
+                ? "Designs that fit"
+                : "Closest designs"
+              : "Your results appear here"}
           </h2>
           {answered && (
             <div className={styles.selected}>
@@ -188,38 +246,75 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
               <ul role="list" className={styles.selectedList}>
                 {s.rooms.map((r) => (
                   <li key={r}>
-                    <Link href={href({ ...s, rooms: s.rooms.filter((x) => x !== r) })} className={styles.remove} scroll={false} replace>
-                      {uses.find((u) => u.id === r)!.name} <span aria-hidden="true">×</span>
+                    <Link
+                      href={href({
+                        ...s,
+                        rooms: s.rooms.filter((x) => x !== r),
+                      })}
+                      className={styles.remove}
+                      scroll={false}
+                      replace
+                    >
+                      {uses.find((u) => u.id === r)!.name}{" "}
+                      <span aria-hidden="true">×</span>
                       <span className="visually-hidden"> (remove)</span>
                     </Link>
                   </li>
                 ))}
                 {s.doing.map((a) => (
                   <li key={a}>
-                    <Link href={href({ ...s, doing: s.doing.filter((x) => x !== a) })} className={styles.remove} scroll={false} replace>
-                      {activities.find((x) => x.id === a)!.name} <span aria-hidden="true">×</span>
+                    <Link
+                      href={href({
+                        ...s,
+                        doing: s.doing.filter((x) => x !== a),
+                      })}
+                      className={styles.remove}
+                      scroll={false}
+                      replace
+                    >
+                      {activities.find((x) => x.id === a)!.name}{" "}
+                      <span aria-hidden="true">×</span>
                       <span className="visually-hidden"> (remove)</span>
                     </Link>
                   </li>
                 ))}
                 {s.things.map((o) => (
                   <li key={o}>
-                    <Link href={href({ ...s, things: s.things.filter((x) => x !== o) })} className={styles.remove} scroll={false} replace>
-                      {objects.find((x) => x.id === o)!.name} <span aria-hidden="true">×</span>
+                    <Link
+                      href={href({
+                        ...s,
+                        things: s.things.filter((x) => x !== o),
+                      })}
+                      className={styles.remove}
+                      scroll={false}
+                      replace
+                    >
+                      {objects.find((x) => x.id === o)!.name}{" "}
+                      <span aria-hidden="true">×</span>
                       <span className="visually-hidden"> (remove)</span>
                     </Link>
                   </li>
                 ))}
                 {s.example && (
                   <li>
-                    <Link href={href({ ...s, example: null })} className={styles.remove} scroll={false} replace>
+                    <Link
+                      href={href({ ...s, example: null })}
+                      className={styles.remove}
+                      scroll={false}
+                      replace
+                    >
                       Situation <span aria-hidden="true">×</span>
                       <span className="visually-hidden"> (remove)</span>
                     </Link>
                   </li>
                 )}
               </ul>
-              <Link href="/explore" className="text-link" scroll={false} replace>
+              <Link
+                href="/explore"
+                className="text-link"
+                scroll={false}
+                replace
+              >
                 Clear all
               </Link>
             </div>
@@ -234,28 +329,42 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
         )}
         {answered && !exact && matches.length > 0 && (
           <p className="notice">
-            Nothing fits every choice, so these fit some of them. Removing a choice may help.
+            Nothing fits every choice, so these fit some of them. Removing a
+            choice may help.
           </p>
         )}
         {answered && matches.length === 0 && (
-          <p className="notice">Nothing fits these choices. Try removing one.</p>
+          <p className="notice">
+            Nothing fits these choices. Try removing one.
+          </p>
         )}
         {visible.length > 0 && (
           <>
             <p className={styles.count}>
               {matches.length} {matches.length === 1 ? "design" : "designs"}
-              {!showAll && matches.length > SHOWN ? `, showing the best ${SHOWN}` : ""}. Best
-              matches first; concepts are marked.
+              {!showAll && matches.length > SHOWN
+                ? `, showing the best ${SHOWN}`
+                : ""}
+              . Best matches first; concepts are marked.
             </p>
             <ul role="list" className={styles.grid}>
               {visible.map((m) => (
                 <li key={m.design.id}>
-                  <DesignCard design={m.design} reasons={m.reasons} resultsLabel={resultsLabel} />
+                  <DesignCard
+                    design={m.design}
+                    reasons={m.reasons}
+                    resultsLabel={resultsLabel}
+                  />
                 </li>
               ))}
             </ul>
             {!showAll && matches.length > SHOWN && (
-              <Link href={href(s, { all: "1" })} className="btn btn-secondary" scroll={false} replace>
+              <Link
+                href={href(s, { all: "1" })}
+                className="btn btn-secondary"
+                scroll={false}
+                replace
+              >
                 Show all {matches.length}
               </Link>
             )}

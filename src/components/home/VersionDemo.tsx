@@ -17,7 +17,10 @@ const standard: Configuration = {
   accessories: ["coat-hook", "key-tray"],
   quantity: 1,
 };
-const offered: AccessoryId[] = [...recipe.defaultAccessories, ...recipe.optionalAccessories];
+const offered: AccessoryId[] = [
+  ...recipe.defaultAccessories,
+  ...recipe.optionalAccessories,
+];
 
 /** One real change on one real piece: the same part model the customizer uses. */
 export function VersionDemo() {
@@ -25,8 +28,12 @@ export function VersionDemo() {
   const base = useMemo(() => partsList(recipe, standard), []);
   const rows = useMemo(() => partsList(recipe, config), [config]);
   const diff = compareParts(base, rows);
-  const added = diff.filter((d) => d.added).map((d) => `${d.added} × ${d.name.toLowerCase()}`);
-  const removed = diff.filter((d) => d.removed).map((d) => `${d.removed} × ${d.name.toLowerCase()}`);
+  const added = diff
+    .filter((d) => d.added)
+    .map((d) => `${d.added} × ${d.name.toLowerCase()}`);
+  const removed = diff
+    .filter((d) => d.removed)
+    .map((d) => `${d.removed} × ${d.name.toLowerCase()}`);
 
   const toggle = (a: AccessoryId) =>
     setConfig((c) => ({
@@ -39,7 +46,12 @@ export function VersionDemo() {
   return (
     <div className={styles.demo}>
       <div className={styles.drawing}>
-        <Elevation recipe={recipe} config={config} uid="home-demo" title="Entry organiser, front" />
+        <Elevation
+          recipe={recipe}
+          config={config}
+          uid="home-demo"
+          title="Entry organiser, front"
+        />
       </div>
       <div className={styles.controls}>
         <fieldset>
@@ -70,7 +82,9 @@ export function VersionDemo() {
           ))}
         </fieldset>
         <div className={styles.result} aria-live="polite">
-          <p className={styles.resultTitle}>Same piece, 60 × 120 × 40 cm, {partCount(rows)} parts</p>
+          <p className={styles.resultTitle}>
+            Same piece, 60 × 120 × 40 cm, {partCount(rows)} parts
+          </p>
           <p>
             {added.length || removed.length || config.finish !== "natural"
               ? [
@@ -83,7 +97,10 @@ export function VersionDemo() {
               : "This is the standard version."}
           </p>
         </div>
-        <Link href={configHref(config, "customize")} className="btn btn-primary">
+        <Link
+          href={configHref(config, "customize")}
+          className="btn btn-primary"
+        >
           Customize this version
         </Link>
       </div>

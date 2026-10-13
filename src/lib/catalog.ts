@@ -55,5 +55,9 @@ export function bySiteOrder(a: Design, b: Design) {
   if (a.status !== b.status) return a.status === "configurable" ? -1 : 1;
   const [a1, a2] = a.record.split(".").map(Number);
   const [b1, b2] = b.record.split(".").map(Number);
-  return (a1 ?? 0) - (b1 ?? 0) || (a2 ?? 0) - (b2 ?? 0) || a.name.localeCompare(b.name);
+  return (
+    (a1 ?? 0) - (b1 ?? 0) ||
+    (a2 ?? 0) - (b2 ?? 0) ||
+    a.name.localeCompare(b.name)
+  );
 }

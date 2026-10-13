@@ -11,13 +11,30 @@ export function BeforeAfter({ id, name }: { id: string; name: string }) {
   const sliderId = useId();
   return (
     <figure className={styles.figure}>
-      <div className={styles.frame} style={{ "--split": `${split}%` } as React.CSSProperties}>
-        <Image src={images.room(id)} alt={`The spot with the ${name.toLowerCase()}`} width={960} height={600} sizes="(max-width: 900px) 100vw, 60vw" />
+      <div
+        className={styles.frame}
+        style={{ "--split": `${split}%` } as React.CSSProperties}
+      >
+        <Image
+          src={images.room(id)}
+          alt={`The spot with the ${name.toLowerCase()}`}
+          width={960}
+          height={600}
+          sizes="(max-width: 900px) 100vw, 60vw"
+        />
         <div className={styles.before} aria-hidden="true">
-          <Image src={images.before(id)} alt="" width={960} height={600} sizes="(max-width: 900px) 100vw, 60vw" />
+          <Image
+            src={images.before(id)}
+            alt=""
+            width={960}
+            height={600}
+            sizes="(max-width: 900px) 100vw, 60vw"
+          />
         </div>
         <span className={`${styles.tag} ${styles.left}`}>Before</span>
-        <span className={`${styles.tag} ${styles.right}`}>With the {name.toLowerCase()}</span>
+        <span className={`${styles.tag} ${styles.right}`}>
+          With the {name.toLowerCase()}
+        </span>
       </div>
       <label htmlFor={sliderId} className={styles.label}>
         Slide to compare

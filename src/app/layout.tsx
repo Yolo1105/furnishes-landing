@@ -22,14 +22,20 @@ export const metadata: Metadata = {
     locale: "en_SG",
     type: "website",
   },
-  robots: indexable ? { index: true, follow: true } : { index: false, follow: false },
+  robots: indexable
+    ? { index: true, follow: true }
+    : { index: false, follow: false },
 };
 
 export const viewport: Viewport = {
   themeColor: "#f4f2ec",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en-SG">
       <body>

@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ObjectRender, PriceState, RenderNote, StatusBadge } from "@/components/bits";
+import {
+  ObjectRender,
+  PriceState,
+  RenderNote,
+  StatusBadge,
+} from "@/components/bits";
 import { Elevation } from "@/components/Elevation";
 import { FitCheck } from "@/components/product/FitCheck";
 import { Gallery } from "@/components/product/Gallery";
@@ -29,14 +34,22 @@ import {
   parseConfig,
 } from "@/lib/config";
 import { askMail } from "@/lib/mail";
-import { changeTotals, compareParts, partCount, partsList, steps } from "@/lib/parts";
+import {
+  changeTotals,
+  compareParts,
+  partCount,
+  partsList,
+  steps,
+} from "@/lib/parts";
 import styles from "./product.module.css";
 
 export function generateStaticParams() {
   return designs.map((d) => ({ id: d.id }));
 }
 
-export async function generateMetadata(props: PageProps<"/furniture/[id]">): Promise<Metadata> {
+export async function generateMetadata(
+  props: PageProps<"/furniture/[id]">,
+): Promise<Metadata> {
   const { id } = await props.params;
   const d = getDesign(id);
   if (!d) return {};
@@ -44,7 +57,9 @@ export async function generateMetadata(props: PageProps<"/furniture/[id]">): Pro
     title: d.name,
     description: `${d.line} ${sizeLabel(d.size)}, birch plywood. ${statusInfo[d.status].label}.`,
     alternates: { canonical: `/furniture/${d.id}` },
-    openGraph: { images: [{ url: `/renders/room/${d.id}.webp`, width: 960, height: 600 }] },
+    openGraph: {
+      images: [{ url: `/renders/room/${d.id}.webp`, width: 960, height: 600 }],
+    },
   };
 }
 
@@ -57,8 +72,8 @@ function SiblingChange({ from, to }: { from: Design; to: Design }) {
   const t = changeTotals(compareParts(partsList(a, fa), partsList(b, fb)));
   return (
     <p className={styles.change}>
-      From this piece: <strong>{t.kept}</strong> parts stay, <strong>{t.removed}</strong> come
-      off, <strong>{t.added}</strong> go on.
+      From this piece: <strong>{t.kept}</strong> parts stay,{" "}
+      <strong>{t.removed}</strong> come off, <strong>{t.added}</strong> go on.
     </p>
   );
 }
@@ -73,14 +88,24 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
     ? parseConfig(design.id, await props.searchParams)
     : { config: null, issues: [] };
   const base = configurable ? defaultConfig(design) : null;
-  const isDefault = config && base && configSummary(config) === configSummary(base) && config.quantity === 1;
-  const rows = recipe ? partsList(recipe, config ?? defaultConfig(design)!) : [];
-  const buildSteps = recipe ? steps(recipe, config ?? defaultConfig(design)!) : [];
+  const isDefault =
+    config &&
+    base &&
+    configSummary(config) === configSummary(base) &&
+    config.quantity === 1;
+  const rows = recipe
+    ? partsList(recipe, config ?? defaultConfig(design)!)
+    : [];
+  const buildSteps = recipe
+    ? steps(recipe, config ?? defaultConfig(design)!)
+    : [];
   const siblings = sameFrame(design);
   const situations = problemsFor(design);
   const mainUse = uses.find((u) => u.id === design.uses[0])!;
   const tall = design.size.h >= 1600;
-  const grownFrom = design.grownFrom ? getDesign(design.grownFrom.design) : undefined;
+  const grownFrom = design.grownFrom
+    ? getDesign(design.grownFrom.design)
+    : undefined;
 
   const drawing = recipe ? (
     <Elevation
@@ -115,7 +140,12 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
         <div className={styles.decide}>
           <StatusBadge status={design.status} long />
           <h1 className={styles.title}>{design.name}</h1>
-          <p className={styles.line}>{recipe && configurable ? recipe.use : design.line}</p>
+          <p className={styles.line}>
+            {recipe && configurable ? recipe.use : design.line}
+          </p>
+          <p className={`${styles.quick} num`} aria-hidden="true">
+            {sizeLabel(design.size)} · <PriceState design={design} compact />
+          </p>
 
           {issues.length > 0 && (
             <div className="notice" role="status">
@@ -129,7 +159,8 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
             <div>
               <dt>Size</dt>
               <dd className="num">
-                {sizeLabel(design.size)} <span className="muted">W × H × D, nominal</span>
+                {sizeLabel(design.size)}{" "}
+                <span className="muted">W × H × D, nominal</span>
               </dd>
             </div>
             <div>
@@ -144,7 +175,9 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
                   {recipe.doors ? ` · ${frontName(config.front)}` : ""}
                   <br />
                   {config.accessories.length
-                    ? config.accessories.map((a) => accessories[a].name).join(", ")
+                    ? config.accessories
+                        .map((a) => accessories[a].name)
+                        .join(", ")
                     : "No accessories"}
                   {config.quantity > 1 ? ` · Quantity ${config.quantity}` : ""}
                 </dd>
@@ -156,25 +189,36 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
                 {recipe
                   ? `The piece and its ${rows.find((r) => r.group === "Base")?.name.toLowerCase() ?? "base"}${config?.accessories.length ? ", with the accessories above" : ""}. ${partCount(rows)} parts in all.`
                   : "Not defined yet: this is a concept."}{" "}
-                <span className="muted">Objects shown in the images are not included.</span>
+                <span className="muted">
+                  Objects shown in the images are not included.
+                </span>
               </dd>
             </div>
             <div>
               <dt>Price</dt>
               <dd>
                 <PriceState design={design} />
-                {configurable && <span className="muted"> · {claims.leadTime.label}</span>}
+                {configurable && (
+                  <span className="muted"> · {claims.leadTime.label}</span>
+                )}
               </dd>
             </div>
           </dl>
 
-          <div className={styles.actions}>
+          <div className={`${styles.actions} ${styles.actionsTop}`}>
             {configurable && config ? (
               <>
-                <Link href={configHref(config, "customize")} className="btn btn-primary">
+                <Link
+                  href={configHref(config, "customize")}
+                  className="btn btn-primary"
+                >
                   Customize this piece
                 </Link>
-                <SaveButton design={design.id} config={config} label="Save this version" />
+                <SaveButton
+                  design={design.id}
+                  config={config}
+                  label="Save this version"
+                />
               </>
             ) : (
               <>
@@ -190,7 +234,9 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
               </>
             )}
           </div>
-          <p className={styles.statusNote}>{statusInfo[design.status].detail}</p>
+          <p className={styles.statusNote}>
+            {statusInfo[design.status].detail}
+          </p>
         </div>
       </div>
 
@@ -201,13 +247,12 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
             <div className={styles.prose}>
               <p>{recipe && configurable ? recipe.description : design.line}</p>
               {design.status === "concept" && recipe && (
-                <p className="muted">
-                  Study notes: {recipe.description}
-                </p>
+                <p className="muted">Study notes: {recipe.description}</p>
               )}
               <p className="muted">
-                Shown in {homes[design.home].toLowerCase()}, {design.room}. Part of the{" "}
-                {families[design.family].plural.toLowerCase()} family, on the “{frameName(design.frame)}” frame.
+                Shown in {homes[design.home].toLowerCase()}, {design.room}. Part
+                of the {families[design.family].plural.toLowerCase()} family, on
+                the “{frameName(design.frame)}” frame.
               </p>
             </div>
             {situations.length > 0 && (
@@ -237,13 +282,21 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
               </li>
               <li>
                 <h3 className={styles.small}>Front</h3>
-                <p>{recipe.doors ? "Open, or closed with doors." : "Open front only."}</p>
+                <p>
+                  {recipe.doors
+                    ? "Open, or closed with doors."
+                    : "Open front only."}
+                </p>
               </li>
               <li>
                 <h3 className={styles.small}>Accessories</h3>
                 <p>
-                  {[...recipe.defaultAccessories, ...recipe.optionalAccessories].length
-                    ? [...recipe.defaultAccessories, ...recipe.optionalAccessories]
+                  {[...recipe.defaultAccessories, ...recipe.optionalAccessories]
+                    .length
+                    ? [
+                        ...recipe.defaultAccessories,
+                        ...recipe.optionalAccessories,
+                      ]
                         .map((a) => accessories[a].name)
                         .join(", ")
                     : "None for this piece yet."}
@@ -251,10 +304,16 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
               </li>
               <li>
                 <h3 className={styles.small}>Size</h3>
-                <p>One size for now: {sizeLabel(design.size)}. Other sizes are not offered yet.</p>
+                <p>
+                  One size for now: {sizeLabel(design.size)}. Other sizes are
+                  not offered yet.
+                </p>
               </li>
             </ul>
-            <Link href={configHref(config, "customize")} className="btn btn-primary">
+            <Link
+              href={configHref(config, "customize")}
+              className="btn btn-primary"
+            >
               Customize this piece
             </Link>
           </section>
@@ -267,26 +326,44 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
               {recipe ? (
                 <>
                   <figure>
-                    <Elevation recipe={recipe} config={config ?? defaultConfig(design)!} uid={`s-${design.id}`} title={`${design.name}, front`} />
+                    <Elevation
+                      recipe={recipe}
+                      config={config ?? defaultConfig(design)!}
+                      uid={`s-${design.id}`}
+                      title={`${design.name}, front`}
+                    />
                     <figcaption>Front</figcaption>
                   </figure>
                   <figure>
-                    <Elevation recipe={recipe} config={config ?? defaultConfig(design)!} view="side" uid={`s-${design.id}`} title={`${design.name}, side`} />
+                    <Elevation
+                      recipe={recipe}
+                      config={config ?? defaultConfig(design)!}
+                      view="side"
+                      uid={`s-${design.id}`}
+                      title={`${design.name}, side`}
+                    />
                     <figcaption>Side</figcaption>
                   </figure>
                 </>
               ) : (
                 <figure className={styles.conceptFigure}>
-                  <ObjectRender design={design} sizes="(max-width: 900px) 60vw, 25vw" />
+                  <ObjectRender
+                    design={design}
+                    sizes="(max-width: 900px) 60vw, 25vw"
+                  />
                   <figcaption>
-                    Outline size {sizeLabel(design.size)}. A measured drawing comes when the
-                    concept has a parts recipe.
+                    Outline size {sizeLabel(design.size)}. A measured drawing
+                    comes when the concept has a parts recipe.
                   </figcaption>
                 </figure>
               )}
             </div>
             <div className={styles.prose}>
-              <p>{recipe ? recipe.space : "Sizes are the outline of the concept and may change."}</p>
+              <p>
+                {recipe
+                  ? recipe.space
+                  : "Sizes are the outline of the concept and may change."}
+              </p>
               {tall && <p className="muted">{claims.fixing.detail}</p>}
               <FitCheck size={design.size} name={design.name} />
             </div>
@@ -297,7 +374,9 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
           <section className={styles.section} aria-labelledby="parts">
             <h2 id="parts">Parts and how it goes together</h2>
             <p className="muted">
-              {configurable ? claims.parts.detail : "A study recipe for this concept, not a product."}
+              {configurable
+                ? claims.parts.detail
+                : "A study recipe for this concept, not a product."}
             </p>
             <div className={styles.cols}>
               <details className={styles.details} open={configurable}>
@@ -336,7 +415,9 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
                     <li key={s.title}>
                       <strong>{s.title}.</strong> {s.detail}{" "}
                       <span className="muted">
-                        {s.parts.map((p) => `${p.quantity} × ${p.name.toLowerCase()}`).join(", ")}
+                        {s.parts
+                          .map((p) => `${p.quantity} × ${p.name.toLowerCase()}`)
+                          .join(", ")}
                       </span>
                     </li>
                   ))}
@@ -351,8 +432,8 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
           <div className={styles.prose}>
             <p>{claims.delivery.detail}</p>
             <p className="muted">
-              {claims.leadTime.label}. We don&apos;t state delivery days, assembly time or
-              return terms until they are confirmed.
+              {claims.leadTime.label}. We don&apos;t state delivery days,
+              assembly time or return terms until they are confirmed.
             </p>
           </div>
         </section>
@@ -361,14 +442,20 @@ export default async function ProductPage(props: PageProps<"/furniture/[id]">) {
           <section className={styles.section} aria-labelledby="frame">
             <h2 id="frame">Same frame, another use</h2>
             <p className="muted">
-              These designs start from the same frame as the {design.name.toLowerCase()}. Changing
-              one into another is a concept: part counts come from the drawings, and no
-              conversion kit is offered yet.
+              These designs start from the same frame as the{" "}
+              {design.name.toLowerCase()}. Changing one into another is a
+              concept: part counts come from the drawings, and no conversion kit
+              is offered yet.
             </p>
             {grownFrom && (
               <p className={styles.grown}>
-                Grows out of the <Link href={`/furniture/${grownFrom.id}`}>{grownFrom.name.toLowerCase()}</Link>
-                {design.grownFrom?.adds ? ` by adding ${design.grownFrom.adds}.` : "."}
+                Grows out of the{" "}
+                <Link href={`/furniture/${grownFrom.id}`}>
+                  {grownFrom.name.toLowerCase()}
+                </Link>
+                {design.grownFrom?.adds
+                  ? ` by adding ${design.grownFrom.adds}.`
+                  : "."}
               </p>
             )}
             <ul role="list" className={styles.siblings}>

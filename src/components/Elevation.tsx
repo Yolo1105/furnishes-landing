@@ -17,12 +17,13 @@ type Props = {
   className?: string | undefined;
 };
 
-
 function fill(p: Part, finish: Configuration["finish"], hole: string) {
   if (p.kind === "caster" || p.kind === "hardware") return "var(--hardware)";
   if (p.kind === "base") return "var(--birch-edge)";
-  if (p.kind === "accessory") return p.partId === "key-tray" ? "var(--birch-shade)" : "var(--hardware)";
-  if (p.face) return finish === "orange" ? "var(--orange-face)" : `url(#${hole})`;
+  if (p.kind === "accessory")
+    return p.partId === "key-tray" ? "var(--birch-shade)" : "var(--hardware)";
+  if (p.face)
+    return finish === "orange" ? "var(--orange-face)" : `url(#${hole})`;
   return "var(--birch)";
 }
 
@@ -102,18 +103,52 @@ export function Elevation({
         ))}
       </g>
       {showDimensions && (
-        <g className={styles.dims} aria-hidden="true" style={{ fontSize: 42 * k }}>
+        <g
+          className={styles.dims}
+          aria-hidden="true"
+          style={{ fontSize: 42 * k }}
+        >
           {/* width or depth */}
-          <line x1={X(minX)} x2={X(maxX)} y1={Y(0) + 70 * k} y2={Y(0) + 70 * k} />
-          <line x1={X(minX)} x2={X(minX)} y1={Y(0) + 50 * k} y2={Y(0) + 90 * k} />
-          <line x1={X(maxX)} x2={X(maxX)} y1={Y(0) + 50 * k} y2={Y(0) + 90 * k} />
+          <line
+            x1={X(minX)}
+            x2={X(maxX)}
+            y1={Y(0) + 70 * k}
+            y2={Y(0) + 70 * k}
+          />
+          <line
+            x1={X(minX)}
+            x2={X(minX)}
+            y1={Y(0) + 50 * k}
+            y2={Y(0) + 90 * k}
+          />
+          <line
+            x1={X(maxX)}
+            x2={X(maxX)}
+            y1={Y(0) + 50 * k}
+            y2={Y(0) + 90 * k}
+          />
           <text x={X(minX) + width / 2} y={Y(0) + 130 * k} textAnchor="middle">
             {Math.round(nominal / 10)} cm
           </text>
           {/* height */}
-          <line x1={PAD.left - 80 * k} x2={PAD.left - 80 * k} y1={Y(0)} y2={Y(maxZ)} />
-          <line x1={PAD.left - 100 * k} x2={PAD.left - 60 * k} y1={Y(0)} y2={Y(0)} />
-          <line x1={PAD.left - 100 * k} x2={PAD.left - 60 * k} y1={Y(maxZ)} y2={Y(maxZ)} />
+          <line
+            x1={PAD.left - 80 * k}
+            x2={PAD.left - 80 * k}
+            y1={Y(0)}
+            y2={Y(maxZ)}
+          />
+          <line
+            x1={PAD.left - 100 * k}
+            x2={PAD.left - 60 * k}
+            y1={Y(0)}
+            y2={Y(0)}
+          />
+          <line
+            x1={PAD.left - 100 * k}
+            x2={PAD.left - 60 * k}
+            y1={Y(maxZ)}
+            y2={Y(maxZ)}
+          />
           <text
             x={PAD.left - 100 * k}
             y={Y(maxZ / 2)}

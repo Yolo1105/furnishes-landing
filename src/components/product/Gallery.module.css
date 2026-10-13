@@ -10,7 +10,11 @@
   aspect-ratio: 8 / 7;
   border-radius: var(--radius);
   overflow: hidden;
-  background: linear-gradient(to bottom, var(--stage) 0 82%, var(--sunken) 82% 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--stage) 0 82%,
+    var(--sunken) 82% 100%
+  );
 }
 
 .frame[data-view="room"],
@@ -137,4 +141,15 @@
   border: 2px solid var(--ink);
   padding: 0 13px;
   font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .thumb {
+    min-height: 36px;
+    padding: 0 12px;
+  }
 }

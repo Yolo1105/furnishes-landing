@@ -17,8 +17,14 @@ const DIMS = [
  */
 export function FitCheck({ size, name }: { size: Size; name: string }) {
   const id = useId();
-  const [space, setSpace] = useState<Record<"w" | "h" | "d", string>>({ w: "", h: "", d: "" });
-  const filled = DIMS.filter((d) => space[d.key] !== "" && Number(space[d.key]) > 0);
+  const [space, setSpace] = useState<Record<"w" | "h" | "d", string>>({
+    w: "",
+    h: "",
+    d: "",
+  });
+  const filled = DIMS.filter(
+    (d) => space[d.key] !== "" && Number(space[d.key]) > 0,
+  );
 
   return (
     <div className={styles.fit}>
@@ -34,7 +40,9 @@ export function FitCheck({ size, name }: { size: Size; name: string }) {
               min={1}
               max={1000}
               value={space[d.key]}
-              onChange={(e) => setSpace((s) => ({ ...s, [d.key]: e.target.value }))}
+              onChange={(e) =>
+                setSpace((s) => ({ ...s, [d.key]: e.target.value }))
+              }
             />
           </label>
         ))}
@@ -42,8 +50,8 @@ export function FitCheck({ size, name }: { size: Size; name: string }) {
       <div className={styles.result} aria-live="polite">
         {filled.length === 0 ? (
           <p className="muted">
-            Enter any of the three to compare with the {name.toLowerCase()} ({size.w / 10} ×{" "}
-            {size.h / 10} × {size.d / 10} cm).
+            Enter any of the three to compare with the {name.toLowerCase()} (
+            {size.w / 10} × {size.h / 10} × {size.d / 10} cm).
           </p>
         ) : (
           <ul role="list">
@@ -56,7 +64,9 @@ export function FitCheck({ size, name }: { size: Size; name: string }) {
                 <li key={d.key} data-ok={ok}>
                   <strong>{ok ? "Room to spare" : "Too small"}:</strong>{" "}
                   {d.label.toLowerCase()} {have} cm, piece {need} cm
-                  {ok ? ` (${diff} cm left over)` : ` (${Math.abs(diff)} cm short)`}
+                  {ok
+                    ? ` (${diff} cm left over)`
+                    : ` (${Math.abs(diff)} cm short)`}
                 </li>
               );
             })}

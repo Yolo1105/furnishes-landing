@@ -21,7 +21,8 @@ export function SiteHeader() {
   const open = openOn === path;
   const count = items.length;
 
-  const current = (href: string) => path === href || path.startsWith(`${href}/`);
+  const current = (href: string) =>
+    path === href || path.startsWith(`${href}/`);
 
   return (
     <header className={styles.header}>
@@ -29,11 +30,19 @@ export function SiteHeader() {
         <Link href="/" className={styles.logo} aria-label="Furnishes, home">
           Furnishes
         </Link>
-        <nav aria-label="Main" className={styles.nav} data-open={open || undefined} id="site-nav">
+        <nav
+          aria-label="Main"
+          className={styles.nav}
+          data-open={open || undefined}
+          id="site-nav"
+        >
           <ul role="list">
             {NAV.map((n) => (
               <li key={n.href}>
-                <Link href={n.href} aria-current={current(n.href) ? "page" : undefined}>
+                <Link
+                  href={n.href}
+                  aria-current={current(n.href) ? "page" : undefined}
+                >
                   {n.label}
                 </Link>
               </li>

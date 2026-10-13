@@ -75,7 +75,7 @@
 }
 
 .chip[aria-current="true"]::before {
-  content: "✓";
+  content: "✓" / "";
   margin-right: 6px;
   font-weight: 700;
 }

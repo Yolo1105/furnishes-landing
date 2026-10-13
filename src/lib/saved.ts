@@ -27,7 +27,12 @@ const DRAFTS = "furnishes:quote-drafts:v1";
 const EVENT = "furnishes:saved-change";
 
 /** ready: read on the client yet; available: the browser lets us store. */
-type State = { items: SavedDesign[]; drafts: QuoteDraft[]; available: boolean; ready: boolean };
+type State = {
+  items: SavedDesign[];
+  drafts: QuoteDraft[];
+  available: boolean;
+  ready: boolean;
+};
 const EMPTY: State = { items: [], drafts: [], available: false, ready: false };
 let cache: State | null = null;
 
@@ -80,7 +85,12 @@ function load(): State {
   try {
     const items = clean(JSON.parse(s.getItem(KEY) ?? "[]"));
     const drafts = JSON.parse(s.getItem(DRAFTS) ?? "[]");
-    return { items, drafts: Array.isArray(drafts) ? drafts : [], available: true, ready: true };
+    return {
+      items,
+      drafts: Array.isArray(drafts) ? drafts : [],
+      available: true,
+      ready: true,
+    };
   } catch {
     return { items: [], drafts: [], available: true, ready: true };
   }
@@ -131,7 +141,10 @@ const newId = () =>
     : `s-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 /** Save a new snapshot. Returns its id, or null when the browser refuses storage. */
-export function saveDesign(design: string, config: Configuration | null): string | null {
+export function saveDesign(
+  design: string,
+  config: Configuration | null,
+): string | null {
   const now = new Date().toISOString();
   const entry: SavedDesign = {
     id: newId(),
@@ -147,7 +160,9 @@ export function saveDesign(design: string, config: Configuration | null): string
 /** Replace one snapshot's configuration (Update this version). */
 export function updateSaved(id: string, config: Configuration): boolean {
   const items = snapshot().items.map((e) =>
-    e.id === id ? { ...e, config: { ...config }, updatedAt: new Date().toISOString() } : e,
+    e.id === id
+      ? { ...e, config: { ...config }, updatedAt: new Date().toISOString() }
+      : e,
   );
   return write({ items });
 }
@@ -155,7 +170,11 @@ export function updateSaved(id: string, config: Configuration): boolean {
 export function setQuantity(id: string, quantity: number): boolean {
   const items = snapshot().items.map((e) =>
     e.id === id && e.config
-      ? { ...e, config: { ...e.config, quantity }, updatedAt: new Date().toISOString() }
+      ? {
+          ...e,
+          config: { ...e.config, quantity },
+          updatedAt: new Date().toISOString(),
+        }
       : e,
   );
   return write({ items });
@@ -165,8 +184,15 @@ export function duplicateSaved(id: string): string | null {
   const src = snapshot().items.find((e) => e.id === id);
   if (!src) return null;
   const now = new Date().toISOString();
-  const copy: SavedDesign = { ...src, id: newId(), savedAt: now, updatedAt: now };
-  const items = snapshot().items.flatMap((e) => (e.id === id ? [e, copy] : [e]));
+  const copy: SavedDesign = {
+    ...src,
+    id: newId(),
+    savedAt: now,
+    updatedAt: now,
+  };
+  const items = snapshot().items.flatMap((e) =>
+    e.id === id ? [e, copy] : [e],
+  );
   return write({ items }) ? copy.id : null;
 }
 
@@ -175,7 +201,10 @@ export function removeSaved(id: string): boolean {
 }
 
 export function recordDraft(ids: string[]): boolean {
-  const drafts = [{ draftedAt: new Date().toISOString(), ids }, ...snapshot().drafts].slice(0, 20);
+  const drafts = [
+    { draftedAt: new Date().toISOString(), ids },
+    ...snapshot().drafts,
+  ].slice(0, 20);
   return write({ drafts });
 }
 
@@ -184,7 +213,10 @@ const RESULTS = "furnishes:last-results";
 
 export function rememberResults(href: string, label: string, designId: string) {
   try {
-    window.sessionStorage.setItem(RESULTS, JSON.stringify({ href, label, designId }));
+    window.sessionStorage.setItem(
+      RESULTS,
+      JSON.stringify({ href, label, designId }),
+    );
   } catch {
     /* without session storage the back link is simply not shown */
   }
@@ -199,7 +231,11 @@ function readResults(): string | null {
 }
 
 /** The last results page, read once per render from session storage. */
-export function useLastResults(): { href: string; label: string; designId: string } | null {
+export function useLastResults(): {
+  href: string;
+  label: string;
+  designId: string;
+} | null {
   const raw = useSyncExternalStore(
     () => () => {},
     readResults,

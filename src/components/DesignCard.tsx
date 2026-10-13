@@ -16,7 +16,12 @@ type Props = {
   headingLevel?: "h2" | "h3";
 };
 
-export function DesignCard({ design, reasons, resultsLabel, headingLevel = "h3" }: Props) {
+export function DesignCard({
+  design,
+  reasons,
+  resultsLabel,
+  headingLevel = "h3",
+}: Props) {
   const H = headingLevel;
   return (
     <article className={styles.card} data-status={design.status}>
