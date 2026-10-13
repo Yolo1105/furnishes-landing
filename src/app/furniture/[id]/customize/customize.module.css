@@ -142,8 +142,8 @@
 }
 
 .tab[aria-selected="true"] {
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 .tabNum {

@@ -15,6 +15,7 @@
 }
 
 .logo {
+  color: var(--accent);
   font-family: var(--font-display);
   font-size: 1.75rem;
   line-height: 1;

@@ -33,7 +33,7 @@
 }
 
 .card[data-status="concept"] .stage {
-  background: linear-gradient(to bottom, var(--sunken) 0 86%, #e3ded3 86% 100%);
+  background: linear-gradient(to bottom, var(--sunken) 0 86%, #f3e9e1 86% 100%);
 }
 
 .render {

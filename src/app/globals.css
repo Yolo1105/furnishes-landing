@@ -1,42 +1,44 @@
 /*
-  Furnishes visual system.
-  Warm mineral canvas, graphite type, one deep eucalyptus accent for
-  actions and selected states. The furniture (birch, its orange working
-  face) supplies the colour; the interface stays quiet around it.
+  Furnishes visual system: orange and white.
+  A white page, warm near-black type, one deep orange for actions and
+  selected states (#c93c0a keeps white button text above 4.5:1) and a
+  brighter orange for large decorative details only.
 */
 
 :root {
   color-scheme: light;
 
   /* surfaces */
-  --canvas: #f4f2ec;
-  --surface: #fbfaf6;
-  --sunken: #ebe7de;
-  --stage: #e9e4d9;
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --sunken: #fdf3ec;
+  --stage: #fbf0e8;
+  --band: #fff7f1;
 
   /* type */
-  --ink: #1e211f;
-  --ink-2: #464b47;
-  --ink-3: #636862;
-  --line: #d9d4c9;
-  --line-strong: #b5ae9f;
+  --ink: #1f1a17;
+  --ink-2: #4a403a;
+  --ink-3: #6e625a;
+  --line: #f0e2d8;
+  --line-strong: #dcc2b0;
 
   /* accent: actions, selection, focus */
-  --accent: #2e4b3f;
-  --accent-hover: #233a30;
-  --accent-ink: #fbfaf6;
-  --accent-tint: #e2e9e3;
+  --accent: #c93c0a;
+  --accent-hover: #a8350b;
+  --accent-ink: #ffffff;
+  --accent-tint: #fdeee5;
+  --accent-bright: #e8541e;
 
   /* materials, used in drawings and swatches only */
   --birch: #e8d6b6;
   --birch-shade: #d9c29c;
   --birch-edge: #b8946a;
-  --orange-face: #d9622b;
+  --orange-face: #e2622b;
   --hardware: #3a3d3b;
 
-  --concept: #8b6b3e;
-  --warn-bg: #f6ead6;
-  --warn-ink: #6b4a1c;
+  --concept: #7a6a5e;
+  --warn-bg: #fff4e5;
+  --warn-ink: #7a4a10;
 
   --font-sans:
     "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui,
@@ -265,14 +267,14 @@ button {
 }
 
 .btn-secondary {
-  background: transparent;
-  border-color: var(--ink);
-  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .btn-secondary:hover {
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 .btn-quiet {
@@ -285,7 +287,8 @@ button {
 }
 
 .btn-quiet:hover {
-  border-color: var(--ink);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .btn[disabled],
