@@ -4,7 +4,15 @@ import prettier from "eslint-config-prettier";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: [".next/**", "node_modules/**", "next-env.d.ts", "public/**"] },
+  {
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "next-env.d.ts",
+      "public/**",
+      "tools/render/assets/**",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...nextPlugin,

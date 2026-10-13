@@ -20,6 +20,32 @@ Search engines are blocked until `NEXT_PUBLIC_ALLOW_INDEXING=1` is set at build
 time. Set `NEXT_PUBLIC_SITE_URL` for absolute links in metadata and quote emails
 (default `https://furnish-es.com`).
 
+## Product images
+
+Product images are rendered from the same part model as the drawings and
+parts lists, so a picture always shows the version it is labelled with.
+
+```bash
+pnpm render              # everything (about 15 minutes in software WebGL)
+pnpm render scene/       # only the room view and close-ups
+pnpm render entry-       # only the entry organiser
+```
+
+- `tools/render/scene.ts` builds each piece from `src/lib/parts.ts`: birch
+  veneer faces, 13-ply edges, the working face's 40 mm hole grid, steel hooks
+  and rails. It runs in headless Chromium via `tools/render/render.mjs`.
+- `public/renders/studio/<recipe>-<finish><front>-<accessories>.webp`: every
+  supported version of every configurable recipe, three-quarter view on the
+  chalk backdrop (`--stage`). Names come from `src/lib/renders.ts`; a test
+  fails if any version is missing.
+- `public/renders/scene/`: the entry organiser at eye level beside a door, a
+  close-up of its edge and working face, and a straight front view.
+- Textures, lighting and props are CC0 (see `tools/render/assets/LICENSES.md`).
+  The chair, plant and shoes are scene dressing, not products.
+
+The older renders in `public/renders/{object,room,before}` (from the
+furnishes-house prototype) are still used for concepts.
+
 ## Pages
 
 | Route                       | What it does                                                                                                                             |

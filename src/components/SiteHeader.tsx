@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useSaved } from "@/lib/saved";
+import { Logo } from "./Logo";
 import styles from "./SiteHeader.module.css";
 
 const NAV = [
@@ -28,7 +29,7 @@ export function SiteHeader() {
     <header className={styles.header}>
       <div className={`container ${styles.bar}`}>
         <Link href="/" className={styles.logo} aria-label="Furnishes, home">
-          Furnishes
+          <Logo />
         </Link>
         <nav
           aria-label="Main"

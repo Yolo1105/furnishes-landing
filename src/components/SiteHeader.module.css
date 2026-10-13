@@ -15,12 +15,8 @@
 }
 
 .logo {
-  color: var(--accent);
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  line-height: 1;
+  color: var(--ink);
   text-decoration: none;
-  letter-spacing: -0.01em;
 }
 
 .nav ul {
@@ -46,8 +42,9 @@
 
 .nav a[aria-current="page"] {
   color: var(--ink);
-  background: var(--sunken);
-  box-shadow: inset 0 -2px 0 var(--accent);
+  background: transparent;
+  box-shadow: inset 0 -2px 0 var(--ink);
+  border-radius: 0;
 }
 
 .end {

@@ -1,58 +1,59 @@
 /*
-  Furnishes visual system: orange and white.
-  A white page, warm near-black type, one deep orange for actions and
-  selected states (#c93c0a keeps white button text above 4.5:1) and a
-  brighter orange for large decorative details only.
+  Furnishes visual system.
+  Chalk and graphite, so the birch and its finishes carry the colour. Orange
+  (the working-face finish) is kept for the main action and for selections;
+  #c93c0a keeps white text on it above 4.5:1. --stage matches the backdrop
+  the studio renders are made on (tools/render), so images sit seamlessly.
+  Signature: the plywood edge, 13 plies in 18 mm (.ply-rule).
 */
 
 :root {
   color-scheme: light;
 
   /* surfaces */
-  --canvas: #ffffff;
+  --canvas: #fbfaf8;
   --surface: #ffffff;
-  --sunken: #fdf3ec;
-  --stage: #fbf0e8;
-  --band: #fff7f1;
+  --sunken: #f4f2ee;
+  --stage: #f2efea;
+  --band: #f4f2ee;
 
   /* type */
-  --ink: #1f1a17;
-  --ink-2: #4a403a;
-  --ink-3: #6e625a;
-  --line: #f0e2d8;
-  --line-strong: #dcc2b0;
+  --ink: #1d1f22;
+  --ink-2: #484b50;
+  --ink-3: #686c72;
+  --line: #e4e0d9;
+  --line-strong: #cbc5bb;
 
-  /* accent: actions, selection, focus */
+  /* accent: the main action and selected states */
   --accent: #c93c0a;
   --accent-hover: #a8350b;
   --accent-ink: #ffffff;
-  --accent-tint: #fdeee5;
-  --accent-bright: #e8541e;
+  --accent-tint: #fbece4;
+  --accent-bright: #e2622b;
 
   /* materials, used in drawings and swatches only */
   --birch: #e8d6b6;
   --birch-shade: #d9c29c;
   --birch-edge: #b8946a;
   --orange-face: #e2622b;
-  --hardware: #3a3d3b;
+  --hardware: #2b2a29;
 
-  --concept: #7a6a5e;
-  --warn-bg: #fff4e5;
-  --warn-ink: #7a4a10;
+  --concept: #6f6a62;
+  --warn-bg: #fbf2e3;
+  --warn-ink: #6d4712;
 
   --font-sans:
     "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui,
     -apple-system, "Segoe UI", sans-serif;
-  --font-display:
-    "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-display: var(--font-sans);
 
   --step--1: 0.875rem;
   --step-0: 1rem;
   --step-1: 1.125rem;
   --step-2: 1.375rem;
-  --step-3: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
-  --step-4: clamp(2.25rem, 1.5rem + 2.8vw, 3.5rem);
-  --step-5: clamp(2.75rem, 1.6rem + 4.4vw, 4.75rem);
+  --step-3: clamp(1.5rem, 1.2rem + 1.1vw, 2rem);
+  --step-4: clamp(1.875rem, 1.4rem + 1.8vw, 2.75rem);
+  --step-5: clamp(2.25rem, 1.5rem + 2.9vw, 3.75rem);
 
   --gutter: clamp(16px, 4vw, 48px);
   --max: 1320px;
@@ -120,10 +121,11 @@ ol[role="list"] {
 h1,
 h2,
 .display {
-  font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.04;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-stretch: 96%;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
   text-wrap: balance;
 }
 
@@ -267,14 +269,14 @@ button {
 }
 
 .btn-secondary {
-  background: var(--surface);
-  border-color: var(--accent);
-  color: var(--accent);
+  background: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
 }
 
 .btn-secondary:hover {
-  background: var(--accent);
-  color: var(--accent-ink);
+  background: var(--ink);
+  color: var(--surface);
 }
 
 .btn-quiet {
@@ -287,8 +289,7 @@ button {
 }
 
 .btn-quiet:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--ink);
 }
 
 .btn[disabled],
@@ -346,4 +347,33 @@ button {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---------- the plywood edge: 13 plies in 18 mm ---------- */
+
+.ply-rule {
+  height: 18px;
+  border: 0;
+  margin: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    #ead9ba 0 1.24px,
+    #dcc49c 1.24px 2.77px
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(120 86 46 / 0.35),
+    inset 0 -1px 0 rgb(120 86 46 / 0.35);
+}
+
+.label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-3);
+}
+
+.spec {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--step--1);
+  color: var(--ink-2);
 }

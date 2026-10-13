@@ -1,7 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/instrument-sans";
-import "@fontsource/instrument-serif/400.css";
-import "@fontsource/instrument-serif/400-italic.css";
 import "./globals.css";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -28,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#fbfaf8",
 };
 
 export default function RootLayout({

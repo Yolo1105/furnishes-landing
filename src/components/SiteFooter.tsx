@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { market } from "@/data/market";
+import { Logo } from "./Logo";
 import styles from "./SiteFooter.module.css";
 
 export function SiteFooter() {
@@ -7,7 +8,9 @@ export function SiteFooter() {
     <footer className={styles.footer}>
       <div className={`container ${styles.grid}`}>
         <div className={styles.brand}>
-          <p className={styles.logo}>Furnishes</p>
+          <p className={styles.logo}>
+            <Logo />
+          </p>
           <p className="muted">
             Finished birch plywood furniture for homes in {market.country},
             built from one family of panels and set up for where it stands.
