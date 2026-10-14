@@ -1,6 +1,8 @@
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { ChapterRail } from "@/components/ChapterRail";
+import { HeroDrawing } from "@/components/HeroDrawing";
+import { PlanGlyph } from "@/components/PlanGlyph";
 import { ConceptImage, ProductImage, StatusBadge } from "@/components/bits";
 import { PartsPlate } from "@/components/PartsPlate";
 import { Rail } from "@/components/Rail";
@@ -8,6 +10,8 @@ import { ChangeSteps, type Step } from "@/components/home/ChangeSteps";
 import { Spaces, type Space } from "@/components/home/Spaces";
 import { claims } from "@/data/claims";
 import { packSwap } from "@/data/hero";
+import { families } from "@/data/vocabulary";
+import type { FamilyId } from "@/data/types";
 import { market } from "@/data/market";
 import {
   arrangements,
@@ -20,6 +24,7 @@ import {
   uses,
 } from "@/lib/catalog";
 import { plateRows } from "@/lib/callouts";
+import { records } from "@/lib/records";
 import {
   FRAME_SRC,
   HERO,
@@ -111,10 +116,17 @@ const chapters = [
   { id: "places", label: "Where" },
   { id: "packs", label: "One frame, two packs" },
   { id: "made", label: "Made of" },
+  { id: "kinds", label: "Pieces, walls, screens" },
   { id: "soon", label: "Coming soon" },
   { id: "rooms", label: "Arrangements" },
+  { id: "fit", label: "Will it fit" },
   { id: "next", label: "Next step" },
 ];
+
+const FAMILIES: FamilyId[] = ["pieces", "walls", "screens"];
+const familyUses = (f: FamilyId) =>
+  packs.filter((k) => k.parents.some((id) => getProduct(id)?.family === f))
+    .length;
 
 function HeroPicture() {
   const common = {
@@ -326,7 +338,55 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* 5. The breadth: second batch */}
+      {/* 5. Three kinds, seen from above at one scale */}
+      <section id="kinds" className={styles.chapter} aria-labelledby="kinds-t">
+        <div className={styles.headRow}>
+          <div className={styles.head}>
+            <h2 id="kinds-t">Pieces, walls, screens</h2>
+            <p>
+              Three kinds of furniture from the same boards. Seen from above at
+              one scale, so you can compare what each takes from a room.
+            </p>
+          </div>
+          <Link href="/furniture?view=all" className="text-link">
+            All {records.length} designs
+          </Link>
+        </div>
+        <ul role="list" className={styles.kinds}>
+          {FAMILIES.map((f) => {
+            const list = products.filter((p) => p.family === f);
+            const extra = familyUses(f);
+            return (
+              <li key={f} className={styles.kind}>
+                <div className={styles.plans} aria-hidden="true">
+                  {list.map((p) => (
+                    <PlanGlyph key={p.id} product={p} scale={1 / 22} label="" />
+                  ))}
+                </div>
+                <h3>{families[f].name}</h3>
+                <p>{families[f].line}</p>
+                <p className="spec">
+                  {list.length} {list.length === 1 ? "design" : "designs"}
+                  {extra
+                    ? ` · ${extra} other ${extra === 1 ? "use" : "uses"}`
+                    : ""}
+                </p>
+                <Link
+                  href={`/furniture?view=family#fam-${f}`}
+                  className="text-link"
+                >
+                  See the {families[f].name.toLowerCase()}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <p className={styles.small}>
+          Top views, all at one scale. Dashed lines are a base reaching forward.
+        </p>
+      </section>
+
+      {/* 6. The breadth: second batch */}
       <section id="soon" className={styles.chapter} aria-labelledby="soon-t">
         <div className={styles.headRow}>
           <div className={styles.head}>
@@ -362,7 +422,7 @@ export default function Home() {
         </p>
       </section>
 
-      {/* 6. Arrangements */}
+      {/* 7. Arrangements */}
       <section id="rooms" className={styles.chapter} aria-labelledby="rooms-t">
         <div className={styles.head}>
           <h2 id="rooms-t">A corner, a room</h2>
@@ -395,12 +455,65 @@ export default function Home() {
             </li>
           ))}
         </ul>
+        <h3 className={styles.atlasTitle}>
+          All {arrangements.length}, from above
+        </h3>
+        <ul role="list" className={styles.atlas}>
+          {arrangements.map((a) => (
+            <li key={a.id}>
+              <Link
+                href={`/furniture/${a.members[0]!.product}#around`}
+                className={styles.atlasLink}
+              >
+                <span className={styles.atlasPlan}>
+                  <PlanGlyph
+                    arrangement={a.id}
+                    scale={1 / 40}
+                    label={`${a.name}, seen from above`}
+                  />
+                </span>
+                <span>{a.name}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
         <p className={styles.small}>
-          {claims.conceptRenders.label}. {claims.conceptRenders.detail}
+          {claims.conceptRenders.label}. {claims.conceptRenders.detail} Plans
+          are schematic: 60 × 40 cm segments placed as each arrangement
+          describes them, desk tops dashed.
         </p>
       </section>
 
-      {/* 7. Next step */}
+      {/* 8. Will it fit: one measured example */}
+      <section id="fit" className={styles.chapter} aria-labelledby="fit-t">
+        <div className={styles.fit}>
+          <div className={styles.head}>
+            <h2 id="fit-t">Measure once.</h2>
+            <p>
+              Every launch piece is drawn to the millimetre from its modelling
+              spec. The entry pack is 60 cm wide and 128 cm high; the body is 40
+              cm deep and its base reaches 20 cm further, so keep 60 cm of floor
+              clear.
+            </p>
+            <p className={styles.small}>{claims.fit.detail}</p>
+            <Link href="/furniture/entry#fit" className="text-link">
+              Check it against your space
+            </Link>
+          </div>
+          <figure className={styles.fitDrawing}>
+            <HeroDrawing
+              design="entry"
+              title="Function face, entry pack: front and side"
+              uid="home-fit"
+            />
+            <figcaption className="spec">
+              Front and side · nominal sizes
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      {/* 9. Next step */}
       <section id="next" className={styles.closing} aria-labelledby="next-t">
         <div className={styles.closingInner}>
           <h2 id="next-t">Keep looking, or keep a version.</h2>
@@ -429,7 +542,23 @@ export default function Home() {
                 Choose a launch piece
               </Link>
             </div>
+            <div>
+              <h3>Ask, or send for a quote</h3>
+              <p>
+                Send your kept versions as one email when you&apos;re ready.
+                Questions about a space, a piece or timing go to the same
+                address. {claims.price.label}.
+              </p>
+              <Link href="/help" className="btn btn-secondary">
+                Help and questions
+              </Link>
+            </div>
           </div>
+          <p className={styles.closingIndex}>
+            <Link href="/furniture?view=all">
+              Every design in one list: all {records.length}
+            </Link>
+          </p>
         </div>
       </section>
     </>
