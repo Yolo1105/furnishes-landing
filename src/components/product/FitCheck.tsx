@@ -15,7 +15,16 @@ const DIMS = [
  * A quick check of the nominal size against the visitor's space. It only
  * compares numbers; the answer is always "fit requires confirmation".
  */
-export function FitCheck({ size, name }: { size: Size; name: string }) {
+export function FitCheck({
+  size: s,
+  name,
+}: {
+  size: Size & { baseD?: number };
+  name: string;
+}) {
+  // a base that reaches forward needs its depth too
+  const size = { ...s, d: Math.max(s.d, s.baseD ?? 0) };
+  const cm = (mm: number) => Math.round(mm / 10);
   const id = useId();
   const [space, setSpace] = useState<Record<"w" | "h" | "d", string>>({
     w: "",
@@ -51,13 +60,13 @@ export function FitCheck({ size, name }: { size: Size; name: string }) {
         {filled.length === 0 ? (
           <p className="muted">
             Enter any of the three to compare with the {name.toLowerCase()} (
-            {size.w / 10} × {size.h / 10} × {size.d / 10} cm).
+            {cm(size.w)} × {cm(size.h)} × {cm(size.d)} cm).
           </p>
         ) : (
           <ul role="list">
             {filled.map((d) => {
               const have = Number(space[d.key]);
-              const need = size[d.key] / 10;
+              const need = cm(size[d.key]);
               const diff = Math.round((have - need) * 10) / 10;
               const ok = diff >= 0;
               return (

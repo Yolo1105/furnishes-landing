@@ -2,8 +2,9 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  font-size: var(--step--1);
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
   line-height: 1.2;
   white-space: nowrap;
 }
@@ -14,20 +15,20 @@
   flex: none;
 }
 
-.status[data-status="configurable"] {
-  color: var(--accent);
+.status[data-status="launch"] {
+  color: var(--ink);
 }
 
-.status[data-status="configurable"] .mark {
-  background: var(--accent);
+.status[data-status="launch"] .mark {
+  background: var(--brown);
   border-radius: 2px;
 }
 
-.status[data-status="concept"] {
+.status[data-status="soon"] {
   color: var(--concept);
 }
 
-.status[data-status="concept"] .mark {
+.status[data-status="soon"] .mark {
   border: 1.5px dashed var(--concept);
   border-radius: 50%;
 }
@@ -41,4 +42,26 @@
 .renderNote {
   font-size: var(--step--1);
   color: var(--ink-3);
+}
+
+.footprint {
+  flex: none;
+  overflow: visible;
+}
+
+.footprint rect {
+  fill: var(--orange-soft);
+  stroke: var(--brown);
+  stroke-width: 1;
+}
+
+.footprint .base {
+  fill: none;
+  stroke-dasharray: 2 2;
+}
+
+.footprint path {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 1;
 }

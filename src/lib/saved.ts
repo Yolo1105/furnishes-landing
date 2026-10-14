@@ -2,13 +2,13 @@
 
 import { useSyncExternalStore } from "react";
 import type { Configuration } from "@/data/types";
-import { getDesign, isConfigurable } from "./catalog";
-import { parseConfig, configParams } from "./config";
+import { getProduct } from "./catalog";
+import { configParams, parseConfig } from "./config";
 
 /**
- * Saved designs live in this browser only (localStorage). Each entry is an
- * independent snapshot: editing one never rewrites another. A configurable
- * design keeps its exact configuration; a concept is kept as an idea.
+ * Saved versions live in this browser only (localStorage). Each entry is an
+ * independent snapshot: editing one never rewrites another. A launch piece
+ * keeps its exact configuration; a second-batch piece is kept as an idea.
  */
 export type SavedDesign = {
   id: string;
@@ -22,8 +22,9 @@ export type SavedDesign = {
 /** A quote request we drafted into the visitor's email app. Not proof it was sent. */
 export type QuoteDraft = { draftedAt: string; ids: string[] };
 
-const KEY = "furnishes:saved:v1";
-const DRAFTS = "furnishes:quote-drafts:v1";
+// v2: the six-layer catalogue (2026-10-14); v1 entries were other designs
+const KEY = "furnishes:saved:v2";
+const DRAFTS = "furnishes:quote-drafts:v2";
 const EVENT = "furnishes:saved-change";
 
 /** ready: read on the client yet; available: the browser lets us store. */
@@ -53,16 +54,15 @@ function clean(raw: unknown): SavedDesign[] {
   for (const x of raw) {
     if (!x || typeof x !== "object") continue;
     const e = x as Partial<SavedDesign>;
-    const d = typeof e.design === "string" ? getDesign(e.design) : undefined;
+    const d = typeof e.design === "string" ? getProduct(e.design) : undefined;
     if (!d || typeof e.id !== "string") continue;
     let config: Configuration | null = null;
-    if (e.kind === "configuration" && isConfigurable(d) && e.config) {
+    if (e.kind === "configuration" && d.hero && e.config) {
       const c = e.config;
       const params = configParams({
-        design: d.id,
-        finish: c.finish,
-        front: c.front,
-        accessories: Array.isArray(c.accessories) ? c.accessories : [],
+        design: d.hero,
+        kits: Array.isArray(c.kits) ? c.kits : [],
+        face: c.face === "fabric" ? "fabric" : "solid",
         quantity: Number(c.quantity) || 1,
       });
       config = parseConfig(d.id, params).config;
@@ -150,7 +150,7 @@ export function saveDesign(
     id: newId(),
     design,
     kind: config ? "configuration" : "idea",
-    config: config ? { ...config, accessories: [...config.accessories] } : null,
+    config: config ? { ...config, kits: [...config.kits] } : null,
     savedAt: now,
     updatedAt: now,
   };

@@ -1,125 +1,77 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState } from "react";
-import type { Design } from "@/data/types";
-import { images } from "@/lib/catalog";
+import { useState } from "react";
 import styles from "./Gallery.module.css";
 
-export type GalleryView = "object" | "room" | "before" | "drawing";
-
-type Props = {
-  design: Design;
-  /** A server-rendered drawing for the "drawing" view, when there is one. */
-  drawing?: React.ReactNode;
+export type GalleryImage = {
+  src: string;
+  w: number;
+  h: number;
+  alt: string;
 };
 
-const LABEL: Record<GalleryView, string> = {
-  object: "On its own",
-  room: "In a room",
-  before: "Before and after",
-  drawing: "Measured drawing",
+export type GalleryView = {
+  key: string;
+  label: string;
+  /** shown under the picture: what it is and what's not included */
+  caption: string;
+  image?: GalleryImage;
+  /** a server-rendered drawing instead of a picture */
+  node?: React.ReactNode;
+  /** how the frame holds the picture */
+  fit?: "cover" | "contain";
 };
 
 /**
- * Object, room, before/after and drawing views of one design. Thumbnails
- * are buttons (keyboard and touch); the selected view is marked by a
- * border and aria-pressed, not by colour alone.
+ * Views of one product. "A piece", "A corner" and "A room" widen the view
+ * of the same piece (doc 13); the camera of each picture stays put, and
+ * switching only swaps the picture. Buttons work with keyboard and touch;
+ * the selected view is marked by aria-pressed and a border, not colour.
  */
-export function Gallery({ design, drawing }: Props) {
-  const views: GalleryView[] = ["object"];
-  if (design.image.room) views.push("room");
-  if (design.image.before) views.push("before");
-  if (drawing) views.push("drawing");
-  const [view, setView] = useState<GalleryView>("object");
-  const [split, setSplit] = useState(50);
-  const sliderId = useId();
-
+export function Gallery({
+  views,
+  start,
+  label,
+}: {
+  views: GalleryView[];
+  start: string;
+  label: string;
+}) {
+  const [key, setKey] = useState(start);
+  const v = views.find((x) => x.key === key) ?? views[0]!;
   return (
     <div className={styles.gallery}>
-      <div className={styles.frame} data-view={view}>
-        {view === "object" && (
+      <figure className={styles.frame} data-fit={v.fit ?? "cover"}>
+        {v.image ? (
           <Image
-            src={images.object(design.id)}
-            alt={`${design.name}, rendered on its own`}
-            width={design.image.object.w}
-            height={design.image.object.h}
-            sizes="(max-width: 900px) 80vw, 40vw"
-            preload
-            className={styles.object}
-          />
-        )}
-        {view === "room" && (
-          <Image
-            src={images.room(design.id)}
-            alt={`${design.name} in a room, ${design.room}`}
-            width={960}
-            height={600}
+            key={v.image.src}
+            src={v.image.src}
+            alt={v.image.alt}
+            width={v.image.w}
+            height={v.image.h}
             sizes="(max-width: 900px) 100vw, 60vw"
-            className={styles.room}
+            preload={v.key === start}
+            className={styles.img}
           />
+        ) : (
+          <div className={styles.node}>{v.node}</div>
         )}
-        {view === "before" && (
-          <div
-            className={styles.compare}
-            style={{ "--split": `${split}%` } as React.CSSProperties}
+        <figcaption className={styles.caption}>{v.caption}</figcaption>
+      </figure>
+      <div className={styles.views} role="group" aria-label={label}>
+        {views.map((x) => (
+          <button
+            key={x.key}
+            type="button"
+            className={styles.view}
+            aria-pressed={x.key === v.key}
+            onClick={() => setKey(x.key)}
           >
-            <Image
-              src={images.room(design.id)}
-              alt={`The same spot with the ${design.name.toLowerCase()}`}
-              width={960}
-              height={600}
-              sizes="(max-width: 900px) 100vw, 60vw"
-              className={styles.room}
-            />
-            <div className={styles.beforeLayer} aria-hidden="true">
-              <Image
-                src={images.before(design.id)}
-                alt=""
-                width={960}
-                height={600}
-                sizes="(max-width: 900px) 100vw, 60vw"
-                className={styles.room}
-              />
-            </div>
-            <span className={`${styles.tag} ${styles.tagLeft}`}>Before</span>
-            <span className={`${styles.tag} ${styles.tagRight}`}>
-              With the {design.name.toLowerCase()}
-            </span>
-          </div>
-        )}
-        {view === "drawing" && <div className={styles.drawing}>{drawing}</div>}
+            {x.label}
+          </button>
+        ))}
       </div>
-
-      {view === "before" && (
-        <div className={styles.slider}>
-          <label htmlFor={sliderId}>Compare before and after</label>
-          <input
-            id={sliderId}
-            type="range"
-            min={0}
-            max={100}
-            value={split}
-            onChange={(e) => setSplit(Number(e.target.value))}
-          />
-        </div>
-      )}
-
-      {views.length > 1 && (
-        <div className={styles.thumbs} role="group" aria-label="Views">
-          {views.map((v) => (
-            <button
-              key={v}
-              type="button"
-              className={styles.thumb}
-              aria-pressed={view === v}
-              onClick={() => setView(v)}
-            >
-              {LABEL[v]}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

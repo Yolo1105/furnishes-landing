@@ -45,7 +45,7 @@
 }
 
 .result li[data-ok="true"] strong {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .result li[data-ok="false"] strong {

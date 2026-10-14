@@ -1,0 +1,53 @@
+.drawing {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  overflow: visible;
+}
+
+.board {
+  fill: var(--cream);
+  stroke: var(--brown);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.metal {
+  fill: #3a3633;
+  stroke: #3a3633;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.acc {
+  fill: var(--orange);
+  stroke: var(--brown);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.floor {
+  stroke: var(--ink-3);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dim line {
+  stroke: var(--ink-2);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.dim text,
+.view {
+  font-family: var(--font-mono);
+  font-size: 44px;
+  fill: var(--ink);
+  text-anchor: middle;
+}
+
+.view {
+  text-anchor: start;
+  font-size: 40px;
+  fill: var(--ink-2);
+}

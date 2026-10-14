@@ -1,376 +1,190 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { DesignCard } from "@/components/DesignCard";
-import type { ActivityId, ObjectId, UseId } from "@/data/types";
-import { activities, objects, uses } from "@/data/vocabulary";
-import { images } from "@/lib/catalog";
+import { ProductCard } from "@/components/ProductCard";
+import type { ObjectId, UseId } from "@/data/types";
+import { objects } from "@/data/vocabulary";
+import { bySiteOrder, products, uses } from "@/lib/catalog";
 import {
-  examples,
   explore,
   exploreParams,
   hasAnswers,
   parseExplore,
   type ExploreState,
 } from "@/lib/explore";
+import { SCENE, sceneSrc } from "@/lib/renders";
 import styles from "./explore.module.css";
 
 export const metadata: Metadata = {
   title: "Explore",
   description:
-    "Start from a room, something you do, the things you want a place for, or an everyday situation. See the designs that fit, and why.",
+    "Start with a place in your home or the things you love, and see the pieces that fit, with the reason each one fits.",
   alternates: { canonical: "/explore" },
 };
 
-const SHOWN = 9;
+/** The piece each place is pictured with. */
+const COVER: Record<UseId, string> = {
+  entryway: "entry",
+  work: "desk",
+  bedroom: "bedside",
+  living: "low-cabinet",
+  kitchen: "kitchen",
+  dividing: "bookwall",
+};
 
 function toggle<T extends string>(list: T[], v: T): T[] {
   return list.includes(v) ? list.filter((x) => x !== v) : [...list, v];
 }
 
-function href(s: ExploreState, extra?: Record<string, string>) {
-  const q = exploreParams(s);
-  for (const [k, v] of Object.entries(extra ?? {})) q.set(k, v);
-  const qs = q.toString();
+function href(s: ExploreState) {
+  const qs = exploreParams(s).toString();
   return qs ? `/explore?${qs}` : "/explore";
 }
 
 function describe(s: ExploreState) {
-  const parts = [
+  return [
     ...s.rooms.map((r) => uses.find((u) => u.id === r)!.name),
-    ...s.doing.map((a) =>
-      activities.find((x) => x.id === a)!.name.toLowerCase(),
-    ),
     ...s.things.map((o) => objects.find((x) => x.id === o)!.name.toLowerCase()),
-  ];
-  if (s.example)
-    parts.push(
-      `like the ${examples.find((e) => e.design.id === s.example)?.design.name.toLowerCase() ?? "example"}`,
-    );
-  return parts.join(", ");
+  ].join(", ");
 }
 
 export default async function ExplorePage(props: PageProps<"/explore">) {
-  const sp = await props.searchParams;
-  const s = parseExplore(sp);
-  const showAll = sp.all === "1";
+  const s = parseExplore(await props.searchParams);
   const answered = hasAnswers(s);
-  const matches = answered ? explore(s) : [];
+  const matches = answered
+    ? explore(s)
+    : [...products]
+        .sort(bySiteOrder)
+        .map((p) => ({ product: p, reasons: [], exact: true }));
   const exact = matches.length > 0 && matches[0]!.exact;
-  const visible = showAll ? matches : matches.slice(0, SHOWN);
-  const resultsLabel = `Explore: ${describe(s)}`;
-  const featured = [...examples]
-    .sort((a, b) =>
-      a.design.status === b.design.status
-        ? 0
-        : a.design.status === "configurable"
-          ? -1
-          : 1,
-    )
-    .slice(0, 8);
-
-  const chip = (active: boolean, to: string, label: string, key: string) => (
-    <li key={key}>
-      <Link
-        href={to}
-        className={styles.chip}
-        aria-current={active ? "true" : undefined}
-        scroll={false}
-        replace
-      >
-        {label}
-      </Link>
-    </li>
-  );
+  const label = answered ? `Explore: ${describe(s)}` : "Explore";
 
   return (
     <div className="container">
       <header className={styles.head}>
-        <p className="eyebrow">Explore</p>
-        <h1>Start from the room, the thing, or a picture.</h1>
-        <p className="lede">
-          Pick anything that sounds like you. Nothing is required, and nothing
-          you pick here is added to a design. It only narrows what we show.
+        <h1>Start with what you love</h1>
+        <p className={styles.lede}>
+          A place in your home, or the things you want a place for. Pick any;
+          nothing is required, and nothing you pick is added to a piece. The
+          results show why each one fits.
         </p>
-        <p>
-          <Link href="/furniture" className="text-link">
-            Skip to all furniture →
-          </Link>
-        </p>
+        <Link href="/furniture" className="text-link">
+          Skip to all furniture
+        </Link>
       </header>
 
-      <section className={styles.block} aria-labelledby="q-room">
-        <h2 id="q-room" className={styles.q}>
-          <span className={styles.qNum}>1</span> Which room?
-        </h2>
-        <ul role="list" className={styles.rooms}>
-          {uses.map((u) => {
-            const active = s.rooms.includes(u.id as UseId);
-            return (
-              <li key={u.id}>
-                <Link
-                  href={href({ ...s, rooms: toggle(s.rooms, u.id as UseId) })}
-                  className={styles.room}
-                  aria-current={active ? "true" : undefined}
-                  scroll={false}
-                  replace
-                >
-                  <Image
-                    src={images.room(u.cover)}
-                    alt=""
-                    width={960}
-                    height={600}
-                    sizes="(max-width: 700px) 50vw, 240px"
-                  />
-                  <span className={styles.roomName}>{u.name}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+      <div className={styles.layout}>
+        <div className={styles.choices}>
+          <section aria-labelledby="q-where" className={styles.block}>
+            <h2 id="q-where" className={styles.q}>
+              Where?
+            </h2>
+            <ul role="list" className={styles.places}>
+              {uses.map((u) => {
+                const on = s.rooms.includes(u.id);
+                return (
+                  <li key={u.id}>
+                    <Link
+                      href={href({
+                        ...s,
+                        rooms: toggle(s.rooms, u.id as UseId),
+                      })}
+                      className={styles.place}
+                      aria-current={on ? "true" : undefined}
+                      scroll={false}
+                      replace
+                    >
+                      <Image
+                        src={sceneSrc(COVER[u.id])}
+                        alt=""
+                        width={SCENE.w}
+                        height={SCENE.h}
+                        sizes="(max-width: 700px) 45vw, 180px"
+                      />
+                      <span className={styles.placeName}>
+                        {on ? "✓ " : ""}
+                        {u.name}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
 
-      <section className={styles.block} aria-labelledby="q-do">
-        <h2 id="q-do" className={styles.q}>
-          <span className={styles.qNum}>2</span> What do you want to do there?
-        </h2>
-        <ul role="list" className={styles.chips}>
-          {activities.map((a) =>
-            chip(
-              s.doing.includes(a.id),
-              href({ ...s, doing: toggle(s.doing, a.id as ActivityId) }),
-              a.name,
-              a.id,
-            ),
-          )}
-        </ul>
-      </section>
-
-      <section className={styles.block} aria-labelledby="q-things">
-        <h2 id="q-things" className={styles.q}>
-          <span className={styles.qNum}>3</span> What needs a place?
-        </h2>
-        <ul role="list" className={styles.chips}>
-          {objects.map((o) =>
-            chip(
-              s.things.includes(o.id),
-              href({ ...s, things: toggle(s.things, o.id as ObjectId) }),
-              o.name,
-              o.id,
-            ),
-          )}
-        </ul>
-      </section>
-
-      <section className={styles.block} aria-labelledby="q-example">
-        <h2 id="q-example" className={styles.q}>
-          <span className={styles.qNum}>4</span> Or start from a situation
-        </h2>
-        <ul role="list" className={styles.examples}>
-          {featured.map((e) => (
-            <li key={e.design.id}>
-              <Link
-                href={href({
-                  ...s,
-                  example: s.example === e.design.id ? null : e.design.id,
-                })}
-                className={styles.example}
-                aria-current={s.example === e.design.id ? "true" : undefined}
-                scroll={false}
-                replace
-              >
-                <Image
-                  src={images.room(e.design.id)}
-                  alt=""
-                  width={960}
-                  height={600}
-                  sizes="(max-width: 700px) 50vw, 300px"
-                />
-                <span>“{e.text}”</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <details className={styles.more}>
-          <summary>
-            More situations ({examples.length - featured.length})
-          </summary>
-          <ul role="list" className={styles.moreList}>
-            {examples
-              .slice()
-              .filter((e) => !featured.includes(e))
-              .map((e) => (
-                <li key={e.design.id}>
+          <section aria-labelledby="q-things" className={styles.block}>
+            <h2 id="q-things" className={styles.q}>
+              What needs a place?
+            </h2>
+            <ul role="list" className={styles.chips}>
+              {objects.map((o) => (
+                <li key={o.id}>
                   <Link
-                    href={href({ ...s, example: e.design.id })}
-                    aria-current={
-                      s.example === e.design.id ? "true" : undefined
-                    }
+                    href={href({
+                      ...s,
+                      things: toggle(s.things, o.id as ObjectId),
+                    })}
+                    className={styles.chip}
+                    aria-current={s.things.includes(o.id) ? "true" : undefined}
                     scroll={false}
                     replace
                   >
-                    “{e.text}”
+                    {o.name}
                   </Link>
                 </li>
               ))}
-          </ul>
-        </details>
-      </section>
-
-      {answered && (
-        <div className={styles.jump}>
-          <a href="#results" className={styles.jumpLink}>
-            <strong className="num">{matches.length}</strong>{" "}
-            {matches.length === 1 ? "design fits" : "designs fit"} · See them ↓
-          </a>
-        </div>
-      )}
-
-      <section
-        id="results"
-        className={styles.results}
-        aria-labelledby="results-title"
-        aria-live="polite"
-      >
-        <div className={styles.resultsHead}>
-          <h2 id="results-title">
-            {answered
-              ? exact
-                ? "Designs that fit"
-                : "Closest designs"
-              : "Your results appear here"}
-          </h2>
+            </ul>
+          </section>
           {answered && (
-            <div className={styles.selected}>
-              <span className="muted">You picked:</span>
-              <ul role="list" className={styles.selectedList}>
-                {s.rooms.map((r) => (
-                  <li key={r}>
-                    <Link
-                      href={href({
-                        ...s,
-                        rooms: s.rooms.filter((x) => x !== r),
-                      })}
-                      className={styles.remove}
-                      scroll={false}
-                      replace
-                    >
-                      {uses.find((u) => u.id === r)!.name}{" "}
-                      <span aria-hidden="true">×</span>
-                      <span className="visually-hidden"> (remove)</span>
-                    </Link>
-                  </li>
-                ))}
-                {s.doing.map((a) => (
-                  <li key={a}>
-                    <Link
-                      href={href({
-                        ...s,
-                        doing: s.doing.filter((x) => x !== a),
-                      })}
-                      className={styles.remove}
-                      scroll={false}
-                      replace
-                    >
-                      {activities.find((x) => x.id === a)!.name}{" "}
-                      <span aria-hidden="true">×</span>
-                      <span className="visually-hidden"> (remove)</span>
-                    </Link>
-                  </li>
-                ))}
-                {s.things.map((o) => (
-                  <li key={o}>
-                    <Link
-                      href={href({
-                        ...s,
-                        things: s.things.filter((x) => x !== o),
-                      })}
-                      className={styles.remove}
-                      scroll={false}
-                      replace
-                    >
-                      {objects.find((x) => x.id === o)!.name}{" "}
-                      <span aria-hidden="true">×</span>
-                      <span className="visually-hidden"> (remove)</span>
-                    </Link>
-                  </li>
-                ))}
-                {s.example && (
-                  <li>
-                    <Link
-                      href={href({ ...s, example: null })}
-                      className={styles.remove}
-                      scroll={false}
-                      replace
-                    >
-                      Situation <span aria-hidden="true">×</span>
-                      <span className="visually-hidden"> (remove)</span>
-                    </Link>
-                  </li>
-                )}
-              </ul>
-              <Link
-                href="/explore"
-                className="text-link"
-                scroll={false}
-                replace
-              >
-                Clear all
-              </Link>
-            </div>
+            <Link href="/explore" className="text-link" scroll={false} replace>
+              Clear choices
+            </Link>
           )}
         </div>
 
-        {!answered && (
-          <p className="muted">
-            Pick a room, an activity, a thing or a situation above, or{" "}
-            <Link href="/furniture">see all furniture</Link>.
-          </p>
-        )}
-        {answered && !exact && matches.length > 0 && (
-          <p className="notice">
-            Nothing fits every choice, so these fit some of them. Removing a
-            choice may help.
-          </p>
-        )}
-        {answered && matches.length === 0 && (
-          <p className="notice">
-            Nothing fits these choices. Try removing one.
-          </p>
-        )}
-        {visible.length > 0 && (
-          <>
-            <p className={styles.count}>
-              {matches.length} {matches.length === 1 ? "design" : "designs"}
-              {!showAll && matches.length > SHOWN
-                ? `, showing the best ${SHOWN}`
-                : ""}
-              . Best matches first; concepts are marked.
+        <section
+          id="results"
+          className={styles.results}
+          aria-labelledby="results-t"
+          aria-live="polite"
+        >
+          <div className={styles.resultsHead}>
+            <h2 id="results-t">
+              {!answered
+                ? "Everything, to start"
+                : exact
+                  ? "These fit"
+                  : "Closest fits"}
+            </h2>
+            <p className="spec">
+              {matches.length} of {products.length}
+              {answered ? ` · ${describe(s)}` : ""} · launch pieces first
             </p>
-            <ul role="list" className={styles.grid}>
-              {visible.map((m) => (
-                <li key={m.design.id}>
-                  <DesignCard
-                    design={m.design}
-                    reasons={m.reasons}
-                    resultsLabel={resultsLabel}
-                  />
-                </li>
-              ))}
-            </ul>
-            {!showAll && matches.length > SHOWN && (
-              <Link
-                href={href(s, { all: "1" })}
-                className="btn btn-secondary"
-                scroll={false}
-                replace
-              >
-                Show all {matches.length}
-              </Link>
-            )}
-          </>
-        )}
-      </section>
+          </div>
+          {answered && !exact && matches.length > 0 && (
+            <p className="notice">
+              Nothing fits every choice, so these fit some of them. Removing one
+              may help.
+            </p>
+          )}
+          {answered && matches.length === 0 && (
+            <p className="notice">
+              Nothing fits these choices. Try removing one.
+            </p>
+          )}
+          <ul role="list" className={styles.grid}>
+            {matches.map((m) => (
+              <li key={m.product.id}>
+                <ProductCard
+                  product={m.product}
+                  reasons={m.reasons}
+                  resultsLabel={label}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 }

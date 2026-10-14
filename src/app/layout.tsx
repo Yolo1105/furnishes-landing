@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/instrument-sans";
+import "@fontsource-variable/archivo/wdth.css";
+import "@fontsource/space-mono/400.css";
+import "@fontsource/space-mono/700.css";
 import "./globals.css";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -26,7 +28,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbfaf8",
+  themeColor: "#ffeddf",
 };
 
 export default function RootLayout({

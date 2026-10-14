@@ -1,0 +1,80 @@
+# Furnishes 主样建模规格 v0 · 参数表
+# 2026-10-14 · 适用：F1200功能面（玄关包 1.1、书桌旁包 1.2）与低位块（床边块 1.3）
+#
+# 每个参数都有 source：
+#   原文   = 家具记录 v1.1／v2.0 中的候选值
+#   决定   = D1–D16（见总审稿 v1.3 第02章）
+#   假设   = 建模假设值，编号 X##，样件或出图后替换；不得当作已验证数据
+#   （编号用X是为了不和原文的动作库 A0–A17、检查项 H01–H31 混淆）
+#
+# 坐标系（所有零件位置均按此）：
+#   x 宽度方向，左→右；y 深度方向，前(0)→后；z 高度方向，地面(0)↑
+#   原点 = 主体前沿左下角在地面上的投影；加宽底座向前伸出时 y 为负
+# 单位：毫米、公斤、牛
+
+global:
+  T_board:        {value: 18,   source: 原文, note: "18为首样候选，15为对照；改为15时全部开料尺寸由脚本重算"}
+  T_panel:        {value: 12,   source: 假设, id: X01, note: "分层面板厚度原文未给；取12以便入槽并保留竖板强度"}
+  T_face:         {value: 6,    source: 假设, id: X02, note: "D6方案b 薄穿孔挂载面厚度（4–6）"}
+  groove_depth:   {value: 8,    source: 假设, id: X03, note: "竖板内侧面板槽深"}
+  groove_clear:   {value: 0.5,  source: 假设, id: X04, note: "槽宽 = T_panel + 2×此值"}
+  groove_back_inset: {value: 10, source: 假设, id: X05, note: "面板后表面到竖板后沿的距离（后位槽）"}
+  fit_clear:      {value: 1.0,  source: 假设, id: X06, note: "层板、底梁在两竖板间的总间隙"}
+  panel_vert_clear: {value: 0.5, source: 假设, id: X07, note: "每块面板高度方向留隙"}
+  pin_dia:        {value: 5,    source: 原文, note: "System 32 层板销孔"}
+  pin_pitch:      {value: 32,   source: 原文}
+  pin_front_setback: {value: 37, source: 原文}
+  pin_back_setback:  {value: 37, source: 假设, id: X08, note: "后排孔距层板后沿；原文只给前沿37"}
+  pin_z_margin:   {value: 64,   source: 假设, id: X09, note: "孔列距竖板上下端的最小距离"}
+  edge_radius:    {value: 2,    source: 原文, note: "H29 可触边缘 R2 候选"}
+  ply_density:    {value: 680,  source: 假设, id: X10, note: "桦木胶合板 kg/m³；18毫米约12.2 kg/m²，与原文12.5 kg/m²一致"}
+  face_finish:    {value: "白色层压饰面桦木胶合板（与白漆样板对比）", source: 决定, id: D15}
+
+frame_F1200:            # 骨架①：F1200整高功能面（1.1、1.2 共用；3.1 移动屏复用）
+  W:              {value: 600,  source: 原文}
+  H_side:         {value: 1200, source: 原文, note: "竖板高度；整件总高 = 底座 + 竖板 + 顶盖，见检查报告"}
+  D:              {value: 400,  source: 原文, note: "D4：不固定时≥400；靠墙固定时可做约300（D13）"}
+  D_alt_anchored: {value: 300,  source: 决定, id: D13, note: "仅在附防倾固定件时允许"}
+  beam_z:         {value: 40,   source: 假设, id: X11, note: "结构底梁下表面距竖板底端"}
+  top_overhang:   {value: 0,    source: 假设, id: X12, note: "顶盖与竖板外沿齐平"}
+
+base_wide:              # D13：1.2米及以上挂物件标配
+  depth:          {value: 600,  source: 决定, id: D13}
+  height:         {value: 60,   source: 假设, id: X13, note: "粉末喷涂钢制雪橇底座含调节脚的总高"}
+  back_flush:     {value: true, source: 假设, id: X14, note: "底座后沿与主体后沿齐平，向前伸出 depth−D，可贴墙"}
+  mass:           {value: 8,    source: 假设, id: X15}
+  counterweight:  {value: 10,   source: 决定, id: D13, note: "配重板质量为假设值 X16"}
+  bolt_pattern:   {value: [[60, 60], [540, 60], [60, 340], [540, 340]], source: 假设, id: X17, note: "端口6：通用螺栓孔型（相对主体原点的x,y）；脚垫、脚轮、加宽底座共用"}
+  anti_tip_kit:   {value: "随货附送：墙面固定带×1＋膨胀螺丝组", source: 决定, id: D13}
+
+entry_pack:             # 1.1 玄关包
+  shoe_board:     {value: {w: 562, d: 300, t: 18, angle_deg: 15, front_edge_z: 160}, source: 假设, id: X18, note: "鞋斜板原文无尺寸"}
+  narrow_shelf_z: {value: 760,  source: 假设, id: X19, note: "窄层板上表面距地（钥匙、手机台）"}
+  hanging_face:   {value: {option: b, z_from: 860, z_to: 1220, spacer: 20}, source: 决定, id: D6, note: "方案b范围与间隔为假设 X20"}
+  hooks:          {value: {count: 3, z: 1120}, source: 假设, id: X21}
+  key_tray_z:     {value: 980, source: 假设, id: X22}
+  umbrella_x:     {value: 70,  source: 假设, id: X23}
+
+desk_pack:              # 1.2 书桌旁包
+  shelf_z:        {value: [800, 1080], source: 假设, id: X24, note: "两块全深层板上表面距地"}
+  rail:           {value: {optional: true, z: 960, length: 540}, source: 决定, id: D5, note: "铝轨高度与长度为假设 X25"}
+  monitor_port_z: {value: 900, source: 假设, id: X26, note: "端口3在书桌侧竖板外侧面"}
+
+desk_kit:               # 加装：桌板套件（先卖层）
+  top:            {value: {l: 1200, w: 600, t: 25}, source: 原文, note: "原文1200×600；厚度25为假设 X27，另加钢加强件"}
+  top_z:          {value: 720, source: 原文, note: "桌面高度目标约720"}
+  stiffener:      {value: "30×15 钢方管×1，桌板底面通长", source: 决定, id: D5}
+  leg:            {value: "钢制全高桌腿总成×1（远端）", source: 决定, id: D5}
+
+frame_lowblock:         # 骨架②：低位块（1.3 床边块）
+  W:              {value: 600, source: 原文}
+  H_side:         {value: 400, source: 原文, note: "S400"}
+  D:              {value: 400, source: 原文}
+  legs:           {value: 150, source: 原文, note: "约150高钢脚；总高 150+400+18 = 568"}
+  stack_max_tiers: {value: 3, source: 决定, id: D14, note: "叠到3层（约1368含脚）时附防倾固定件"}
+
+stability:              # 粗算输入（D13 规则校核用）
+  pull_height:    {value: 1100, source: 假设, id: X28}
+  hang_load:      {value: 10,   source: 假设, id: X29, note: "前挂衣物包袋 kg"}
+  hang_offset:    {value: 80,   source: 假设, id: X30, note: "挂物重心在面板前方的距离"}
+  min_pull_N:     {value: 100,  source: 假设, id: X31, note: "规划阶段的最低临界拉力目标；正式标准与测试后替换"}

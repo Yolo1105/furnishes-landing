@@ -1,206 +1,287 @@
 import { describe, expect, it } from "vitest";
-import { designs, problems } from "@/data/designs";
-import { recipes } from "@/data/recipes";
-import { prices } from "@/data/market";
-import { getDesign, isConfigurable, recipeOf, sizeLabel } from "./catalog";
+import { heroParts, heroSteps, kits, packSwap } from "@/data/hero";
+import { arrangements, packs, products } from "@/data/products";
+import { arrangementsWith, getProduct, packsFor } from "./catalog";
+import { configParams, configSummary, parseConfig, swapPack } from "./config";
 import {
-  configHref,
-  configKey,
-  configParams,
-  configSummary,
-  defaultConfig,
-  parseConfig,
-} from "./config";
-import {
-  emptyExplore,
   explore,
-  exploreParams,
-  filterDesigns,
-  parseExplore,
+  filterProducts,
   parseFilters,
+  reasonSentence,
 } from "./explore";
-import {
-  compareParts,
-  changeTotals,
-  partCount,
-  partsList,
-  steps,
-} from "./parts";
+import { changes, partRows } from "./version";
 
-describe("catalogue", () => {
-  it("has all 64 designs with unique ids and an object render each", () => {
-    expect(designs).toHaveLength(64);
-    expect(new Set(designs.map((d) => d.id)).size).toBe(64);
-    for (const d of designs) expect(d.image.object.w).toBeGreaterThan(0);
+/** Records in layers E (research) and F (parked): never on the site (D11). */
+const HIDDEN = [
+  "2.7",
+  "2.8",
+  "2.10",
+  "2.14",
+  "2.15",
+  "2.25",
+  "2.26",
+  "3.3",
+  "1.8",
+  "1.12",
+  "1.13",
+  "1.19",
+  "1.20",
+  "2.13",
+  "2.21",
+  "2.27",
+  "2.28",
+  "3.8",
+];
+
+describe("catalogue by layer", () => {
+  it("has 3 launch pieces and 11 coming soon, launch first", () => {
+    expect(
+      products.filter((p) => p.layer === "A").map((p) => p.record),
+    ).toEqual(["1.1", "1.2", "1.3"]);
+    expect(
+      products
+        .filter((p) => p.layer === "B")
+        .map((p) => p.record)
+        .sort(),
+    ).toEqual(
+      [
+        "1.4",
+        "1.6",
+        "1.10",
+        "1.14",
+        "1.16",
+        "1.17",
+        "2.1",
+        "2.2",
+        "2.9",
+        "2.12",
+        "3.1",
+      ].sort(),
+    );
   });
 
-  it("only configurable designs with a recipe can be configured", () => {
-    const configurable = designs.filter(isConfigurable).map((d) => d.id);
-    expect(configurable).toHaveLength(11);
-    expect(configurable).toContain("entry");
-    expect(isConfigurable(getDesign("island")!)).toBe(false);
+  it("has 14 packs and 14 arrangements, all pointing at real products", () => {
+    expect(packs).toHaveLength(14);
+    expect(arrangements).toHaveLength(14);
+    for (const k of packs)
+      for (const id of k.parents) expect(getProduct(id), k.id).toBeTruthy();
+    for (const a of arrangements)
+      for (const m of a.members)
+        expect(getProduct(m.product), a.id).toBeTruthy();
   });
 
-  it("every problem points at a real design", () => {
-    expect(problems).toHaveLength(53);
-    for (const p of problems) expect(getDesign(p.design)).toBeDefined();
+  it("shows no research or parked record anywhere", () => {
+    const records = [...products, ...packs, ...arrangements].map(
+      (x) => x.record,
+    );
+    for (const r of HIDDEN) expect(records).not.toContain(r);
   });
 
-  it("publishes no prices until they are confirmed", () => {
-    expect(Object.keys(prices)).toHaveLength(0);
+  it("puts packs and arrangements on their products", () => {
+    expect(
+      packsFor(getProduct("mobile-screen")!).length,
+    ).toBeGreaterThanOrEqual(6);
+    expect(arrangementsWith(getProduct("bedside")!).map((a) => a.id)).toContain(
+      "shape-t",
+    );
   });
 
-  it("prints sizes as W x H x D in centimetres", () => {
-    expect(sizeLabel({ w: 600, h: 1200, d: 400 })).toBe("60 × 120 × 40 cm");
+  it("launch pieces are built from the model, the rest from recipes", () => {
+    for (const p of products)
+      expect(Boolean(p.hero) !== Boolean(p.recipe), p.id).toBe(true);
   });
 });
 
-describe("part model", () => {
-  const entry = recipes.entry;
-  const base = { finish: "natural" as const, front: "open" as const };
-
-  it("counts the entry organiser's parts from its drawing", () => {
-    const rows = partsList(entry, {
-      ...base,
-      accessories: ["coat-hook", "key-tray"],
-    });
-    const qty = (id: string) =>
-      rows.find((r) => r.partId === id)?.quantity ?? 0;
-    expect(qty("side-full-1200")).toBe(2);
-    expect(qty("working-face")).toBe(3);
-    expect(qty("coat-hook")).toBe(3);
-    expect(qty("key-tray")).toBe(1);
-    expect(partCount(rows)).toBe(14);
+describe("hero model (spec v0)", () => {
+  it("matches the spec's part and step counts", () => {
+    expect(heroParts("entry")).toHaveLength(17);
+    expect(heroParts("desk")).toHaveLength(15);
+    expect(heroParts("bedside")).toHaveLength(7);
+    expect(heroSteps("entry")).toHaveLength(13);
+    expect(heroSteps("desk")).toHaveLength(12);
+    expect(heroSteps("bedside")).toHaveLength(7);
   });
 
-  it("adds doors only where the recipe takes them", () => {
-    const withDoors = partsList(recipes.bedside, {
-      ...base,
-      front: "doors",
-      accessories: [],
-    });
-    expect(withDoors.some((r) => r.group === "Doors")).toBe(true);
-    const noDoors = partsList(entry, {
-      ...base,
-      front: "doors",
-      accessories: [],
-    });
-    expect(noDoors.some((r) => r.group === "Doors")).toBe(false);
+  it("places every part in exactly one step", () => {
+    for (const h of ["entry", "desk", "bedside"] as const) {
+      const inSteps = heroSteps(h).flatMap((s) => s.parts);
+      expect(new Set(inSteps).size).toBe(inSteps.length);
+      expect(inSteps.sort()).toEqual(
+        heroParts(h)
+          .map((p) => p.id)
+          .sort(),
+      );
+    }
   });
 
-  it("reports what stays, comes off and goes on between two versions", () => {
-    const from = partsList(recipes.bedside, { ...base, accessories: [] });
-    const to = partsList(recipes.bedside, {
-      ...base,
-      front: "doors",
-      accessories: ["key-tray"],
-    });
-    const t = changeTotals(compareParts(from, to));
-    expect(t).toEqual({ kept: partCount(from), added: 2, removed: 0 });
+  it("names everything in English", () => {
+    const cjk = /[\u3000-\u9fff\uff00-\uffef]/;
+    for (const h of ["entry", "desk", "bedside"] as const) {
+      for (const p of heroParts(h))
+        expect(cjk.test(p.name + p.material), p.id).toBe(false);
+      for (const s of heroSteps(h))
+        expect(cjk.test(s.title + s.check + s.tool), `${h} ${s.n}`).toBe(false);
+    }
+    for (const k of kits)
+      expect(cjk.test(k.name + k.adds.join() + k.removes.join()), k.id).toBe(
+        false,
+      );
   });
 
-  it("orders the build steps and skips steps with no parts", () => {
-    const s = steps(entry, { ...base, accessories: [] });
-    expect(s[0]!.title).toMatch(/base/i);
-    expect(s.some((x) => x.title === "Hang the doors")).toBe(false);
+  it("swaps packs on one frame: 9 kept, 8 off, 5 on", () => {
+    const s = packSwap("entry", "desk");
+    expect(s.kept).toHaveLength(9);
+    expect(s.removed).toHaveLength(8);
+    expect(s.added).toHaveLength(5);
+    expect(s.kept.every((p) => p.shared)).toBe(true);
   });
 });
 
-describe("configuration links", () => {
-  const entry = getDesign("entry")!;
-
-  it("round-trips through URL parameters", () => {
-    const c = {
-      ...defaultConfig(entry)!,
-      finish: "orange" as const,
-      accessories: ["headphone-hook" as const],
-      quantity: 2,
-    };
-    const back = parseConfig("entry", configParams(c));
-    expect(back.issues).toEqual([]);
-    expect(configKey(back.config!)).toBe(configKey(c));
+describe("configuration", () => {
+  it("round-trips through the URL", () => {
+    const { config } = parseConfig(
+      "desk",
+      new URLSearchParams("kits=K-D2,K-D1&face=fabric&qty=3"),
+    );
+    expect(config).toEqual({
+      design: "desk",
+      kits: ["K-D1", "K-D2"],
+      face: "fabric",
+      quantity: 3,
+    });
+    expect(parseConfig("desk", configParams(config!)).config).toEqual(config);
   });
 
-  it("keeps an explicit 'no accessories' apart from the defaults", () => {
-    const none = { ...defaultConfig(entry)!, accessories: [] };
-    expect(
-      parseConfig("entry", configParams(none)).config!.accessories,
-    ).toEqual([]);
-    expect(
-      parseConfig("entry", new URLSearchParams()).config!.accessories,
-    ).toEqual(["coat-hook", "key-tray"]);
-  });
-
-  it("drops unsupported options and says so", () => {
-    const r = parseConfig(
+  it("drops kits a piece can't take today, and says so", () => {
+    const { config, issues } = parseConfig(
       "entry",
-      new URLSearchParams("front=doors&acc=kitchen-rail&qty=99"),
+      new URLSearchParams("kits=K-E3,K-E6,K-D1"),
     );
-    expect(r.config!.front).toBe("open");
-    expect(r.config!.accessories).toEqual([]);
-    expect(r.config!.quantity).toBe(1);
-    expect(r.issues).toHaveLength(3);
+    expect(config!.kits).toEqual(["K-E3"]);
+    expect(issues[0]).toMatch(/Mirror/);
   });
 
-  it("builds short links and a readable summary", () => {
-    expect(configHref(defaultConfig(entry)!, "customize")).toBe(
-      "/furniture/entry/customize",
+  it("joining two blocks needs two of them", () => {
+    const { config, issues } = parseConfig(
+      "bedside",
+      new URLSearchParams("kits=K-B4"),
     );
-    expect(configSummary(defaultConfig(entry)!)).toBe(
-      "Natural birch · Coat hooks (set of 3), Small tray",
-    );
+    expect(config!.quantity).toBe(2);
+    expect(issues.length).toBe(1);
   });
 
-  it("has no configuration for a concept", () => {
-    expect(parseConfig("pet-door", new URLSearchParams()).config).toBeNull();
-    expect(recipeOf(getDesign("pet-door")!)).toBeUndefined();
+  it("has no configuration for pieces coming soon", () => {
+    expect(parseConfig("kitchen", new URLSearchParams()).config).toBeNull();
+  });
+
+  it("keeps shared add-ons when changing packs", () => {
+    const next = swapPack({
+      design: "entry",
+      kits: ["K-E3", "K-E4"],
+      face: "fabric",
+      quantity: 1,
+    });
+    expect(next).toEqual({
+      design: "desk",
+      kits: ["K-E4"],
+      face: "fabric",
+      quantity: 1,
+    });
+    expect(
+      swapPack({ design: "bedside", kits: [], face: "solid", quantity: 1 }),
+    ).toBeNull();
+  });
+
+  it("says the version in words", () => {
+    expect(
+      configSummary({ design: "entry", kits: [], face: "solid", quantity: 1 }),
+    ).toBe("Standard version");
+    expect(
+      configSummary({
+        design: "desk",
+        kits: ["K-D1"],
+        face: "fabric",
+        quantity: 1,
+      }),
+    ).toBe("Desk top kit, fabric faces");
+  });
+});
+
+describe("version parts", () => {
+  it("adds the desk top kit's drawn parts", () => {
+    const rows = partRows({
+      design: "desk",
+      kits: ["K-D1"],
+      face: "solid",
+      quantity: 1,
+    });
+    expect(rows.map((r) => r.name)).toContain("Full-height steel desk leg");
+    expect(rows.map((r) => r.name)).not.toContain("Aluminium rail");
+  });
+
+  it("lists what a version adds and takes off", () => {
+    const c = changes({
+      design: "bedside",
+      kits: ["K-B3"],
+      face: "solid",
+      quantity: 1,
+    });
+    expect(c.added).toContain("Caster base with brakes");
+    expect(c.removed).toContain("Steel leg frame");
+    const rows = partRows({
+      design: "bedside",
+      kits: ["K-B3"],
+      face: "solid",
+      quantity: 1,
+    });
+    expect(
+      rows.map((r) => r.name).some((n) => n.startsWith("Steel leg frame")),
+    ).toBe(false);
+  });
+
+  it("replaces solid faces with fabric ones", () => {
+    const rows = partRows({
+      design: "entry",
+      kits: [],
+      face: "fabric",
+      quantity: 1,
+    });
+    expect(rows.find((r) => r.name === "Face panel in fabric")?.quantity).toBe(
+      3,
+    );
   });
 });
 
 describe("explore and filters", () => {
-  it("restores answers from the URL and ignores unknown values", () => {
-    const s = parseExplore(
-      new URLSearchParams("room=entryway,nope&things=shoes&example=entry"),
-    );
-    expect(s).toEqual({
-      rooms: ["entryway"],
-      doing: [],
-      things: ["shoes"],
-      example: "entry",
-    });
-    expect(parseExplore(exploreParams(s))).toEqual(s);
+  it("matches across kinds, launch pieces first, nothing cut", () => {
+    const m = explore({ rooms: ["entryway"], things: ["bag-coat"] });
+    expect(m.map((x) => x.product.id)).toEqual(["entry", "coat-stand"]);
+    expect(m.every((x) => x.exact)).toBe(true);
   });
 
-  it("matches across kinds of answer and explains why", () => {
-    const m = explore({
-      ...emptyExplore,
-      rooms: ["entryway"],
-      things: ["shoes"],
-    });
-    expect(m[0]!.exact).toBe(true);
-    expect(m.map((x) => x.design.id)).toContain("entry");
-    expect(m[0]!.reasons.join(" ")).toMatch(/shoes|entryway/);
-  });
-
-  it("falls back to the closest designs when nothing matches everything", () => {
-    const m = explore({ ...emptyExplore, rooms: ["bath"], things: ["books"] });
+  it("falls back to the closest when nothing fits both", () => {
+    const m = explore({ rooms: ["kitchen"], things: ["records"] });
     expect(m.length).toBeGreaterThan(0);
-    expect(m.every((x) => !x.exact)).toBe(true);
+    expect(m[0]!.exact).toBe(false);
   });
 
-  it("filters the listing from URL parameters", () => {
-    const f = parseFilters(
-      new URLSearchParams("use=kitchen&status=configurable"),
+  it("writes one plain sentence of reasons", () => {
+    expect(reasonSentence(["By the door", "hooks for a bag and a coat"])).toBe(
+      "By the door: hooks for a bag and a coat.",
     );
+  });
+
+  it("filters the index", () => {
     expect(
-      filterDesigns(f)
-        .map((d) => d.id)
-        .sort(),
-    ).toEqual(["kitchen"]);
+      filterProducts(parseFilters(new URLSearchParams("status=launch"))),
+    ).toHaveLength(3);
     expect(
-      filterDesigns(parseFilters(new URLSearchParams("q=shoes"))).map(
-        (d) => d.id,
+      filterProducts(parseFilters(new URLSearchParams("type=dividers"))).length,
+    ).toBe(5);
+    expect(
+      filterProducts(parseFilters(new URLSearchParams("q=coat"))).map(
+        (p) => p.id,
       ),
-    ).toContain("entry");
+    ).toContain("coat-stand");
   });
 });

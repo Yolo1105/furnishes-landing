@@ -1,0 +1,479 @@
+<title>Furnishes 主样拼装步骤</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f6f3ee; --panel:#fffdfa; --ink:#28231f; --muted:#6f665e; --line:#e3dcd3; --soft:#efe8df;
+  --accent:#c8642a; --accent-soft:#f8e6da; --accent-ink:#9a4518;
+  --good:#3d7a4f; --warn:#a2512a; --assume:#2d5b86; --assume-soft:#e5edf5;
+  --scene:#f1ece5; --ground:#e6dfd5; --board:#f4f1ec; --edge:#c9a77c; --metal:#3a3632; --alu:#b9bdc2; --acc:#c8642a; --ghost:#9a8f84;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1b1917; --panel:#242120; --ink:#ede7df; --muted:#a69c92; --line:#3a3532; --soft:#2d2926;
+  --accent:#e08350; --accent-soft:#3b2a20; --accent-ink:#f0a77d;
+  --good:#7cbf8d; --warn:#e79a70; --assume:#8fb5dc; --assume-soft:#22303d;
+  --scene:#211e1c; --ground:#2b2724; --board:#e9e5df; --edge:#b89366; --metal:#55504b; --alu:#a3a8ae; --acc:#e08350; --ghost:#7d746b;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1b1917; --panel:#242120; --ink:#ede7df; --muted:#a69c92; --line:#3a3532; --soft:#2d2926;
+  --accent:#e08350; --accent-soft:#3b2a20; --accent-ink:#f0a77d;
+  --good:#7cbf8d; --warn:#e79a70; --assume:#8fb5dc; --assume-soft:#22303d;
+  --scene:#211e1c; --ground:#2b2724; --board:#e9e5df; --edge:#b89366; --metal:#55504b; --alu:#a3a8ae; --acc:#e08350; --ghost:#7d746b;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-feature-settings:"tnum"}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+.brand .k{font-size:11px;letter-spacing:.14em;color:var(--accent-ink);text-transform:uppercase;font-weight:500}
+.brand h1{margin:0;font-size:24px;line-height:1.25;text-wrap:balance;font-weight:700}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;padding:7px 14px;border-radius:999px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;line-height:1.3}
+.tabs button small{color:var(--muted);font-size:11px}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button[aria-pressed="true"] small{color:inherit;opacity:.75}
+.main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
+.stage{position:relative;background:var(--scene);border:1px solid var(--line);border-radius:14px;overflow:hidden;aspect-ratio:4/3.6;max-width:100%;min-height:320px}
+@media (max-width:560px){.stage{aspect-ratio:4/5}.stage .dims{display:none}}
+#kits{min-width:560px}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.stage .hud{position:absolute;left:12px;top:10px;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+.stage .hud .n{font-size:12px;color:var(--muted)}
+.stage .hud .t{font-size:15px;font-weight:700;max-width:28ch}
+.stage .dims{position:absolute;right:12px;top:10px;font-size:11px;color:var(--muted);text-align:right;pointer-events:none}
+.stage .tools{position:absolute;right:10px;bottom:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.chip{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:12px;padding:4px 10px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.stage .pick{position:absolute;left:10px;bottom:10px;max-width:min(320px,calc(100% - 20px));background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.stage .pick b{display:block;font-size:13px}
+.stage .err{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--muted)}
+.ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font:inherit;font-weight:500;padding:8px 16px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.35;cursor:default}
+.timeline{display:flex;gap:4px;flex-wrap:wrap}
+.timeline button{appearance:none;font:inherit;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;min-width:30px;height:30px;padding:0 6px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+.timeline button.done{background:var(--soft);color:var(--ink)}
+.timeline button.cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card h2{margin:0;font-size:18px;line-height:1.35;text-wrap:balance}
+.card .stepno{font-size:12px;color:var(--accent-ink);letter-spacing:.08em}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;margin:0}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0;min-width:0}
+.sec{display:flex;flex-direction:column;gap:6px}
+.sec h3{margin:0;font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;font-weight:500}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+td,th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:11.5px}
+td.r,th.r{text-align:right;white-space:nowrap}
+.tw{overflow-x:auto;max-width:100%}
+.check{display:flex;gap:8px;align-items:flex-start;background:var(--soft);border-radius:10px;padding:8px 10px;font-size:13px}
+.check::before{content:"✓";color:var(--good);font-weight:700}
+.pre{font-size:12.5px;color:var(--muted)}
+.tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:5px;line-height:1.6;white-space:nowrap}
+.t-sell{background:var(--ink);color:var(--bg)}
+.t-test{background:var(--accent-soft);color:var(--accent-ink)}
+.t-res{background:var(--assume-soft);color:var(--assume)}
+.t-hist{background:var(--soft);color:var(--muted)}
+.empty{color:var(--muted);font-size:13px}
+.lower{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.lower{grid-template-columns:minmax(0,1fr)}}
+.note{font-size:12.5px;color:var(--muted);background:var(--assume-soft);border-radius:10px;padding:10px 12px}
+.note b{color:var(--assume)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <span class="k">Furnishes · 主样建模规格 __VERSION__</span>
+      <h1>主样拼装步骤</h1>
+      <p>一副F1200骨架配两个功能包，加一个低位床边块。每一步放什么、用什么五金、怎样算装对。</p>
+    </div>
+    <div class="tabs" id="tabs" role="group" aria-label="选择配置"></div>
+  </header>
+
+  <div class="main">
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+      <div class="stage" id="stage">
+        <div class="hud"><span class="n mono" id="hudN"></span><span class="t" id="hudT"></span></div>
+        <div class="dims mono" id="dims"></div>
+        <div class="tools">
+          <button class="chip" id="tGhost" aria-pressed="true">后续零件轮廓</button>
+          <button class="chip" id="tPorts" aria-pressed="false">端口</button>
+          <button class="chip" id="tReset">复位视角</button>
+        </div>
+        <div class="pick" id="pick" hidden></div>
+      </div>
+      <div class="ctrl">
+        <button class="btn ghost" id="prev" aria-label="上一步">← 上一步</button>
+        <button class="btn" id="next">下一步 →</button>
+        <button class="btn ghost" id="play">连续播放</button>
+        <button class="btn ghost" id="replay">重播本步</button>
+      </div>
+      <div class="timeline" id="timeline" aria-label="步骤"></div>
+      <div class="legend">
+        <span><i style="background:var(--board)"></i>胶合板（白色层压面，D15）</span>
+        <span><i style="background:var(--metal)"></i>钢件</span>
+        <span><i style="background:var(--alu)"></i>铝轨（可选）</span>
+        <span><i style="background:var(--acc)"></i>配件（强调色）</span>
+      </div>
+    </div>
+
+    <aside class="card" id="card" aria-live="polite"></aside>
+  </div>
+
+  <div class="lower">
+    <section class="card">
+      <div class="sec">
+        <h3>这套配置之后还能加什么</h3>
+        <div class="tw"><table id="kits"></table></div>
+      </div>
+      <div class="sec" id="retiredSec">
+        <h3>旧记录里退为历史的改造路径</h3>
+        <div class="tw"><table id="retired"></table></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="sec">
+        <h3>整套五金</h3>
+        <div class="tw"><table id="hw"></table></div>
+      </div>
+      <div class="sec">
+        <h3>零件清单</h3>
+        <div class="tw"><table id="plist"></table></div>
+      </div>
+      <p class="note"><b>这是规格v0，不是生产图。</b>尺寸由 params.yaml 生成；标“假设”的参数（X01–X33）等首套样件后替换。底座、配重和防倾固定件按决定D13画出。点模型上的零件可看尺寸。</p>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const DATA = __DATA__;
+const CONFIG_ORDER = ["entry","desk","bedside"];
+const SHORT = {entry:["玄关包","1.1"],desk:["书桌旁包","1.2"],bedside:["床边块","1.3"]};
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = v => Number.isInteger(v) ? String(v) : (Math.round(v*10)/10).toString();
+
+let cfgKey = "entry";
+try { const s = localStorage.getItem("fx-cfg"); if (s && DATA.configs[s]) cfgKey = s; } catch(e) {}
+if (location.hash && DATA.configs[location.hash.slice(1)]) cfgKey = location.hash.slice(1);
+let stepIdx = -1;            // -1 = 总览（全部装好）
+let playing = false, playTimer = null;
+let showGhost = true, showPorts = false;
+
+/* ---------- tabs ---------- */
+function renderTabs(){
+  $("tabs").innerHTML = CONFIG_ORDER.map(k => `<button data-k="${k}" aria-pressed="${k===cfgKey}">${SHORT[k][0]}<small class="mono">${SHORT[k][1]} · ${DATA.configs[k].steps.length}步</small></button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { setConfig(b.dataset.k); });
+}
+function cfg(){ return DATA.configs[cfgKey]; }
+function partsById(){ const m = {}; cfg().parts.forEach(p => m[p.id] = p); return m; }
+
+/* ---------- 3D ---------- */
+let renderer, scene, camera, controls, root, ground, meshes = {}, ghosts = {}, portGroup, raycaster, anim = null, ok = true;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initThree(){
+  if (!window.THREE || !THREE.OrbitControls){ ok = false; $("stage").insertAdjacentHTML("beforeend", `<div class="err">三维库没有加载出来。右侧的步骤说明和下方清单仍然完整。</div>`); return; }
+  const st = $("stage");
+  renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  st.prepend(renderer.domElement);
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(32, 1, 0.05, 50);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI*0.495; controls.minDistance = 0.6; controls.maxDistance = 8;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7a6a, 0.75));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(-1.6, 3.2, 2.4); sun.castShadow = true;
+  sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera, {left:-1.5,right:1.5,top:2,bottom:-1,near:0.5,far:8}); sun.shadow.bias = -0.0004;
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.25); fill.position.set(2,1.5,-1); scene.add(fill);
+  ground = new THREE.Mesh(new THREE.PlaneGeometry(12,12), new THREE.ShadowMaterial({opacity:0.16}));
+  ground.rotation.x = -Math.PI/2; ground.receiveShadow = true; scene.add(ground);
+  raycaster = new THREE.Raycaster();
+  applyTheme();
+  new ResizeObserver(resize).observe(st); resize();
+  let down = null;
+  renderer.domElement.addEventListener("pointerdown", e => down = [e.clientX, e.clientY]);
+  renderer.domElement.addEventListener("pointerup", e => { if (down && Math.hypot(e.clientX-down[0], e.clientY-down[1]) < 5) pick(e); down = null; });
+  requestAnimationFrame(loop);
+}
+function applyTheme(){
+  if (!ok) return;
+  scene.background = new THREE.Color(css("--scene"));
+  MAT = null; if (root) buildScene(true);
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(applyTheme, 30));
+new MutationObserver(() => setTimeout(applyTheme, 30)).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+
+function resize(){
+  if (!ok) return;
+  const r = $("stage").getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / Math.max(r.height,1); camera.updateProjectionMatrix();
+}
+let MAT = null;
+function mats(){
+  if (MAT) return MAT;
+  const c = n => new THREE.Color(css(n));
+  MAT = {
+    board: new THREE.MeshStandardMaterial({color:c("--board"), roughness:0.85}),
+    metal: new THREE.MeshStandardMaterial({color:c("--metal"), roughness:0.55, metalness:0.35}),
+    alu: new THREE.MeshStandardMaterial({color:c("--alu"), roughness:0.35, metalness:0.7}),
+    accessory: new THREE.MeshStandardMaterial({color:c("--acc"), roughness:0.6}),
+    edge: new THREE.LineBasicMaterial({color:c("--edge")}),
+    edgeDark: new THREE.LineBasicMaterial({color:c("--ghost")}),
+    ghost: new THREE.LineBasicMaterial({color:c("--ghost"), transparent:true, opacity:0.35}),
+    hi: new THREE.LineBasicMaterial({color:c("--accent")}),
+    port: new THREE.MeshBasicMaterial({color:c("--accent")})
+  };
+  return MAT;
+}
+// data(mm): x左→右, y前→后, z上 ; three: x, y=上, z=朝观者
+function centerOf(p){ return new THREE.Vector3((p.pos[0]+p.size[0]/2)/1000, (p.pos[2]+p.size[2]/2)/1000, -(p.pos[1]+p.size[1]/2)/1000); }
+function geomOf(p){
+  if (p.rot && p.rot.axis === "x"){
+    const a = p.rot.deg*Math.PI/180, d = p.size[1]/Math.cos(a), t = Math.max(p.size[2] - d*Math.sin(a), 6);
+    const g = new THREE.BoxGeometry(p.size[0]/1000, t/1000, d/1000); g.rotateX(a); return g;
+  }
+  return new THREE.BoxGeometry(p.size[0]/1000, p.size[2]/1000, p.size[1]/1000);
+}
+// 钢底座与钢脚架画成框架，而不是实心块（尺寸仍取包围盒）
+function frameGeom(p){
+  if (p.id !== "BASE" && p.id !== "LEGS") return null;
+  const W = p.size[0]/1000, D = p.size[1]/1000, H = p.size[2]/1000, parts = [];
+  const box = (w, h, d, x, y, z) => { const b = new THREE.BoxGeometry(w, h, d); b.translate(x, y, z); parts.push(b); };
+  if (p.id === "BASE"){            // 雪橇式：两根纵梁＋前后横梁＋四个调节脚
+    const r = 0.04, hh = H*0.6;
+    [-1, 1].forEach(sx => box(r, hh, D, sx*(W/2 - r/2), H/2 - hh/2, 0));
+    [-1, 1].forEach(sz => box(W - 2*r, hh*0.7, r, 0, H/2 - hh*0.35, sz*(D/2 - r/2)));
+    [-1, 1].forEach(sx => [-1, 1].forEach(sz => box(0.03, H - hh, 0.03, sx*(W/2 - 0.03), -H/2 + (H - hh)/2, sz*(D/2 - 0.03))));
+  } else {                         // 脚架：四根方管腿＋顶部围框
+    const l = 0.03, t = 0.025;
+    [-1, 1].forEach(sx => [-1, 1].forEach(sz => box(l, H, l, sx*(W/2 - l/2), 0, sz*(D/2 - l/2))));
+    [-1, 1].forEach(sz => box(W, t, t, 0, H/2 - t/2, sz*(D/2 - t/2)));
+    [-1, 1].forEach(sx => box(t, t, D, sx*(W/2 - t/2), H/2 - t/2, 0));
+  }
+  return mergeGeoms(parts);
+}
+function mergeGeoms(list){
+  let pos = [], nor = [], idx = [], off = 0;
+  list.forEach(g => { const P = g.attributes.position.array, N = g.attributes.normal.array;
+    pos.push(...P); nor.push(...N); const I = g.index ? Array.from(g.index.array) : [...Array(P.length/3).keys()]; idx.push(...I.map(i => i + off)); off += P.length/3; });
+  const out = new THREE.BufferGeometry();
+  out.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); out.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3)); out.setIndex(idx);
+  return out;
+}
+function matKey(p){ if (p.material && p.material.includes("铝")) return "alu"; if (p.kind === "metal") return "metal"; if (p.kind === "accessory") return "accessory"; return "board"; }
+function buildScene(keep){
+  if (!ok) return;
+  if (root) scene.remove(root);
+  root = new THREE.Group(); scene.add(root); meshes = {}; ghosts = {};
+  const M = mats();
+  cfg().parts.forEach(p => {
+    const g = geomOf(p), mk = matKey(p);
+    const fr = frameGeom(p);
+    const mesh = new THREE.Mesh(fr || g, M[mk]); mesh.castShadow = true; mesh.receiveShadow = true;
+    const e = new THREE.LineSegments(new THREE.EdgesGeometry(fr || g, 20), mk === "board" ? M.edge : M.edgeDark); mesh.add(e); mesh.userData = {part:p, edge:e, base:mk === "board" ? M.edge : M.edgeDark};
+    const c = centerOf(p); mesh.position.copy(c); root.add(mesh); meshes[p.id] = mesh;
+    const gh = new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), M.ghost); gh.position.copy(c); root.add(gh); ghosts[p.id] = gh;
+  });
+  portGroup = new THREE.Group(); root.add(portGroup);
+  portMarkers().forEach(m => { const s = new THREE.Mesh(new THREE.SphereGeometry(0.018, 16, 12), M.port); s.position.set(m.x/1000, m.z/1000, -m.y/1000); s.userData = {port:m}; portGroup.add(s); });
+  portGroup.visible = showPorts;
+  if (!keep) frameCamera();
+  applyStep(false);
+}
+function portMarkers(){
+  const out = [], W = cfg().geo.W;
+  (cfg().ports || []).forEach(pt => {
+    if (pt.z == null || Array.isArray(pt.z)) return;
+    const ys = Array.isArray(pt.y) ? pt.y : (pt.y != null ? [pt.y] : []);
+    const xs = pt.x != null ? [pt.x] : [18, W-18];
+    xs.forEach(x => ys.forEach(y => out.push({x, y, z:pt.z, id:pt.id, name:pt.name, spec:pt.spec, where:pt.where})));
+  });
+  return out;
+}
+function bbox(){
+  let mn = [1e9,1e9,1e9], mx = [-1e9,-1e9,-1e9];
+  cfg().parts.forEach(p => { for (let i=0;i<3;i++){ mn[i] = Math.min(mn[i], p.pos[i]); mx[i] = Math.max(mx[i], p.pos[i]+p.size[i]); } });
+  return {mn, mx};
+}
+function bodyH(){ return cfg().parts.filter(p => p.kind !== "accessory").reduce((a, p) => Math.max(a, p.pos[2] + p.size[2]), 0); }
+function frameCamera(){
+  const {mn, mx} = bbox();
+  const cx = (mn[0]+mx[0])/2000, cy = (mx[2])/2000, cz = -(mn[1]+mx[1])/2000;
+  const h = mx[2]/1000;
+  controls.target.set(cx, cy*0.95, cz);
+  const dist = 1.15 + h*1.9;
+  camera.position.set(cx - dist*0.55, cy + dist*0.42, cz + dist*0.85);
+  controls.update();
+}
+
+/* ---------- steps ---------- */
+function stepParts(i){ return i < 0 ? [] : (cfg().steps[i].parts || []); }
+function partStepMap(){ const m = {}; cfg().steps.forEach((s, i) => (s.parts||[]).forEach(id => m[id] = i)); return m; }
+function applyStep(animate){
+  renderCard(); renderTimeline();
+  if (!ok) return;
+  const psm = partStepMap(), total = cfg().steps.length, M = mats();
+  const cur = stepIdx < 0 ? total : stepIdx;
+  Object.entries(meshes).forEach(([id, m]) => {
+    const si = psm[id] ?? 0, p = m.userData.part, home = centerOf(p);
+    const isCur = stepIdx >= 0 && si === stepIdx;
+    m.visible = si <= cur;
+    m.position.copy(home);
+    m.userData.edge.material = isCur ? M.hi : m.userData.base;
+    ghosts[id].visible = showGhost && si > cur;
+  });
+  anim = null;
+  if (stepIdx >= 0){
+    const s = cfg().steps[stepIdx], off = s.from_offset || [0,0,0];
+    const v = new THREE.Vector3(off[0]/1000, off[2]/1000, -off[1]/1000);
+    const ids = s.parts || [];
+    if (animate && !reduce && ids.length && v.length() > 0){
+      ids.forEach((id, k) => { const m = meshes[id]; if (m){ m.position.copy(centerOf(m.userData.part)).add(v); } });
+      anim = {ids, v, t0: performance.now(), dur: 1100, stagger: 160};
+    }
+  }
+}
+function ease(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+function loop(now){
+  if (anim){
+    let done = true;
+    anim.ids.forEach((id, k) => {
+      const m = meshes[id]; if (!m) return;
+      const t = Math.min(Math.max((now - anim.t0 - k*anim.stagger)/anim.dur, 0), 1); if (t < 1) done = false;
+      const home = centerOf(m.userData.part); m.position.copy(home).addScaledVector(anim.v, 1 - ease(t));
+    });
+    if (done) anim = null;
+  }
+  controls.update(); renderer.render(scene, camera);
+  requestAnimationFrame(loop);
+}
+function pick(e){
+  const r = renderer.domElement.getBoundingClientRect();
+  const v = new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1, -((e.clientY-r.top)/r.height)*2+1);
+  raycaster.setFromCamera(v, camera);
+  const targets = Object.values(meshes).filter(m => m.visible).concat(showPorts ? portGroup.children : []);
+  const hit = raycaster.intersectObjects(targets, false)[0];
+  const el = $("pick");
+  if (!hit){ el.hidden = true; return; }
+  const ud = hit.object.userData;
+  if (ud.port){ const p = ud.port; el.innerHTML = `<b>端口${p.id} · ${esc(p.name)}</b>${esc(p.where||"")}<br><span class="mono">x${p.x} y${p.y} z${p.z}</span>${p.spec?`<br>${esc(p.spec)}`:""}`; el.hidden = false; return; }
+  const p = ud.part, step = partStepMap()[p.id];
+  el.innerHTML = `<b>${esc(p.id)} · ${esc(p.name)}</b><span class="mono">${p.rot ? "倾斜件，包围盒 " : ""}${p.size.map(fmt).join(" × ")} mm</span><br>${esc(p.material)}${p.mass?` · <span class="mono">${fmt(p.mass)} kg</span>`:""}<br>第 ${step+1} 步装入 · 位置 <span class="mono">(${p.pos.map(fmt).join(", ")})</span>`;
+  el.hidden = false;
+}
+
+/* ---------- panels ---------- */
+function renderCard(){
+  const c = cfg(), byId = partsById(), total = c.steps.length;
+  $("hudN").textContent = stepIdx < 0 ? `总览 · 共${total}步` : `第 ${stepIdx+1} / ${total} 步`;
+  $("hudT").textContent = stepIdx < 0 ? c.title : c.steps[stepIdx].title;
+  const Hb = bodyH();
+  $("dims").innerHTML = `整件 ${c.geo.W} 宽 · 主体 ${c.geo.D} 深<br>底座 ${c.geo.base_depth} 深 · 总高 ${fmt(Hb)}`;
+  $("prev").disabled = stepIdx < 0;
+  $("next").textContent = stepIdx < 0 ? "从第1步开始 →" : (stepIdx === total-1 ? "看完成图 →" : "下一步 →");
+  if (stepIdx < 0){
+    const kg = c.parts.reduce((a, p) => a + (p.mass||0), 0);
+    $("card").innerHTML = `<span class="stepno mono">总览</span><h2>${esc(c.title)}</h2>
+      <dl class="meta"><dt>外形</dt><dd class="mono">${c.geo.W} 宽 × ${c.geo.D} 深（底座 ${c.geo.base_depth}）× ${fmt(bodyH())} 高</dd><dt>零件</dt><dd class="mono">${c.parts.length} 件</dd><dt>步骤</dt><dd class="mono">${total} 步</dd>
+      <dt>估算重量</dt><dd class="mono">${kg ? fmt(kg)+" kg（含钢件）" : "—"}</dd><dt>人数</dt><dd>${Math.max(...c.steps.map(s => s.people||1))} 人</dd></dl>
+      <div class="pre">${esc(c.steps[0].precondition || "")}</div>
+      <p class="empty">点“从第1步开始”，按顺序看每一步放什么、从哪个方向放入、用什么五金、怎样检查。拖动可旋转，滚轮或双指可缩放。</p>`;
+    return;
+  }
+  const s = c.steps[stepIdx];
+  const rows = (s.parts||[]).map(id => { const p = byId[id]; return p ? `<tr><td class="mono">${esc(id)}</td><td>${esc(p.name)}</td><td class="r mono">${p.size.map(fmt).join("×")}</td></tr>` : ""; }).join("");
+  const fas = (s.fasteners||[]).map(f => `<tr><td>${esc(f.type)}</td><td class="r mono">×${f.qty}</td><td>${esc(f.at||"")}</td></tr>`).join("");
+  const dir = dirText(s.from_offset);
+  $("card").innerHTML = `<span class="stepno mono">第 ${stepIdx+1} / ${total} 步 · 动作 ${esc(s.action||"")}${(DATA.actions||{})[(s.action||"").replace("*","")] ? " " + esc(DATA.actions[(s.action||"").replace("*","")]) : ""}</span><h2>${esc(s.title)}</h2>
+    ${s.precondition ? `<div class="pre">前提：${esc(s.precondition)}</div>` : ""}
+    <dl class="meta"><dt>放入方向</dt><dd>${dir}</dd><dt>工具</dt><dd>${esc(s.tool||"无")}</dd><dt>人数</dt><dd>${s.people||1} 人</dd></dl>
+    <div class="sec"><h3>这一步的零件</h3>${rows ? `<div class="tw"><table><tr><th>编号</th><th>名称</th><th class="r">尺寸 mm（宽×深×高）</th></tr>${rows}</table></div>` : `<p class="empty">这一步不加零件。</p>`}</div>
+    <div class="sec"><h3>五金</h3>${fas ? `<div class="tw"><table>${fas}</table></div>` : `<p class="empty">不用五金。</p>`}</div>
+    ${s.check ? `<div class="check">${esc(s.check)}</div>` : ""}`;
+}
+function dirText(o){
+  if (!o || (!o[0] && !o[1] && !o[2])) return "—";
+  const t = [];
+  if (o[2] > 0) t.push("从上方落下"); if (o[1] < 0) t.push("从正面推入"); if (o[1] > 0) t.push("从背面推入");
+  if (o[0] < 0) t.push("从左侧立起"); if (o[0] > 0) t.push("从右侧立起");
+  return t.join("，");
+}
+function renderTimeline(){
+  const n = cfg().steps.length;
+  let h = `<button class="${stepIdx<0?"cur":"done"}" data-i="-1" title="总览">总</button>`;
+  for (let i=0;i<n;i++) h += `<button class="${i===stepIdx?"cur":(stepIdx<0||i<stepIdx?"done":"")}" data-i="${i}" title="${esc(cfg().steps[i].title)}">${i+1}</button>`;
+  $("timeline").innerHTML = h;
+  $("timeline").querySelectorAll("button").forEach(b => b.onclick = () => { stopPlay(); go(+b.dataset.i); });
+}
+function renderLower(){
+  const k = cfgKey, tierCls = {"先卖":"t-sell","测试后":"t-test","研究":"t-res"};
+  const kits = DATA.kits.filter(x => x.applies.split(",").includes(k));
+  $("kits").innerHTML = `<tr><th>套件</th><th>层级</th><th>加入</th><th>撤下</th><th>端口</th></tr>` + kits.map(x =>
+    `<tr><td><span class="mono">${esc(x.id)}</span> ${esc(x.name)}</td><td><span class="tag ${tierCls[x.tier]||"t-hist"}">${esc(x.tier)}</span></td><td>${esc(x.add.join("、"))}</td><td>${esc((x.remove||[]).join("、")||"—")}</td><td class="mono">${(x.ports||[]).join(", ")||"—"}</td></tr>`).join("");
+  const prefix = {entry:"1.1",desk:"1.2",bedside:"1.3"}[k];
+  const ret = DATA.retired_paths.filter(r => r.path.startsWith(prefix));
+  $("retiredSec").hidden = !ret.length;
+  $("retired").innerHTML = ret.map(r => `<tr><td>${esc(r.path)}</td><td>${esc(r.reason)}</td><td><span class="tag t-hist">${esc(r.status)}</span></td></tr>`).join("");
+  const hw = {};
+  cfg().steps.forEach(s => (s.fasteners||[]).forEach(f => { hw[f.type] = (hw[f.type]||0) + (f.qty||0); }));
+  $("hw").innerHTML = `<tr><th>五金</th><th class="r">数量</th></tr>` + Object.entries(hw).map(([t,q]) => `<tr><td>${esc(t)}</td><td class="r mono">${q}</td></tr>`).join("");
+  const psm = partStepMap();
+  $("plist").innerHTML = `<tr><th>编号</th><th>名称</th><th class="r">尺寸 mm</th><th class="r">步</th></tr>` + cfg().parts.map(p =>
+    `<tr><td class="mono">${esc(p.id)}</td><td>${esc(p.name)}</td><td class="r mono">${p.size.map(fmt).join("×")}</td><td class="r mono">${(psm[p.id]??0)+1}</td></tr>`).join("");
+}
+
+/* ---------- navigation ---------- */
+function go(i){ const n = cfg().steps.length; stepIdx = Math.max(-1, Math.min(n-1, i)); $("pick").hidden = true; applyStep(true); }
+function next(){ const n = cfg().steps.length; if (stepIdx >= n-1){ go(-1); return; } go(stepIdx+1); }
+function stopPlay(){ playing = false; clearTimeout(playTimer); $("play").textContent = "连续播放"; }
+function tick(){
+  if (!playing) return;
+  const n = cfg().steps.length;
+  if (stepIdx >= n-1){ go(-1); stopPlay(); return; }
+  go(stepIdx+1);
+  const k = (cfg().steps[stepIdx].parts||[]).length;
+  playTimer = setTimeout(tick, reduce ? 1600 : 1100 + 160*Math.max(k-1,0) + 900);
+}
+function setConfig(k){
+  stopPlay(); cfgKey = k; stepIdx = -1;
+  try { localStorage.setItem("fx-cfg", k); } catch(e) {}
+  renderTabs(); renderLower(); $("pick").hidden = true; buildScene(false); if (!ok) applyStep(false);
+}
+$("prev").onclick = () => { stopPlay(); go(stepIdx-1); };
+$("next").onclick = () => { stopPlay(); next(); };
+$("replay").onclick = () => { stopPlay(); if (stepIdx >= 0) applyStep(true); };
+$("play").onclick = () => {
+  if (playing){ stopPlay(); return; }
+  playing = true; $("play").textContent = "暂停";
+  if (stepIdx >= cfg().steps.length-1) stepIdx = -1;
+  tick();
+};
+$("tGhost").onclick = e => { showGhost = !showGhost; e.currentTarget.setAttribute("aria-pressed", showGhost); applyStep(false); };
+$("tPorts").onclick = e => { showPorts = !showPorts; e.currentTarget.setAttribute("aria-pressed", showPorts); if (portGroup) portGroup.visible = showPorts; };
+$("tReset").onclick = () => { if (ok) frameCamera(); };
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input,textarea")) return;
+  if (e.key === "ArrowRight"){ stopPlay(); next(); }
+  if (e.key === "ArrowLeft"){ stopPlay(); go(stepIdx-1); }
+});
+
+renderTabs(); renderLower(); initThree();
+if (ok) buildScene(false); else applyStep(false);
+</script>

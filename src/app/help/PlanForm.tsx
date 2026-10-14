@@ -4,11 +4,11 @@ import { useId, useState } from "react";
 import styles from "@/components/prose/prose.module.css";
 import { claims } from "@/data/claims";
 import { market } from "@/data/market";
-import { getDesign } from "@/lib/catalog";
+import { getProduct } from "@/lib/catalog";
 import { configSummary } from "@/lib/config";
 import { useSaved } from "@/lib/saved";
 
-/** A room-sized question, written into an email with the visitor's saved designs. */
+/** A room-sized question, written into an email with the visitor's kept versions. */
 export function PlanForm() {
   const id = useId();
   const { items } = useSaved();
@@ -20,8 +20,8 @@ export function PlanForm() {
   const [opened, setOpened] = useState(false);
 
   const saved = items.map((e) => {
-    const d = getDesign(e.design)!;
-    return `- ${d.name}${e.config ? `: ${configSummary(e.config)}` : " (concept idea)"}`;
+    const d = getProduct(e.design)!;
+    return `- ${d.name}${e.config ? `: ${configSummary(e.config)}` : " (coming soon, kept as an idea)"}`;
   });
   const body = [
     "Hello Furnishes,",
@@ -82,8 +82,8 @@ export function PlanForm() {
               checked={include}
               onChange={(e) => setInclude(e.target.checked)}
             />{" "}
-            Include my {saved.length} saved{" "}
-            {saved.length === 1 ? "design" : "designs"}
+            Include my {saved.length} kept{" "}
+            {saved.length === 1 ? "version" : "versions"}
           </span>
         </label>
       )}
@@ -95,8 +95,7 @@ export function PlanForm() {
         Write the email
       </a>
       <p className={styles.small}>
-        {claims.quoteDraft.detail} No photos or measurements are needed to
-        start.
+        {claims.draft.detail} No photos or measurements are needed to start.
       </p>
       {opened && (
         <p className="notice" role="status">

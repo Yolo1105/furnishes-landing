@@ -4,17 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useId, useMemo, useState } from "react";
 import { StatusBadge } from "@/components/bits";
-import { Elevation } from "@/components/Elevation";
 import { claims } from "@/data/claims";
 import { market } from "@/data/market";
-import { getDesign, images, recipeOf, sizeLabel } from "@/lib/catalog";
+import { fullSizeLabel, getProduct } from "@/lib/catalog";
+import { heroImage, STUDIO, studioSrc } from "@/lib/renders";
 import {
   configHref,
   configParams,
   configSummary,
   MAX_QUANTITY,
 } from "@/lib/config";
-import { quoteMail } from "@/lib/mail";
+import { requestMail } from "@/lib/mail";
 import {
   duplicateSaved,
   recordDraft,
@@ -51,8 +51,8 @@ function Entry({
   selected: boolean;
   onSelect: (v: boolean) => void;
 }) {
-  const d = getDesign(e.design)!;
-  const r = recipeOf(d);
+  const d = getProduct(e.design)!;
+  const pic = e.config ? heroImage(e.config) : null;
   const [confirm, setConfirm] = useState(false);
   const id = useId();
   return (
@@ -63,35 +63,22 @@ function Entry({
           checked={selected}
           onChange={(ev) => onSelect(ev.target.checked)}
         />
-        <span className="visually-hidden">
-          Include {d.name} in the quote request
-        </span>
+        <span className="visually-hidden">Include {d.name} in the email</span>
       </label>
       <div className={styles.thumbs}>
         <span className={styles.thumb}>
           <Image
-            src={images.object(d.id)}
-            alt=""
-            width={d.image.object.w}
-            height={d.image.object.h}
-            sizes="90px"
+            src={pic ? pic.src : studioSrc(d)}
+            alt={`${d.name}, ${e.config ? configSummary(e.config).toLowerCase() : "design render"}`}
+            width={STUDIO.w}
+            height={STUDIO.h}
+            sizes="120px"
           />
         </span>
-        {e.config && r && (
-          <span className={styles.thumbDrawing}>
-            <Elevation
-              recipe={r}
-              config={e.config}
-              uid={`sv-${e.id}`}
-              showDimensions={false}
-              title={`${d.name}, your version`}
-            />
-          </span>
-        )}
       </div>
       <div className={styles.info}>
         <p className={styles.kind}>
-          {e.kind === "configuration" ? "Saved version" : "Saved idea"}
+          {e.kind === "configuration" ? "Kept version" : "Saved idea"}
           <StatusBadge status={d.status} />
         </p>
         <h2 className={styles.name}>
@@ -106,15 +93,21 @@ function Entry({
         <p className={styles.summary}>
           {e.config
             ? configSummary(e.config)
-            : "Concept: saved as an idea, not a configuration."}
+            : "Coming soon: kept as an idea. Register interest from its page."}
+          {pic && pic.missing.length > 0 ? (
+            <span className={styles.pending}>
+              {" "}
+              Picture pending for {pic.missing.join(", ").toLowerCase()}.
+            </span>
+          ) : null}
         </p>
         <p className={`${styles.meta} num`}>
-          {sizeLabel(d.size)} nominal · Saved {date(e.savedAt)}
+          {fullSizeLabel(d)}, nominal · Saved {date(e.savedAt)}
           {e.updatedAt !== e.savedAt ? ` · Updated ${date(e.updatedAt)}` : ""}
         </p>
         {drafted && (
           <p className={styles.drafted}>
-            In a quote request drafted {date(drafted)} (sending not confirmed)
+            In an email drafted {date(drafted)} (sending not confirmed)
           </p>
         )}
       </div>
@@ -199,8 +192,11 @@ export function SavedList() {
   const chosen = items.filter((e) => !excluded.has(e.id));
   const mail = useMemo(
     () =>
-      quoteMail(
-        chosen.map((e) => ({ design: getDesign(e.design)!, config: e.config })),
+      requestMail(
+        chosen.map((e) => ({
+          product: getProduct(e.design)!,
+          config: e.config,
+        })),
         note,
       ),
     [chosen, note],
@@ -212,48 +208,46 @@ export function SavedList() {
   return (
     <div className="container">
       <header className={styles.head}>
-        <p className="eyebrow">Saved designs</p>
-        <h1>Your saved designs</h1>
+        <h1>Kept versions</h1>
         <p className="lede">
-          Each one keeps the exact version you chose. Edit or copy one without
-          changing the others, then prepare a quote request for the ones you
-          want.
+          Each one keeps the exact version you chose. Change or copy one without
+          touching the others, then email us about the ones you want.
         </p>
         <p className="muted">{claims.saved.detail}</p>
       </header>
 
       {!ready ? (
         <p className="muted" role="status">
-          Loading your saved designs…
+          Loading your kept versions…
         </p>
       ) : !available ? (
         <div className={styles.empty}>
           <p>
             This browser isn&apos;t letting the site store anything (a private
-            window can do this), so designs can&apos;t be saved here. You can
-            still copy the address of a customized piece to keep it.
+            window can do this), so versions can&apos;t be kept here. You can
+            still copy the address of a configured piece to keep it.
           </p>
         </div>
       ) : items.length === 0 ? (
         <div className={styles.empty}>
           <p>
-            Nothing saved in this browser yet. When you save a piece, it appears
-            here with its finish, accessories and quantity.
+            Nothing kept in this browser yet. When you keep a version, it
+            appears here with its pack, add-ons and quantity.
           </p>
           <div className={styles.emptyActions}>
             <Link href="/furniture" className="btn btn-primary">
               Browse furniture
             </Link>
             <Link href="/explore" className="btn btn-secondary">
-              Explore by room or use
+              Start with what you love
             </Link>
           </div>
         </div>
       ) : (
         <div className={styles.layout}>
-          <section aria-label="Saved designs">
+          <section aria-label="Kept versions">
             <p className={styles.count}>
-              {items.length} saved · {chosen.length} in the quote request
+              {items.length} kept · {chosen.length} in the email
             </p>
             <ul role="list" className={styles.list}>
               {items.map((e) => (
@@ -277,11 +271,12 @@ export function SavedList() {
 
           <aside className={styles.quote} aria-labelledby="quote-title">
             <h2 id="quote-title" className={styles.quoteTitle}>
-              Ask for a quote
+              Email us about them
             </h2>
             <p>
-              We reply with a price, lead time and delivery options for the
-              exact versions you include. Prices are not published yet.
+              Prices aren&apos;t set yet. We reply with what we know, and with
+              the price, timing and delivery for the exact versions you include
+              once they are set.
             </p>
             <label htmlFor={noteId} className={styles.noteLabel}>
               About your space and timing{" "}
@@ -307,11 +302,10 @@ export function SavedList() {
                 setOpened(new Date().toISOString());
               }}
             >
-              Prepare quote request ({chosen.length})
+              Prepare the email ({chosen.length})
             </a>
             <p className={styles.small}>
-              <strong>{claims.quoteDraft.label}.</strong>{" "}
-              {claims.quoteDraft.detail}
+              <strong>{claims.draft.label}.</strong> {claims.draft.detail}
             </p>
             {opened && (
               <p className={styles.opened} role="status">
@@ -322,7 +316,7 @@ export function SavedList() {
               </p>
             )}
             <details className={styles.preview}>
-              <summary>See the request text</summary>
+              <summary>See the email text</summary>
               <pre>{mail.body}</pre>
               <button
                 type="button"
@@ -348,22 +342,22 @@ export function SavedList() {
             </details>
             {configs < chosen.length && (
               <p className={styles.small}>
-                Concepts are sent as questions, not as items to price.
+                Pieces coming soon go in as interest, not as items to price.
               </p>
             )}
             <div className={styles.states}>
               <h3>What each step means</h3>
               <dl>
-                <dt>Saved</dt>
-                <dd>Kept in this browser. Nobody at Furnishes can see it.</dd>
-                <dt>Request drafted</dt>
-                <dd>An email written for you. Only sent if you send it.</dd>
-                <dt>Request received</dt>
+                <dt>Kept</dt>
+                <dd>In this browser. Nobody at Furnishes can see it.</dd>
+                <dt>Email drafted</dt>
+                <dd>Written for you. Only sent if you send it.</dd>
+                <dt>Received</dt>
                 <dd>When we reply to your email.</dd>
                 <dt>Order</dt>
                 <dd>
-                  Not available on this site yet. Orders are confirmed with your
-                  quote.
+                  Not yet. Launch pieces get prices and ordering once their
+                  samples, quotes and tests are done.
                 </dd>
               </dl>
             </div>

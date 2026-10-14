@@ -1,0 +1,110 @@
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--cream);
+  border-radius: var(--radius);
+  overflow: hidden;
+  outline: 1px solid transparent;
+  transition: outline-color 160ms var(--ease);
+}
+
+.card:hover {
+  outline-color: var(--line-strong);
+}
+
+.card:focus-within {
+  outline: 2px solid var(--brown);
+  outline-offset: 2px;
+}
+
+/* one stage for every product: the render backdrop colour, 4:5 */
+.stage {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--stage);
+  overflow: hidden;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 260ms var(--ease);
+}
+
+.card:hover .img {
+  transform: scale(1.025);
+}
+
+.body {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 12px 14px 14px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.name {
+  font-size: var(--step-1);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+/* the whole card is one link target */
+.link {
+  text-decoration: none;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.line {
+  color: var(--ink-2);
+  font-size: var(--step--1);
+  line-height: 1.45;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.card[data-wide] .stage {
+  aspect-ratio: 5 / 4;
+}
+
+.card[data-wide] .img {
+  object-position: center 70%;
+}
+
+@media (max-width: 600px) {
+  .body {
+    padding: 10px 10px 12px;
+  }
+
+  .top :global(svg) {
+    display: none;
+  }
+}

@@ -14,15 +14,16 @@ export function Logo({ className }: { className?: string | undefined }) {
         {[2, 6, 10, 14, 18, 22].map((y) => (
           <rect key={y} x="0" y={y} width="7" height="1" fill="#b8946a" />
         ))}
-        <rect x="7" y="0" width="15" height="26" fill="#c93c0a" />
-        <circle cx="14.5" cy="8" r="1.6" fill="#5a1b04" />
-        <circle cx="14.5" cy="18" r="1.6" fill="#5a1b04" />
+        <rect x="7" y="0" width="15" height="26" fill="#e83200" />
+        <circle cx="14.5" cy="8" r="1.6" fill="#6e1810" />
+        <circle cx="14.5" cy="18" r="1.6" fill="#6e1810" />
       </svg>
       <span
         style={{
-          fontWeight: 650,
-          fontSize: "1.3rem",
-          letterSpacing: "-0.03em",
+          fontWeight: 700,
+          fontStretch: "78%",
+          fontSize: "1.5rem",
+          letterSpacing: "-0.02em",
           lineHeight: 1,
         }}
       >

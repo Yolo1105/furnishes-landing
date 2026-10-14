@@ -10,7 +10,7 @@ import styles from "./ProductActions.module.css";
 
 type SaveState = "idle" | "saved" | "failed";
 
-/** Save the exact version on screen (or the idea, for a concept). */
+/** Save the exact version on screen (or the idea, for a piece coming soon). */
 export function SaveButton({
   design,
   config,
@@ -60,8 +60,8 @@ export function SaveButton({
           <>
             {state === "saved"
               ? "Saved in this browser. "
-              : "This version is in your saved designs. "}
-            <Link href="/saved">View saved designs</Link>
+              : "This version is in your saved list. "}
+            <Link href="/saved">See saved versions</Link>
           </>
         ) : (
           <span className="muted">

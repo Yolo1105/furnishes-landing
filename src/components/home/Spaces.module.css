@@ -1,0 +1,250 @@
+.wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  grid-template-areas:
+    "tiles feature"
+    "others feature";
+  grid-template-rows: auto 1fr;
+  gap: 18px clamp(16px, 2.4vw, 32px);
+  align-items: start;
+}
+
+.tiles {
+  grid-area: tiles;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 3fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  aspect-ratio: 16 / 10;
+}
+
+.tiles li[data-lead] {
+  grid-row: span 2;
+}
+
+.tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--sunken);
+  text-align: left;
+  outline: 3px solid transparent;
+  outline-offset: -3px;
+  transition: outline-color 160ms var(--ease);
+}
+
+.tile[aria-pressed="true"] {
+  outline-color: var(--orange-strong);
+}
+
+.tile:focus-visible {
+  outline: 3px solid var(--brown);
+  outline-offset: 2px;
+}
+
+.tileImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms var(--ease);
+}
+
+.tile:hover .tileImg {
+  transform: scale(1.02);
+}
+
+.tileText {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+}
+
+.tileRoom {
+  font-weight: 700;
+  font-stretch: 80%;
+  font-size: var(--step-1);
+  line-height: 1.1;
+}
+
+.tileJob {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.tile[aria-pressed="true"] .tileText {
+  background: var(--orange-soft);
+}
+
+.feature {
+  grid-area: feature;
+  display: grid;
+  gap: 0;
+  background: var(--cream);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.featureImg {
+  background: var(--stage);
+  aspect-ratio: 4 / 5;
+}
+
+.featureImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: appear 380ms var(--ease);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+}
+
+.featureText {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  padding: 16px 18px 20px;
+}
+
+.featureName {
+  font-size: var(--step-3);
+  font-weight: 700;
+  font-stretch: 78%;
+  line-height: 1.02;
+}
+
+.featureUse {
+  color: var(--ink-2);
+}
+
+.featureMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.featureLinks {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  margin-top: 6px;
+}
+
+.step {
+  display: none;
+}
+
+.others {
+  grid-area: others;
+  display: grid;
+  gap: 8px;
+}
+
+.others ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.others a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.others a:hover {
+  border-color: var(--brown);
+}
+
+.others .allSpaces {
+  border-color: var(--brown);
+}
+
+@media (max-width: 900px) {
+  .wrap {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "step"
+      "tiles"
+      "feature"
+      "others";
+  }
+
+  .step {
+    grid-area: step;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .step button {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--brown);
+    border-radius: 50%;
+    background: transparent;
+  }
+
+  .tiles {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    grid-auto-columns: 78%;
+    aspect-ratio: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-right: calc(-1 * var(--gutter));
+    padding-right: var(--gutter);
+  }
+
+  .tiles li {
+    scroll-snap-align: start;
+    aspect-ratio: 5 / 4;
+  }
+
+  .tiles li[data-lead] {
+    grid-row: auto;
+  }
+
+  .feature {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: center;
+  }
+
+  .featureImg {
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featureImg img {
+    animation: none;
+  }
+}

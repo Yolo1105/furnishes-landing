@@ -1,35 +1,63 @@
 /*
   Furnishes visual system.
-  Chalk and graphite, so the birch and its finishes carry the colour. Orange
-  (the working-face finish) is kept for the main action and for selections;
-  #c93c0a keeps white text on it above 4.5:1. --stage matches the backdrop
-  the studio renders are made on (tools/render), so images sit seamlessly.
-  Signature: the plywood edge, 13 plies in 18 mm (.ply-rule).
+  The house palette from the original landing (furnishes_prod,
+  src/features/landing/landing.module.css): peach paper, cream reading
+  surfaces, brown ink, and orange as the structural signature.
+  Contrast (WCAG 2.2):
+  - brown #6e1810 on peach 10.2:1, on cream 10.9:1; --ink-3 at least 5.8:1;
+  - cream on strong orange #e83200 is 4.0:1, so orange buttons set their
+    label as large text (19px, 700), which needs 3:1;
+  - small orange text uses --accent-text (#a82400, 6.3:1 on peach);
+  - selected states: soft orange fill with brown text (7.3:1).
+  --stage is the backdrop the product renders are made on (tools/render).
 */
 
 :root {
   color-scheme: light;
 
+  /* the house palette */
+  --paper: #ffeddf;
+  --cream: #fff6e9;
+  --brown: #6e1810;
+  --orange: #e7551a;
+  --orange-strong: #e83200;
+  --orange-mid: #ff9c18;
+  --orange-soft: #f6c485;
+  --on-orange: #fbf0dc;
+  --wash: linear-gradient(
+    180deg,
+    #e83200 0%,
+    #f34d00 14%,
+    #fe6a02 28%,
+    #ff8a10 40%,
+    #ff9c18 50%,
+    #fab45c 62%,
+    #f6c485 72%,
+    #f2d2a6 82%,
+    #ffeddf 100%
+  );
+
   /* surfaces */
-  --canvas: #fbfaf8;
-  --surface: #ffffff;
-  --sunken: #f4f2ee;
-  --stage: #f2efea;
-  --band: #f4f2ee;
+  --canvas: var(--paper);
+  --surface: var(--cream);
+  --sunken: #fbe3cf;
+  --stage: #f7e5d2;
+  --band: var(--orange-soft);
 
   /* type */
-  --ink: #1d1f22;
-  --ink-2: #484b50;
-  --ink-3: #686c72;
-  --line: #e4e0d9;
-  --line-strong: #cbc5bb;
+  --ink: var(--brown);
+  --ink-2: #7d3a22;
+  --ink-3: #8a4426;
+  --line: rgb(110 24 16 / 0.16);
+  --line-strong: rgb(110 24 16 / 0.34);
 
-  /* accent: the main action and selected states */
-  --accent: #c93c0a;
-  --accent-hover: #a8350b;
-  --accent-ink: #ffffff;
-  --accent-tint: #fbece4;
-  --accent-bright: #e2622b;
+  /* action and selection */
+  --accent: var(--orange-strong);
+  --accent-hover: var(--brown);
+  --accent-ink: var(--cream);
+  --accent-tint: var(--orange-soft);
+  --accent-text: #a82400;
+  --accent-bright: var(--orange);
 
   /* materials, used in drawings and swatches only */
   --birch: #e8d6b6;
@@ -38,27 +66,30 @@
   --orange-face: #e2622b;
   --hardware: #2b2a29;
 
-  --concept: #6f6a62;
-  --warn-bg: #fbf2e3;
-  --warn-ink: #6d4712;
+  --concept: #7a4a36;
+  --warn-bg: #fde0c4;
+  --warn-ink: var(--brown);
 
   --font-sans:
-    "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui,
-    -apple-system, "Segoe UI", sans-serif;
+    "Archivo Variable", "Archivo", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
   --font-display: var(--font-sans);
+  --font-mono:
+    "Space Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   --step--1: 0.875rem;
   --step-0: 1rem;
-  --step-1: 1.125rem;
-  --step-2: 1.375rem;
-  --step-3: clamp(1.5rem, 1.2rem + 1.1vw, 2rem);
-  --step-4: clamp(1.875rem, 1.4rem + 1.8vw, 2.75rem);
-  --step-5: clamp(2.25rem, 1.5rem + 2.9vw, 3.75rem);
+  --step-1: 1.1875rem;
+  --step-2: 1.4375rem;
+  --step-3: clamp(1.625rem, 1.25rem + 1.3vw, 2.25rem);
+  --step-4: clamp(2.125rem, 1.5rem + 2.3vw, 3.25rem);
+  --step-5: clamp(2.625rem, 1.6rem + 3.6vw, 4.75rem);
+  --step-6: clamp(3rem, 1.6rem + 5.2vw, 6.5rem);
 
-  --gutter: clamp(16px, 4vw, 48px);
-  --max: 1320px;
-  --radius: 8px;
-  --radius-sm: 4px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --max: 1360px;
+  --radius: 6px;
+  --radius-sm: 3px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --header-h: 64px;
 }
@@ -81,7 +112,7 @@ body {
   font-family: var(--font-sans);
   font-size: var(--step-0);
   line-height: 1.55;
-  font-feature-settings: "tnum" 0;
+  font-stretch: 100%;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -118,14 +149,15 @@ ol[role="list"] {
   padding: 0;
 }
 
+/* display: Archivo condensed, for short human statements */
 h1,
 h2,
 .display {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-stretch: 96%;
-  letter-spacing: -0.025em;
-  line-height: 1.06;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-stretch: 74%;
+  letter-spacing: -0.012em;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
@@ -139,9 +171,9 @@ h2 {
 
 h3 {
   font-size: var(--step-2);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.005em;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 p {
@@ -171,7 +203,7 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--brown);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -192,11 +224,9 @@ button {
 }
 
 .eyebrow {
-  font-size: var(--step--1);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--ink-2);
 }
 
 .lede {
@@ -259,9 +289,12 @@ button {
   text-decoration: none;
 }
 
+/* orange labels are large text (19px bold): 4.0:1 on #e83200 */
 .btn-primary {
   background: var(--accent);
   color: var(--accent-ink);
+  font-size: 1.1875rem;
+  font-weight: 700;
 }
 
 .btn-primary:hover {
@@ -276,7 +309,17 @@ button {
 
 .btn-secondary:hover {
   background: var(--ink);
-  color: var(--surface);
+  color: var(--cream);
+}
+
+/* on an orange field the main action is brown, so it stays visible */
+.btn-ink {
+  background: var(--brown);
+  color: var(--cream);
+}
+
+.btn-ink:hover {
+  background: #4f0f09;
 }
 
 .btn-quiet {
@@ -305,6 +348,14 @@ button {
   font-weight: 600;
   text-decoration: underline;
   text-decoration-color: var(--line-strong);
+}
+
+button.text-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 600;
 }
 
 .text-link:hover {
@@ -365,15 +416,30 @@ button {
     inset 0 -1px 0 rgb(120 86 46 / 0.35);
 }
 
+/* measured facts and statuses: Space Mono, sentence case */
 .label {
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--ink-3);
+  color: var(--ink-2);
 }
 
 .spec {
-  font-variant-numeric: tabular-nums;
-  font-size: var(--step--1);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
   color: var(--ink-2);
+  letter-spacing: -0.01em;
+}
+
+/* the working face's hole grid, as a chapter mark: 8 mm holes on 40 mm */
+.holes {
+  height: 10px;
+  border: 0;
+  margin: 0;
+  background: radial-gradient(
+      circle at 5px 5px,
+      var(--brown) 0 3.2px,
+      transparent 3.6px
+    )
+    0 0 / 20px 10px repeat-x;
+  opacity: 0.85;
 }

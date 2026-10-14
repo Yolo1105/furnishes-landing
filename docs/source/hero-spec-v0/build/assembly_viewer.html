@@ -1,0 +1,479 @@
+<title>Furnishes 主样拼装步骤</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f6f3ee; --panel:#fffdfa; --ink:#28231f; --muted:#6f665e; --line:#e3dcd3; --soft:#efe8df;
+  --accent:#c8642a; --accent-soft:#f8e6da; --accent-ink:#9a4518;
+  --good:#3d7a4f; --warn:#a2512a; --assume:#2d5b86; --assume-soft:#e5edf5;
+  --scene:#f1ece5; --ground:#e6dfd5; --board:#f4f1ec; --edge:#c9a77c; --metal:#3a3632; --alu:#b9bdc2; --acc:#c8642a; --ghost:#9a8f84;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1b1917; --panel:#242120; --ink:#ede7df; --muted:#a69c92; --line:#3a3532; --soft:#2d2926;
+  --accent:#e08350; --accent-soft:#3b2a20; --accent-ink:#f0a77d;
+  --good:#7cbf8d; --warn:#e79a70; --assume:#8fb5dc; --assume-soft:#22303d;
+  --scene:#211e1c; --ground:#2b2724; --board:#e9e5df; --edge:#b89366; --metal:#55504b; --alu:#a3a8ae; --acc:#e08350; --ghost:#7d746b;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1b1917; --panel:#242120; --ink:#ede7df; --muted:#a69c92; --line:#3a3532; --soft:#2d2926;
+  --accent:#e08350; --accent-soft:#3b2a20; --accent-ink:#f0a77d;
+  --good:#7cbf8d; --warn:#e79a70; --assume:#8fb5dc; --assume-soft:#22303d;
+  --scene:#211e1c; --ground:#2b2724; --board:#e9e5df; --edge:#b89366; --metal:#55504b; --alu:#a3a8ae; --acc:#e08350; --ghost:#7d746b;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-feature-settings:"tnum"}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+.brand .k{font-size:11px;letter-spacing:.14em;color:var(--accent-ink);text-transform:uppercase;font-weight:500}
+.brand h1{margin:0;font-size:24px;line-height:1.25;text-wrap:balance;font-weight:700}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;padding:7px 14px;border-radius:999px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;line-height:1.3}
+.tabs button small{color:var(--muted);font-size:11px}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button[aria-pressed="true"] small{color:inherit;opacity:.75}
+.main{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}}
+.stage{position:relative;background:var(--scene);border:1px solid var(--line);border-radius:14px;overflow:hidden;aspect-ratio:4/3.6;max-width:100%;min-height:320px}
+@media (max-width:560px){.stage{aspect-ratio:4/5}.stage .dims{display:none}}
+#kits{min-width:560px}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none}
+.stage .hud{position:absolute;left:12px;top:10px;display:flex;flex-direction:column;gap:2px;pointer-events:none}
+.stage .hud .n{font-size:12px;color:var(--muted)}
+.stage .hud .t{font-size:15px;font-weight:700;max-width:28ch}
+.stage .dims{position:absolute;right:12px;top:10px;font-size:11px;color:var(--muted);text-align:right;pointer-events:none}
+.stage .tools{position:absolute;right:10px;bottom:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.chip{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit;font-size:12px;padding:4px 10px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+.stage .pick{position:absolute;left:10px;bottom:10px;max-width:min(320px,calc(100% - 20px));background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12px;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.stage .pick b{display:block;font-size:13px}
+.stage .err{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;color:var(--muted)}
+.ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font:inherit;font-weight:500;padding:8px 16px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.35;cursor:default}
+.timeline{display:flex;gap:4px;flex-wrap:wrap}
+.timeline button{appearance:none;font:inherit;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;min-width:30px;height:30px;padding:0 6px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+.timeline button.done{background:var(--soft);color:var(--ink)}
+.timeline button.cur{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card h2{margin:0;font-size:18px;line-height:1.35;text-wrap:balance}
+.card .stepno{font-size:12px;color:var(--accent-ink);letter-spacing:.08em}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;margin:0}
+.meta dt{color:var(--muted)}
+.meta dd{margin:0;min-width:0}
+.sec{display:flex;flex-direction:column;gap:6px}
+.sec h3{margin:0;font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;font-weight:500}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+td,th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:11.5px}
+td.r,th.r{text-align:right;white-space:nowrap}
+.tw{overflow-x:auto;max-width:100%}
+.check{display:flex;gap:8px;align-items:flex-start;background:var(--soft);border-radius:10px;padding:8px 10px;font-size:13px}
+.check::before{content:"✓";color:var(--good);font-weight:700}
+.pre{font-size:12.5px;color:var(--muted)}
+.tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:5px;line-height:1.6;white-space:nowrap}
+.t-sell{background:var(--ink);color:var(--bg)}
+.t-test{background:var(--accent-soft);color:var(--accent-ink)}
+.t-res{background:var(--assume-soft);color:var(--assume)}
+.t-hist{background:var(--soft);color:var(--muted)}
+.empty{color:var(--muted);font-size:13px}
+.lower{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.lower{grid-template-columns:minmax(0,1fr)}}
+.note{font-size:12.5px;color:var(--muted);background:var(--assume-soft);border-radius:10px;padding:10px 12px}
+.note b{color:var(--assume)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <span class="k">Furnishes · 主样建模规格 v0</span>
+      <h1>主样拼装步骤</h1>
+      <p>一副F1200骨架配两个功能包，加一个低位床边块。每一步放什么、用什么五金、怎样算装对。</p>
+    </div>
+    <div class="tabs" id="tabs" role="group" aria-label="选择配置"></div>
+  </header>
+
+  <div class="main">
+    <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+      <div class="stage" id="stage">
+        <div class="hud"><span class="n mono" id="hudN"></span><span class="t" id="hudT"></span></div>
+        <div class="dims mono" id="dims"></div>
+        <div class="tools">
+          <button class="chip" id="tGhost" aria-pressed="true">后续零件轮廓</button>
+          <button class="chip" id="tPorts" aria-pressed="false">端口</button>
+          <button class="chip" id="tReset">复位视角</button>
+        </div>
+        <div class="pick" id="pick" hidden></div>
+      </div>
+      <div class="ctrl">
+        <button class="btn ghost" id="prev" aria-label="上一步">← 上一步</button>
+        <button class="btn" id="next">下一步 →</button>
+        <button class="btn ghost" id="play">连续播放</button>
+        <button class="btn ghost" id="replay">重播本步</button>
+      </div>
+      <div class="timeline" id="timeline" aria-label="步骤"></div>
+      <div class="legend">
+        <span><i style="background:var(--board)"></i>胶合板（白色层压面，D15）</span>
+        <span><i style="background:var(--metal)"></i>钢件</span>
+        <span><i style="background:var(--alu)"></i>铝轨（可选）</span>
+        <span><i style="background:var(--acc)"></i>配件（强调色）</span>
+      </div>
+    </div>
+
+    <aside class="card" id="card" aria-live="polite"></aside>
+  </div>
+
+  <div class="lower">
+    <section class="card">
+      <div class="sec">
+        <h3>这套配置之后还能加什么</h3>
+        <div class="tw"><table id="kits"></table></div>
+      </div>
+      <div class="sec" id="retiredSec">
+        <h3>旧记录里退为历史的改造路径</h3>
+        <div class="tw"><table id="retired"></table></div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="sec">
+        <h3>整套五金</h3>
+        <div class="tw"><table id="hw"></table></div>
+      </div>
+      <div class="sec">
+        <h3>零件清单</h3>
+        <div class="tw"><table id="plist"></table></div>
+      </div>
+      <p class="note"><b>这是规格v0，不是生产图。</b>尺寸由 params.yaml 生成；标“假设”的参数（X01–X33）等首套样件后替换。底座、配重和防倾固定件按决定D13画出。点模型上的零件可看尺寸。</p>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const DATA = {"version":"v0 2026-10-14","configs":{"entry":{"title":"1.1 玄关包（F1200，加宽底座）","geo":{"W":600,"D":400,"H":1200,"hb":60,"iw":564,"beam_d":377,"panel_front":378,"panel_back":390,"base_depth":600},"ports":[{"id":1,"name":"层板销孔列","where":"两侧竖板内侧","spec":"Ø5／32节距／前后两排"},{"id":3,"name":"镜／显示器重托嵌件对","where":"右竖板外侧面","x":600,"y":[100,300],"z":900,"spec":"M6面嵌件×2，带隐藏盖"},{"id":4,"name":"衣杆／挂杆嵌件对","where":"两侧竖板内侧","y":200.0,"z":1140,"spec":"M6面嵌件×2"},{"id":6,"name":"底座通用螺栓孔型","where":"底座顶面","spec":"4×M6","xy":[[60,60],[540,60],[60,340],[540,340]]},{"id":8,"name":"门铰链底座孔位","where":"两侧竖板内侧下层","spec":"35杯铰链底座孔，预装【假设X32】"},{"id":11,"name":"桌板托架嵌件对","where":"右竖板外侧面","x":600,"y":[80,320],"z":635,"spec":"M6面嵌件×2；书桌旁版本出厂预装【假设X33】"},{"id":5,"name":"顶面立板孔","where":"顶盖","spec":"M6×2，带塞"},{"id":2,"name":"挂载区","where":"上层","z":[860,1220],"spec":"方案b；方案a备选"}],"steps":[{"id":1,"title":"放底座并调平，放入配重","action":"A0","parts":["BASE","CW"],"from_offset":[0,0,300],"fasteners":[],"tool":"随附L扳手（调节脚）","people":1,"check":"底座水平泡居中；配重板落入槽内","precondition":"清出约1.2×1.6米工作区"},{"id":2,"title":"立左竖板：定位销对孔，连接片锁入底座","action":"A1","parts":["SL"],"from_offset":[-300,0,200],"fasteners":[{"type":"M6手拧两用头","qty":2,"at":"左竖板底端连接片"}],"tool":"手拧","people":1,"check":"竖板不扶也能立住","precondition":""},{"id":3,"title":"立右竖板","action":"A1","parts":["SR"],"from_offset":[300,0,200],"fasteners":[{"type":"M6手拧两用头","qty":2,"at":"右竖板底端连接片"}],"tool":"手拧","people":1,"check":"两竖板平行，内侧槽口相对","precondition":""},{"id":4,"title":"装结构底梁：放在支承销上，两端锁紧","action":"A3","parts":["BEAM"],"from_offset":[0,-400,0],"fasteners":[{"type":"M6手拧","qty":4,"at":"底梁两端底面连接片"}],"tool":"手拧","people":1,"check":"推动竖板顶端，框体不晃","precondition":""},{"id":5,"title":"放鞋斜板：落在前低后高两组层板销上","action":"A4","parts":["SHOE"],"from_offset":[0,-500,0],"fasteners":[{"type":"层板销","qty":4,"at":"前后两排"}],"tool":"无","people":1,"check":"前沿挡条朝上，板面不翘","precondition":""},{"id":6,"title":"面板1：从顶端滑入两侧后槽，落到底","action":"A2","parts":["PNL1"],"from_offset":[0,0,1400],"fasteners":[],"tool":"无","people":2,"check":"面板落底有“嗒”声；一人扶竖板顶端","precondition":"顶盖尚未安装"},{"id":7,"title":"面板2：同样滑入，压在面板1上","action":"A2","parts":["PNL2"],"from_offset":[0,0,1400],"fasteners":[],"tool":"无","people":2,"check":"接缝等宽","precondition":""},{"id":8,"title":"面板3：滑入","action":"A2","parts":["PNL3"],"from_offset":[0,0,1400],"fasteners":[{"type":"隐藏防脱件","qty":3,"at":"每块面板一处"}],"tool":"无","people":2,"check":"三块面板齐平，无高低差","precondition":""},{"id":9,"title":"装顶盖：压住面板，竖板顶端连接片向上锁入","action":"A6","parts":["TOP"],"from_offset":[0,0,400],"fasteners":[{"type":"M6手拧","qty":4,"at":"两竖板顶端连接片"}],"tool":"手拧","people":2,"check":"顶盖与竖板外沿齐平；整件不晃","precondition":""},{"id":10,"title":"放窄层板","action":"A4","parts":["NSH"],"from_offset":[0,-500,0],"fasteners":[{"type":"层板销","qty":4}],"tool":"无","people":1,"check":"层板落销到底","precondition":""},{"id":11,"title":"装挂载面：间隔件锁入，薄穿孔面挂上","action":"A13*","parts":["FACE"],"from_offset":[0,-400,0],"fasteners":[{"type":"间隔件＋M6","qty":4}],"tool":"手拧","people":1,"check":"挂载面与面板间留约20空隙","precondition":""},{"id":12,"title":"挂配件：大衣钩、钥匙托、伞架","action":"A13","parts":["HOOK1","HOOK2","HOOK3","KEY","UMB"],"from_offset":[0,-300,0],"fasteners":[],"tool":"无","people":1,"check":"挂件锁定扣到位，轻拉不脱","precondition":""},{"id":13,"title":"最后检查；需要时安装附送防倾固定件","action":"检查","parts":[],"from_offset":[0,0,0],"fasteners":[{"type":"墙面固定带","qty":1,"at":"顶盖后沿（可选）"}],"tool":"螺丝刀（仅固定件）","people":1,"check":"按说明的挂物范围使用","precondition":""}],"parts":[{"id":"BASE","name":"加宽钢底座（含调节脚×4、配重槽）","kind":"metal","group":"金属","material":"粉末喷涂钢","size":[600,600,60],"pos":[0,-200,0],"mass":8},{"id":"CW","name":"配重板","kind":"metal","group":"金属","material":"钢","size":[520,520,12],"pos":[40,-160,10],"mass":10},{"id":"SL","name":"F1200整高竖板（左）","kind":"board","group":"结构板","material":"桦木胶合板","size":[18,400,1200],"pos":[0,0,60],"mass":5.88},{"id":"SR","name":"F1200整高竖板（右）","kind":"board","group":"结构板","material":"桦木胶合板","size":[18,400,1200],"pos":[582,0,60],"mass":5.88},{"id":"BEAM","name":"结构底梁","kind":"board","group":"结构板","material":"桦木胶合板","size":[563.0,377,18],"pos":[18.5,0,100],"mass":2.6},{"id":"PNL1","name":"分层面板 1（下→上）","kind":"board","group":"面板","material":"桦木胶合板","size":[579.0,12,399.5],"pos":[10.5,378,60.25],"mass":1.89},{"id":"PNL2","name":"分层面板 2（下→上）","kind":"board","group":"面板","material":"桦木胶合板","size":[579.0,12,399.5],"pos":[10.5,378,460.25],"mass":1.89},{"id":"PNL3","name":"分层面板 3（下→上）","kind":"board","group":"面板","material":"桦木胶合板","size":[579.0,12,399.5],"pos":[10.5,378,860.25],"mass":1.89},{"id":"TOP","name":"顶盖","kind":"board","group":"结构板","material":"桦木胶合板","size":[600,400,18],"pos":[0,0,1260],"mass":2.94},{"id":"SHOE","name":"鞋斜板（前低后高）","kind":"board","group":"层板","material":"桦木胶合板","size":[563.0,289.78,95.65],"pos":[18.5,10,160],"rot":{"axis":"x","deg":15},"mass":2.07},{"id":"NSH","name":"窄层板","kind":"board","group":"层板","material":"桦木胶合板","size":[563.0,190,18],"pos":[18.5,0,742],"mass":1.31},{"id":"FACE","name":"挂载面（方案b：薄穿孔面）","kind":"board","group":"挂载面","material":"穿孔胶合板或粉末喷涂钢板","size":[562,6,360],"pos":[19,352,860],"mass":0.83},{"id":"HOOK1","name":"大衣钩 1","kind":"accessory","group":"配件","material":"粉末喷涂钢","size":[30,50,60],"pos":[98.0,302,1060],"mass":0.15},{"id":"HOOK2","name":"大衣钩 2","kind":"accessory","group":"配件","material":"粉末喷涂钢","size":[30,50,60],"pos":[285.0,302,1060],"mass":0.15},{"id":"HOOK3","name":"大衣钩 3","kind":"accessory","group":"配件","material":"粉末喷涂钢","size":[30,50,60],"pos":[472.0,302,1060],"mass":0.15},{"id":"KEY","name":"钥匙托","kind":"accessory","group":"配件","material":"胶合板＋钢挂件","size":[140,70,40],"pos":[58,282,940],"mass":0.3},{"id":"UMB","name":"伞架（挂环）","kind":"accessory","group":"配件","material":"粉末喷涂钢","size":[60,60,30],"pos":[70,292,870],"mass":0.2}]},"desk":{"title":"1.2 书桌旁包（F1200，加宽底座，含铝轨）","geo":{"W":600,"D":400,"H":1200,"hb":60,"iw":564,"beam_d":377,"panel_front":378,"panel_back":390,"base_depth":600},"ports":[{"id":1,"name":"层板销孔列","where":"两侧竖板内侧","spec":"Ø5／32节距／前后两排"},{"id":3,"name":"镜／显示器重托嵌件对","where":"右竖板外侧面","x":600,"y":[100,300],"z":900,"spec":"M6面嵌件×2，带隐藏盖"},{"id":4,"name":"衣杆／挂杆嵌件对","where":"两侧竖板内侧","y":200.0,"z":1140,"spec":"M6面嵌件×2"},{"id":6,"name":"底座通用螺栓孔型","where":"底座顶面","spec":"4×M6","xy":[[60,60],[540,60],[60,340],[540,340]]},{"id":8,"name":"门铰链底座孔位","where":"两侧竖板内侧下层","spec":"35杯铰链底座孔，预装【假设X32】"},{"id":11,"name":"桌板托架嵌件对","where":"右竖板外侧面","x":600,"y":[80,320],"z":635,"spec":"M6面嵌件×2；书桌旁版本出厂预装【假设X33】"},{"id":5,"name":"顶面立板孔","where":"顶盖","spec":"M6×2，带塞"},{"id":7,"name":"铝轨槽位","where":"面板前，书桌旁版本","z":960,"spec":"两端支架锁入竖板内侧嵌件"}],"steps":[{"id":1,"title":"放底座并调平，放入配重","action":"A0","parts":["BASE","CW"],"from_offset":[0,0,300],"fasteners":[],"tool":"随附L扳手（调节脚）","people":1,"check":"底座水平泡居中；配重板落入槽内","precondition":"清出约1.2×1.6米工作区"},{"id":2,"title":"立左竖板：定位销对孔，连接片锁入底座","action":"A1","parts":["SL"],"from_offset":[-300,0,200],"fasteners":[{"type":"M6手拧两用头","qty":2,"at":"左竖板底端连接片"}],"tool":"手拧","people":1,"check":"竖板不扶也能立住","precondition":""},{"id":3,"title":"立右竖板","action":"A1","parts":["SR"],"from_offset":[300,0,200],"fasteners":[{"type":"M6手拧两用头","qty":2,"at":"右竖板底端连接片"}],"tool":"手拧","people":1,"check":"两竖板平行，内侧槽口相对","precondition":""},{"id":4,"title":"装结构底梁：放在支承销上，两端锁紧","action":"A3","parts":["BEAM"],"from_offset":[0,-400,0],"fasteners":[{"type":"M6手拧","qty":4,"at":"底梁两端底面连接片"}],"tool":"手拧","people":1,"check":"推动竖板顶端，框体不晃","precondition":""},{"id":5,"title":"面板1：从顶端滑入两侧后槽，落到底","action":"A2","parts":["PNL1"],"from_offset":[0,0,1400],"fasteners":[],"tool":"无","people":2,"check":"面板落底有“嗒”声；一人扶竖板顶端","precondition":"顶盖尚未安装"},{"id":6,"title":"面板2：同样滑入，压在面板1上","action":"A2","parts":["PNL2"],"from_offset":[0,0,1400],"fasteners":[],"tool":"无","people":2,"check":"接缝等宽","precondition":""},{"id":7,"title":"面板3：滑入","action":"A2","parts":["PNL3"],"from_offset":[0,0,1400],"fasteners":[{"type":"隐藏防脱件","qty":3,"at":"每块面板一处"}],"tool":"无","people":2,"check":"三块面板齐平，无高低差","precondition":""},{"id":8,"title":"装顶盖：压住面板，竖板顶端连接片向上锁入","action":"A6","parts":["TOP"],"from_offset":[0,0,400],"fasteners":[{"type":"M6手拧","qty":4,"at":"两竖板顶端连接片"}],"tool":"手拧","people":2,"check":"顶盖与竖板外沿齐平；整件不晃","precondition":""},{"id":9,"title":"放两块全深层板","action":"A4","parts":["SH1","SH2"],"from_offset":[0,-500,0],"fasteners":[{"type":"层板销","qty":8}],"tool":"无","people":1,"check":"层板水平、落销到底","precondition":""},{"id":10,"title":"装铝轨（可选）：两端支架锁入竖板内侧","action":"A13*","parts":["RAIL"],"from_offset":[0,-400,0],"fasteners":[{"type":"M6","qty":2}],"tool":"随附L扳手","people":1,"check":"铝轨水平","precondition":""},{"id":11,"title":"装线槽、笔筒、书立","action":"A13","parts":["CBL","PEN","BOOKEND"],"from_offset":[0,-300,0],"fasteners":[],"tool":"无","people":1,"check":"线可从线槽进入","precondition":""},{"id":12,"title":"最后检查；需要时安装附送防倾固定件","action":"检查","parts":[],"from_offset":[0,0,0],"fasteners":[{"type":"墙面固定带","qty":1,"at":"顶盖后沿（可选）"}],"tool":"螺丝刀（仅固定件）","people":1,"check":"按说明的挂物范围使用","precondition":""}],"parts":[{"id":"BASE","name":"加宽钢底座（含调节脚×4、配重槽）","kind":"metal","group":"金属","material":"粉末喷涂钢","size":[600,600,60],"pos":[0,-200,0],"mass":8},{"id":"CW","name":"配重板","kind":"metal","group":"金属","material":"钢","size":[520,520,12],"pos":[40,-160,10],"mass":10},{"id":"SL","name":"F1200整高竖板（左）","kind":"board","group":"结构板","material":"桦木胶合板","size":[18,400,1200],"pos":[0,0,60],"mass":5.88},{"id":"SR","name":"F1200整高竖板（右）","kind":"board","group":"结构板","material":"桦木胶合板","size":[18,400,1200],"pos":[582,0,60],"mass":5.88},{"id":"BEAM","name":"结构底梁","kind":"board","group":"结构板","material":"桦木胶合板","size":[563.0,377,18],"pos":[18.5,0,100],"mass":2.6},{"id":"PNL1","name":"分层面板 1（下→上）","kind":"board","group":"面板","material":"桦木胶合板","size":[579.0,12,399.5],"pos":[10.5,378,60.25],"mass":1.89},{"id":"PNL2","name":"分层面板 2（下→上）","kind":"board","group":"面板","material":"桦木胶合板","size":[579.0,12,399.5],"pos":[10.5,378,460.25],"mass":1.89},{"id":"PNL3","name":"分层面板 3（下→上）","kind":"board","group":"面板","material":"桦木胶合板","size":[579.0,12,399.5],"pos":[10.5,378,860.25],"mass":1.89},{"id":"TOP","name":"顶盖","kind":"board","group":"结构板","material":"桦木胶合板","size":[600,400,18],"pos":[0,0,1260],"mass":2.94},{"id":"SH1","name":"全深层板 1","kind":"board","group":"层板","material":"桦木胶合板","size":[563.0,377,18],"pos":[18.5,0,782],"mass":2.6},{"id":"SH2","name":"全深层板 2","kind":"board","group":"层板","material":"桦木胶合板","size":[563.0,377,18],"pos":[18.5,0,1062],"mass":2.6},{"id":"RAIL","name":"铝轨（可选）","kind":"metal","group":"金属","material":"阳极氧化铝","size":[540,12,30],"pos":[30.0,366,960],"mass":0.4},{"id":"CBL","name":"线槽","kind":"accessory","group":"配件","material":"钢","size":[400,60,40],"pos":[78,0,742],"mass":0.4},{"id":"PEN","name":"笔筒","kind":"accessory","group":"配件","material":"钢","size":[70,70,100],"pos":[462,40,800],"mass":0.2},{"id":"BOOKEND","name":"书立","kind":"accessory","group":"配件","material":"钢","size":[20,150,160],"pos":[58,60,1080],"mass":0.3}]},"bedside":{"title":"1.3 床边块（低位块一层）","geo":{"W":600,"D":400,"H":400,"hb":150,"iw":564,"beam_d":377,"panel_front":378,"base_depth":400},"ports":[{"id":1,"name":"层板销孔列","where":"两侧竖板内侧"},{"id":6,"name":"底座通用螺栓孔型","where":"脚架"},{"id":9,"name":"台面底面嵌件","where":"台面"},{"id":10,"name":"叠层跨接板位","where":"竖板顶端","spec":"D14"}],"steps":[{"id":1,"title":"放钢脚架并调平","action":"A0","parts":["LEGS"],"from_offset":[0,0,250],"fasteners":[],"tool":"随附L扳手","people":1,"check":"四脚落地不晃","precondition":""},{"id":2,"title":"立左竖板，锁入脚架","action":"A1","parts":["SL1"],"from_offset":[-300,0,150],"fasteners":[{"type":"M6手拧两用头","qty":2}],"tool":"手拧","people":1,"check":"竖板直立","precondition":""},{"id":3,"title":"立右竖板","action":"A1","parts":["SR1"],"from_offset":[300,0,150],"fasteners":[{"type":"M6手拧两用头","qty":2}],"tool":"手拧","people":1,"check":"槽口相对","precondition":""},{"id":4,"title":"装结构底梁（兼底板）","action":"A3","parts":["BEAM"],"from_offset":[0,-400,0],"fasteners":[{"type":"M6手拧","qty":4}],"tool":"手拧","people":1,"check":"框体不晃","precondition":""},{"id":5,"title":"面板从顶端滑入后槽","action":"A2","parts":["PNL1"],"from_offset":[0,0,600],"fasteners":[{"type":"隐藏防脱件","qty":1}],"tool":"无","people":1,"check":"面板落底","precondition":""},{"id":6,"title":"装台面","action":"A9","parts":["TOPB"],"from_offset":[0,0,300],"fasteners":[{"type":"M6手拧","qty":4}],"tool":"手拧","people":1,"check":"台面齐平","precondition":""},{"id":7,"title":"放浅托盘","action":"A13","parts":["TRAY"],"from_offset":[0,0,200],"fasteners":[],"tool":"无","people":1,"check":"充电线可从后部出线","precondition":""}],"parts":[{"id":"LEGS","name":"钢脚架（约150高，含调节脚）","kind":"metal","group":"金属","material":"粉末喷涂钢","size":[600,400,150],"pos":[0,0,0],"mass":3.0},{"id":"SL1","name":"S400竖板（左，第1层）","kind":"board","group":"结构板","material":"桦木胶合板","size":[18,400,400],"pos":[0,0,150],"mass":1.96},{"id":"SR1","name":"S400竖板（右，第1层）","kind":"board","group":"结构板","material":"桦木胶合板","size":[18,400,400],"pos":[582,0,150],"mass":1.96},{"id":"PNL1","name":"面板（第1层）","kind":"board","group":"面板","material":"桦木胶合板","size":[579.0,12,399.5],"pos":[10.5,378,150.25],"mass":1.89},{"id":"BEAM","name":"结构底梁（兼底板）","kind":"board","group":"结构板","material":"桦木胶合板","size":[563.0,377,18],"pos":[18.5,0,150],"mass":2.6},{"id":"TOPB","name":"台面","kind":"board","group":"结构板","material":"桦木胶合板","size":[600,400,18],"pos":[0,0,550],"mass":2.94},{"id":"TRAY","name":"浅托盘（充电线槽）","kind":"accessory","group":"配件","material":"胶合板","size":[300,200,25],"pos":[150,60,568],"mass":0.4}]}},"kits":[{"id":"K-E1","name":"换成书桌旁包","applies":"entry","tier":"先卖","ports":[1,7],"add":["全深层板×2","书桌旁配件包"],"remove":["鞋斜板","窄层板","挂载面","玄关配件包"],"leftover":"撤下件登记去向（可留作日后换回）","steps":"A13拆配件 → A4取下层板 → A4放全深层板×2 → A13装配件","legacy":"1.1 变书桌旁 ✓"},{"id":"K-E2","name":"并排一段（双人玄关）","applies":"entry","tier":"先卖","ports":[6],"add":["完整F1200功能面一套","段间联结螺栓×4"],"remove":[],"leftover":"无","steps":"另一段按原步骤装好 → A7两竖板贴合锁紧","legacy":"1.1 双人玄关 ✓"},{"id":"K-E3","name":"下层门","applies":"entry","tier":"先卖","ports":[8],"add":["门板×1（预装卡入铰链）"],"remove":[],"leftover":"无","steps":"A14卡入铰链底座 → 调门缝","legacy":"K.8 门×1遮鞋"},{"id":"K-E4","name":"抽屉模块","applies":"entry,desk","tier":"先卖","ports":[1],"add":["抽屉模块×1"],"remove":[],"leftover":"无","steps":"A15落销 → 推入","legacy":"K.8 抽屉模块"},{"id":"K-E5","name":"换面型（实面／织物）","applies":"entry,desk","tier":"先卖","ports":[],"add":["面板×1–3（新面型）"],"remove":["原面板"],"leftover":"原面板登记去向","steps":"A6松开顶盖 → A2抽出面板 → A2滑入新面板 → A6锁回顶盖","legacy":"1.1 对床那面不露孔／1.2 变视频背景（由翻面改写）"},{"id":"K-E6","name":"挂镜套件","applies":"entry","tier":"测试后","ports":[3],"add":["安全镜＋重托×2"],"remove":[],"leftover":"无","steps":"重托锁入端口3 → 挂镜 → 防脱","legacy":"K.8 挂镜重托"},{"id":"K-E7","name":"换鞋坐凳","applies":"entry","tier":"测试后","ports":[],"add":["低位块一套＋厚坐板＋坐垫"],"remove":[],"leftover":"无","steps":"低位块按床边块步骤装好 → 放在功能面旁 → A9坐板","legacy":"1.1 换鞋凳 △（承人测试）"},{"id":"K-E8","name":"脚轮底座（变移动屏3.1）","applies":"entry,desk","tier":"测试后","ports":[6],"add":["刹车脚轮底座＋配重"],"remove":["加宽底座"],"leftover":"加宽底座","steps":"卸载 → 两人放倒 → A12换底座 → 立起锁轮","legacy":"1.1 变带轮玄关车 △（动态稳定测试）"},{"id":"K-D1","name":"桌板套件（变带桌工作区）","applies":"desk","tier":"先卖","ports":[11],"add":["桌板1200×600×25","重托架×2","钢制全高桌腿","底部加强方管"],"remove":[],"leftover":"无","steps":"A11重托架锁入端口11 → 放桌板 → 远端立钢腿 → 锁紧","legacy":"1.2 变一张桌 ✓（腿改钢腿）"},{"id":"K-D2","name":"铝轨","applies":"desk","tier":"先卖","ports":[7],"add":["铝轨＋支架×2"],"remove":[],"leftover":"无","steps":"支架锁入竖板内侧 → 装轨","legacy":"新增（D5）"},{"id":"K-D3","name":"显示器支架","applies":"desk","tier":"测试后","ports":[3],"add":["显示器重托＋第三方支臂"],"remove":[],"leftover":"无","steps":"重托锁入端口3 → 装支臂；须先装桌板套件或联结第二段","legacy":"K.8 显示器重托"},{"id":"K-D4","name":"换成玄关包","applies":"desk","tier":"先卖","ports":[1,2],"add":["鞋斜板","窄层板","挂载面","玄关配件包"],"remove":["全深层板×2","书桌旁配件包"],"leftover":"撤下件登记去向","steps":"K-E1的逆过程","legacy":"1.2 变玄关 ✓"},{"id":"K-D5","name":"下翻站立台","applies":"desk","tier":"研究","ports":[],"add":["下翻台面＋铰链＋支腿"],"remove":[],"leftover":"无","steps":"待4.1节点验证后定义","legacy":"1.2 变站立台 △"},{"id":"K-B1","name":"叠一层（800床头柜）","applies":"bedside","tier":"测试后","ports":[10],"add":["S400竖板×2（带跨接板）","面板×1"],"remove":[],"leftover":"无（台面移到新顶部）","steps":"A9松开台面 → A5上层竖板跨接锁入 → A2滑入面板 → A9台面回顶","legacy":"1.3 变800床头柜（D14允许）"},{"id":"K-B2","name":"叠两层（书桌旁小柜）","applies":"bedside","tier":"测试后","ports":[10],"add":["S400竖板×4（带跨接板）","面板×2","防倾固定件"],"remove":[],"leftover":"无","steps":"同K-B1两次；3层时安装固定件","legacy":"1.3 变书桌旁（D14允许，≤3层）"},{"id":"K-B3","name":"脚轮底座（沙发边桌）","applies":"bedside","tier":"先卖","ports":[6],"add":["刹车脚轮底座"],"remove":["钢脚架"],"leftover":"钢脚架","steps":"A12换底座","legacy":"1.3 变沙发边桌 ✓"},{"id":"K-B4","name":"并排成矮柜一格","applies":"bedside","tier":"先卖","ports":[],"add":["联结螺栓×4"],"remove":[],"leftover":"无","steps":"两块贴合 → A7锁紧","legacy":"1.3 变矮柜一格 ✓"},{"id":"K-B5","name":"抽屉或门","applies":"bedside","tier":"先卖","ports":[1],"add":["抽屉模块或门板"],"remove":[],"leftover":"无","steps":"A15／A14","legacy":"K.8 抽屉、门"}],"retired_paths":[{"path":"1.1 降到800矮台","reason":"F整高竖板不能拆层（D3）","status":"历史"},{"path":"1.1 变隔断的一段","reason":"需要S叠层（D3）","status":"历史"},{"path":"1.2 变床边块","reason":"F不能拆层","status":"历史"},{"path":"1.2 叠成书架","reason":"需要S叠层或换整块竖板","status":"历史"},{"path":"1.3 变厨房车","reason":"S叠层可行，但厨房件与卧室件互换有卫生问题","status":"历史"}],"actions":{"A0":"调平并建立稳定底座","A1":"底部定位与连接","A2":"装面板并锁定","A3":"固定结构横板","A4":"安装普通层板","A5":"竖向加高","A6":"安装完整顶板","A7":"同向并联","A8":"转角组合","A9":"桌板与跨桥","A10":"桌上立脚","A11":"重载工作面","A12":"更换底座或脚轮","A13":"轻载静态挂装","A14":"装门","A15":"装抽屉模块","A16":"装下翻工作台","A17":"装折叠屏"}};
+const CONFIG_ORDER = ["entry","desk","bedside"];
+const SHORT = {entry:["玄关包","1.1"],desk:["书桌旁包","1.2"],bedside:["床边块","1.3"]};
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = v => Number.isInteger(v) ? String(v) : (Math.round(v*10)/10).toString();
+
+let cfgKey = "entry";
+try { const s = localStorage.getItem("fx-cfg"); if (s && DATA.configs[s]) cfgKey = s; } catch(e) {}
+if (location.hash && DATA.configs[location.hash.slice(1)]) cfgKey = location.hash.slice(1);
+let stepIdx = -1;            // -1 = 总览（全部装好）
+let playing = false, playTimer = null;
+let showGhost = true, showPorts = false;
+
+/* ---------- tabs ---------- */
+function renderTabs(){
+  $("tabs").innerHTML = CONFIG_ORDER.map(k => `<button data-k="${k}" aria-pressed="${k===cfgKey}">${SHORT[k][0]}<small class="mono">${SHORT[k][1]} · ${DATA.configs[k].steps.length}步</small></button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { setConfig(b.dataset.k); });
+}
+function cfg(){ return DATA.configs[cfgKey]; }
+function partsById(){ const m = {}; cfg().parts.forEach(p => m[p.id] = p); return m; }
+
+/* ---------- 3D ---------- */
+let renderer, scene, camera, controls, root, ground, meshes = {}, ghosts = {}, portGroup, raycaster, anim = null, ok = true;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function initThree(){
+  if (!window.THREE || !THREE.OrbitControls){ ok = false; $("stage").insertAdjacentHTML("beforeend", `<div class="err">三维库没有加载出来。右侧的步骤说明和下方清单仍然完整。</div>`); return; }
+  const st = $("stage");
+  renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  st.prepend(renderer.domElement);
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(32, 1, 0.05, 50);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI*0.495; controls.minDistance = 0.6; controls.maxDistance = 8;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7a6a, 0.75));
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75); sun.position.set(-1.6, 3.2, 2.4); sun.castShadow = true;
+  sun.shadow.mapSize.set(2048,2048); Object.assign(sun.shadow.camera, {left:-1.5,right:1.5,top:2,bottom:-1,near:0.5,far:8}); sun.shadow.bias = -0.0004;
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.25); fill.position.set(2,1.5,-1); scene.add(fill);
+  ground = new THREE.Mesh(new THREE.PlaneGeometry(12,12), new THREE.ShadowMaterial({opacity:0.16}));
+  ground.rotation.x = -Math.PI/2; ground.receiveShadow = true; scene.add(ground);
+  raycaster = new THREE.Raycaster();
+  applyTheme();
+  new ResizeObserver(resize).observe(st); resize();
+  let down = null;
+  renderer.domElement.addEventListener("pointerdown", e => down = [e.clientX, e.clientY]);
+  renderer.domElement.addEventListener("pointerup", e => { if (down && Math.hypot(e.clientX-down[0], e.clientY-down[1]) < 5) pick(e); down = null; });
+  requestAnimationFrame(loop);
+}
+function applyTheme(){
+  if (!ok) return;
+  scene.background = new THREE.Color(css("--scene"));
+  MAT = null; if (root) buildScene(true);
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => setTimeout(applyTheme, 30));
+new MutationObserver(() => setTimeout(applyTheme, 30)).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+
+function resize(){
+  if (!ok) return;
+  const r = $("stage").getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / Math.max(r.height,1); camera.updateProjectionMatrix();
+}
+let MAT = null;
+function mats(){
+  if (MAT) return MAT;
+  const c = n => new THREE.Color(css(n));
+  MAT = {
+    board: new THREE.MeshStandardMaterial({color:c("--board"), roughness:0.85}),
+    metal: new THREE.MeshStandardMaterial({color:c("--metal"), roughness:0.55, metalness:0.35}),
+    alu: new THREE.MeshStandardMaterial({color:c("--alu"), roughness:0.35, metalness:0.7}),
+    accessory: new THREE.MeshStandardMaterial({color:c("--acc"), roughness:0.6}),
+    edge: new THREE.LineBasicMaterial({color:c("--edge")}),
+    edgeDark: new THREE.LineBasicMaterial({color:c("--ghost")}),
+    ghost: new THREE.LineBasicMaterial({color:c("--ghost"), transparent:true, opacity:0.35}),
+    hi: new THREE.LineBasicMaterial({color:c("--accent")}),
+    port: new THREE.MeshBasicMaterial({color:c("--accent")})
+  };
+  return MAT;
+}
+// data(mm): x左→右, y前→后, z上 ; three: x, y=上, z=朝观者
+function centerOf(p){ return new THREE.Vector3((p.pos[0]+p.size[0]/2)/1000, (p.pos[2]+p.size[2]/2)/1000, -(p.pos[1]+p.size[1]/2)/1000); }
+function geomOf(p){
+  if (p.rot && p.rot.axis === "x"){
+    const a = p.rot.deg*Math.PI/180, d = p.size[1]/Math.cos(a), t = Math.max(p.size[2] - d*Math.sin(a), 6);
+    const g = new THREE.BoxGeometry(p.size[0]/1000, t/1000, d/1000); g.rotateX(a); return g;
+  }
+  return new THREE.BoxGeometry(p.size[0]/1000, p.size[2]/1000, p.size[1]/1000);
+}
+// 钢底座与钢脚架画成框架，而不是实心块（尺寸仍取包围盒）
+function frameGeom(p){
+  if (p.id !== "BASE" && p.id !== "LEGS") return null;
+  const W = p.size[0]/1000, D = p.size[1]/1000, H = p.size[2]/1000, parts = [];
+  const box = (w, h, d, x, y, z) => { const b = new THREE.BoxGeometry(w, h, d); b.translate(x, y, z); parts.push(b); };
+  if (p.id === "BASE"){            // 雪橇式：两根纵梁＋前后横梁＋四个调节脚
+    const r = 0.04, hh = H*0.6;
+    [-1, 1].forEach(sx => box(r, hh, D, sx*(W/2 - r/2), H/2 - hh/2, 0));
+    [-1, 1].forEach(sz => box(W - 2*r, hh*0.7, r, 0, H/2 - hh*0.35, sz*(D/2 - r/2)));
+    [-1, 1].forEach(sx => [-1, 1].forEach(sz => box(0.03, H - hh, 0.03, sx*(W/2 - 0.03), -H/2 + (H - hh)/2, sz*(D/2 - 0.03))));
+  } else {                         // 脚架：四根方管腿＋顶部围框
+    const l = 0.03, t = 0.025;
+    [-1, 1].forEach(sx => [-1, 1].forEach(sz => box(l, H, l, sx*(W/2 - l/2), 0, sz*(D/2 - l/2))));
+    [-1, 1].forEach(sz => box(W, t, t, 0, H/2 - t/2, sz*(D/2 - t/2)));
+    [-1, 1].forEach(sx => box(t, t, D, sx*(W/2 - t/2), H/2 - t/2, 0));
+  }
+  return mergeGeoms(parts);
+}
+function mergeGeoms(list){
+  let pos = [], nor = [], idx = [], off = 0;
+  list.forEach(g => { const P = g.attributes.position.array, N = g.attributes.normal.array;
+    pos.push(...P); nor.push(...N); const I = g.index ? Array.from(g.index.array) : [...Array(P.length/3).keys()]; idx.push(...I.map(i => i + off)); off += P.length/3; });
+  const out = new THREE.BufferGeometry();
+  out.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); out.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3)); out.setIndex(idx);
+  return out;
+}
+function matKey(p){ if (p.material && p.material.includes("铝")) return "alu"; if (p.kind === "metal") return "metal"; if (p.kind === "accessory") return "accessory"; return "board"; }
+function buildScene(keep){
+  if (!ok) return;
+  if (root) scene.remove(root);
+  root = new THREE.Group(); scene.add(root); meshes = {}; ghosts = {};
+  const M = mats();
+  cfg().parts.forEach(p => {
+    const g = geomOf(p), mk = matKey(p);
+    const fr = frameGeom(p);
+    const mesh = new THREE.Mesh(fr || g, M[mk]); mesh.castShadow = true; mesh.receiveShadow = true;
+    const e = new THREE.LineSegments(new THREE.EdgesGeometry(fr || g, 20), mk === "board" ? M.edge : M.edgeDark); mesh.add(e); mesh.userData = {part:p, edge:e, base:mk === "board" ? M.edge : M.edgeDark};
+    const c = centerOf(p); mesh.position.copy(c); root.add(mesh); meshes[p.id] = mesh;
+    const gh = new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), M.ghost); gh.position.copy(c); root.add(gh); ghosts[p.id] = gh;
+  });
+  portGroup = new THREE.Group(); root.add(portGroup);
+  portMarkers().forEach(m => { const s = new THREE.Mesh(new THREE.SphereGeometry(0.018, 16, 12), M.port); s.position.set(m.x/1000, m.z/1000, -m.y/1000); s.userData = {port:m}; portGroup.add(s); });
+  portGroup.visible = showPorts;
+  if (!keep) frameCamera();
+  applyStep(false);
+}
+function portMarkers(){
+  const out = [], W = cfg().geo.W;
+  (cfg().ports || []).forEach(pt => {
+    if (pt.z == null || Array.isArray(pt.z)) return;
+    const ys = Array.isArray(pt.y) ? pt.y : (pt.y != null ? [pt.y] : []);
+    const xs = pt.x != null ? [pt.x] : [18, W-18];
+    xs.forEach(x => ys.forEach(y => out.push({x, y, z:pt.z, id:pt.id, name:pt.name, spec:pt.spec, where:pt.where})));
+  });
+  return out;
+}
+function bbox(){
+  let mn = [1e9,1e9,1e9], mx = [-1e9,-1e9,-1e9];
+  cfg().parts.forEach(p => { for (let i=0;i<3;i++){ mn[i] = Math.min(mn[i], p.pos[i]); mx[i] = Math.max(mx[i], p.pos[i]+p.size[i]); } });
+  return {mn, mx};
+}
+function bodyH(){ return cfg().parts.filter(p => p.kind !== "accessory").reduce((a, p) => Math.max(a, p.pos[2] + p.size[2]), 0); }
+function frameCamera(){
+  const {mn, mx} = bbox();
+  const cx = (mn[0]+mx[0])/2000, cy = (mx[2])/2000, cz = -(mn[1]+mx[1])/2000;
+  const h = mx[2]/1000;
+  controls.target.set(cx, cy*0.95, cz);
+  const dist = 1.15 + h*1.9;
+  camera.position.set(cx - dist*0.55, cy + dist*0.42, cz + dist*0.85);
+  controls.update();
+}
+
+/* ---------- steps ---------- */
+function stepParts(i){ return i < 0 ? [] : (cfg().steps[i].parts || []); }
+function partStepMap(){ const m = {}; cfg().steps.forEach((s, i) => (s.parts||[]).forEach(id => m[id] = i)); return m; }
+function applyStep(animate){
+  renderCard(); renderTimeline();
+  if (!ok) return;
+  const psm = partStepMap(), total = cfg().steps.length, M = mats();
+  const cur = stepIdx < 0 ? total : stepIdx;
+  Object.entries(meshes).forEach(([id, m]) => {
+    const si = psm[id] ?? 0, p = m.userData.part, home = centerOf(p);
+    const isCur = stepIdx >= 0 && si === stepIdx;
+    m.visible = si <= cur;
+    m.position.copy(home);
+    m.userData.edge.material = isCur ? M.hi : m.userData.base;
+    ghosts[id].visible = showGhost && si > cur;
+  });
+  anim = null;
+  if (stepIdx >= 0){
+    const s = cfg().steps[stepIdx], off = s.from_offset || [0,0,0];
+    const v = new THREE.Vector3(off[0]/1000, off[2]/1000, -off[1]/1000);
+    const ids = s.parts || [];
+    if (animate && !reduce && ids.length && v.length() > 0){
+      ids.forEach((id, k) => { const m = meshes[id]; if (m){ m.position.copy(centerOf(m.userData.part)).add(v); } });
+      anim = {ids, v, t0: performance.now(), dur: 1100, stagger: 160};
+    }
+  }
+}
+function ease(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+function loop(now){
+  if (anim){
+    let done = true;
+    anim.ids.forEach((id, k) => {
+      const m = meshes[id]; if (!m) return;
+      const t = Math.min(Math.max((now - anim.t0 - k*anim.stagger)/anim.dur, 0), 1); if (t < 1) done = false;
+      const home = centerOf(m.userData.part); m.position.copy(home).addScaledVector(anim.v, 1 - ease(t));
+    });
+    if (done) anim = null;
+  }
+  controls.update(); renderer.render(scene, camera);
+  requestAnimationFrame(loop);
+}
+function pick(e){
+  const r = renderer.domElement.getBoundingClientRect();
+  const v = new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1, -((e.clientY-r.top)/r.height)*2+1);
+  raycaster.setFromCamera(v, camera);
+  const targets = Object.values(meshes).filter(m => m.visible).concat(showPorts ? portGroup.children : []);
+  const hit = raycaster.intersectObjects(targets, false)[0];
+  const el = $("pick");
+  if (!hit){ el.hidden = true; return; }
+  const ud = hit.object.userData;
+  if (ud.port){ const p = ud.port; el.innerHTML = `<b>端口${p.id} · ${esc(p.name)}</b>${esc(p.where||"")}<br><span class="mono">x${p.x} y${p.y} z${p.z}</span>${p.spec?`<br>${esc(p.spec)}`:""}`; el.hidden = false; return; }
+  const p = ud.part, step = partStepMap()[p.id];
+  el.innerHTML = `<b>${esc(p.id)} · ${esc(p.name)}</b><span class="mono">${p.rot ? "倾斜件，包围盒 " : ""}${p.size.map(fmt).join(" × ")} mm</span><br>${esc(p.material)}${p.mass?` · <span class="mono">${fmt(p.mass)} kg</span>`:""}<br>第 ${step+1} 步装入 · 位置 <span class="mono">(${p.pos.map(fmt).join(", ")})</span>`;
+  el.hidden = false;
+}
+
+/* ---------- panels ---------- */
+function renderCard(){
+  const c = cfg(), byId = partsById(), total = c.steps.length;
+  $("hudN").textContent = stepIdx < 0 ? `总览 · 共${total}步` : `第 ${stepIdx+1} / ${total} 步`;
+  $("hudT").textContent = stepIdx < 0 ? c.title : c.steps[stepIdx].title;
+  const Hb = bodyH();
+  $("dims").innerHTML = `整件 ${c.geo.W} 宽 · 主体 ${c.geo.D} 深<br>底座 ${c.geo.base_depth} 深 · 总高 ${fmt(Hb)}`;
+  $("prev").disabled = stepIdx < 0;
+  $("next").textContent = stepIdx < 0 ? "从第1步开始 →" : (stepIdx === total-1 ? "看完成图 →" : "下一步 →");
+  if (stepIdx < 0){
+    const kg = c.parts.reduce((a, p) => a + (p.mass||0), 0);
+    $("card").innerHTML = `<span class="stepno mono">总览</span><h2>${esc(c.title)}</h2>
+      <dl class="meta"><dt>外形</dt><dd class="mono">${c.geo.W} 宽 × ${c.geo.D} 深（底座 ${c.geo.base_depth}）× ${fmt(bodyH())} 高</dd><dt>零件</dt><dd class="mono">${c.parts.length} 件</dd><dt>步骤</dt><dd class="mono">${total} 步</dd>
+      <dt>估算重量</dt><dd class="mono">${kg ? fmt(kg)+" kg（含钢件）" : "—"}</dd><dt>人数</dt><dd>${Math.max(...c.steps.map(s => s.people||1))} 人</dd></dl>
+      <div class="pre">${esc(c.steps[0].precondition || "")}</div>
+      <p class="empty">点“从第1步开始”，按顺序看每一步放什么、从哪个方向放入、用什么五金、怎样检查。拖动可旋转，滚轮或双指可缩放。</p>`;
+    return;
+  }
+  const s = c.steps[stepIdx];
+  const rows = (s.parts||[]).map(id => { const p = byId[id]; return p ? `<tr><td class="mono">${esc(id)}</td><td>${esc(p.name)}</td><td class="r mono">${p.size.map(fmt).join("×")}</td></tr>` : ""; }).join("");
+  const fas = (s.fasteners||[]).map(f => `<tr><td>${esc(f.type)}</td><td class="r mono">×${f.qty}</td><td>${esc(f.at||"")}</td></tr>`).join("");
+  const dir = dirText(s.from_offset);
+  $("card").innerHTML = `<span class="stepno mono">第 ${stepIdx+1} / ${total} 步 · 动作 ${esc(s.action||"")}${(DATA.actions||{})[(s.action||"").replace("*","")] ? " " + esc(DATA.actions[(s.action||"").replace("*","")]) : ""}</span><h2>${esc(s.title)}</h2>
+    ${s.precondition ? `<div class="pre">前提：${esc(s.precondition)}</div>` : ""}
+    <dl class="meta"><dt>放入方向</dt><dd>${dir}</dd><dt>工具</dt><dd>${esc(s.tool||"无")}</dd><dt>人数</dt><dd>${s.people||1} 人</dd></dl>
+    <div class="sec"><h3>这一步的零件</h3>${rows ? `<div class="tw"><table><tr><th>编号</th><th>名称</th><th class="r">尺寸 mm（宽×深×高）</th></tr>${rows}</table></div>` : `<p class="empty">这一步不加零件。</p>`}</div>
+    <div class="sec"><h3>五金</h3>${fas ? `<div class="tw"><table>${fas}</table></div>` : `<p class="empty">不用五金。</p>`}</div>
+    ${s.check ? `<div class="check">${esc(s.check)}</div>` : ""}`;
+}
+function dirText(o){
+  if (!o || (!o[0] && !o[1] && !o[2])) return "—";
+  const t = [];
+  if (o[2] > 0) t.push("从上方落下"); if (o[1] < 0) t.push("从正面推入"); if (o[1] > 0) t.push("从背面推入");
+  if (o[0] < 0) t.push("从左侧立起"); if (o[0] > 0) t.push("从右侧立起");
+  return t.join("，");
+}
+function renderTimeline(){
+  const n = cfg().steps.length;
+  let h = `<button class="${stepIdx<0?"cur":"done"}" data-i="-1" title="总览">总</button>`;
+  for (let i=0;i<n;i++) h += `<button class="${i===stepIdx?"cur":(stepIdx<0||i<stepIdx?"done":"")}" data-i="${i}" title="${esc(cfg().steps[i].title)}">${i+1}</button>`;
+  $("timeline").innerHTML = h;
+  $("timeline").querySelectorAll("button").forEach(b => b.onclick = () => { stopPlay(); go(+b.dataset.i); });
+}
+function renderLower(){
+  const k = cfgKey, tierCls = {"先卖":"t-sell","测试后":"t-test","研究":"t-res"};
+  const kits = DATA.kits.filter(x => x.applies.split(",").includes(k));
+  $("kits").innerHTML = `<tr><th>套件</th><th>层级</th><th>加入</th><th>撤下</th><th>端口</th></tr>` + kits.map(x =>
+    `<tr><td><span class="mono">${esc(x.id)}</span> ${esc(x.name)}</td><td><span class="tag ${tierCls[x.tier]||"t-hist"}">${esc(x.tier)}</span></td><td>${esc(x.add.join("、"))}</td><td>${esc((x.remove||[]).join("、")||"—")}</td><td class="mono">${(x.ports||[]).join(", ")||"—"}</td></tr>`).join("");
+  const prefix = {entry:"1.1",desk:"1.2",bedside:"1.3"}[k];
+  const ret = DATA.retired_paths.filter(r => r.path.startsWith(prefix));
+  $("retiredSec").hidden = !ret.length;
+  $("retired").innerHTML = ret.map(r => `<tr><td>${esc(r.path)}</td><td>${esc(r.reason)}</td><td><span class="tag t-hist">${esc(r.status)}</span></td></tr>`).join("");
+  const hw = {};
+  cfg().steps.forEach(s => (s.fasteners||[]).forEach(f => { hw[f.type] = (hw[f.type]||0) + (f.qty||0); }));
+  $("hw").innerHTML = `<tr><th>五金</th><th class="r">数量</th></tr>` + Object.entries(hw).map(([t,q]) => `<tr><td>${esc(t)}</td><td class="r mono">${q}</td></tr>`).join("");
+  const psm = partStepMap();
+  $("plist").innerHTML = `<tr><th>编号</th><th>名称</th><th class="r">尺寸 mm</th><th class="r">步</th></tr>` + cfg().parts.map(p =>
+    `<tr><td class="mono">${esc(p.id)}</td><td>${esc(p.name)}</td><td class="r mono">${p.size.map(fmt).join("×")}</td><td class="r mono">${(psm[p.id]??0)+1}</td></tr>`).join("");
+}
+
+/* ---------- navigation ---------- */
+function go(i){ const n = cfg().steps.length; stepIdx = Math.max(-1, Math.min(n-1, i)); $("pick").hidden = true; applyStep(true); }
+function next(){ const n = cfg().steps.length; if (stepIdx >= n-1){ go(-1); return; } go(stepIdx+1); }
+function stopPlay(){ playing = false; clearTimeout(playTimer); $("play").textContent = "连续播放"; }
+function tick(){
+  if (!playing) return;
+  const n = cfg().steps.length;
+  if (stepIdx >= n-1){ go(-1); stopPlay(); return; }
+  go(stepIdx+1);
+  const k = (cfg().steps[stepIdx].parts||[]).length;
+  playTimer = setTimeout(tick, reduce ? 1600 : 1100 + 160*Math.max(k-1,0) + 900);
+}
+function setConfig(k){
+  stopPlay(); cfgKey = k; stepIdx = -1;
+  try { localStorage.setItem("fx-cfg", k); } catch(e) {}
+  renderTabs(); renderLower(); $("pick").hidden = true; buildScene(false); if (!ok) applyStep(false);
+}
+$("prev").onclick = () => { stopPlay(); go(stepIdx-1); };
+$("next").onclick = () => { stopPlay(); next(); };
+$("replay").onclick = () => { stopPlay(); if (stepIdx >= 0) applyStep(true); };
+$("play").onclick = () => {
+  if (playing){ stopPlay(); return; }
+  playing = true; $("play").textContent = "暂停";
+  if (stepIdx >= cfg().steps.length-1) stepIdx = -1;
+  tick();
+};
+$("tGhost").onclick = e => { showGhost = !showGhost; e.currentTarget.setAttribute("aria-pressed", showGhost); applyStep(false); };
+$("tPorts").onclick = e => { showPorts = !showPorts; e.currentTarget.setAttribute("aria-pressed", showPorts); if (portGroup) portGroup.visible = showPorts; };
+$("tReset").onclick = () => { if (ok) frameCamera(); };
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input,textarea")) return;
+  if (e.key === "ArrowRight"){ stopPlay(); next(); }
+  if (e.key === "ArrowLeft"){ stopPlay(); go(stepIdx-1); }
+});
+
+renderTabs(); renderLower(); initThree();
+if (ok) buildScene(false); else applyStep(false);
+</script>

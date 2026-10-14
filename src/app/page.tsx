@@ -1,54 +1,154 @@
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
-import { StatusBadge } from "@/components/bits";
-import { Elevation } from "@/components/Elevation";
-import { ChangeDemo } from "@/components/home/ChangeDemo";
-import { designs } from "@/data/designs";
+import { ChapterRail } from "@/components/ChapterRail";
+import { ConceptImage, ProductImage, StatusBadge } from "@/components/bits";
+import { PartsPlate } from "@/components/PartsPlate";
+import { Rail } from "@/components/Rail";
+import { ChangeSteps, type Step } from "@/components/home/ChangeSteps";
+import { Spaces, type Space } from "@/components/home/Spaces";
+import { claims } from "@/data/claims";
+import { packSwap } from "@/data/hero";
 import { market } from "@/data/market";
-import { recipes } from "@/data/recipes";
-import type { Design, UseId } from "@/data/types";
-import { getDesign, recipeOf, sizeLabel } from "@/lib/catalog";
-import { defaultConfig } from "@/lib/config";
-import { STUDIO, studioSrc } from "@/lib/renders";
+import {
+  arrangements,
+  comingSoon,
+  fullSizeLabel,
+  getProduct,
+  launchPieces,
+  packs,
+  products,
+  uses,
+} from "@/lib/catalog";
+import { plateRows } from "@/lib/callouts";
+import {
+  FRAME_SRC,
+  HERO,
+  SCENE,
+  SQUARE,
+  STUDIO,
+  detailSrc,
+  partsSrc,
+  sceneSrc,
+  studioSrc,
+} from "@/lib/renders";
 import styles from "./home.module.css";
 
-const configurable = designs.filter((d) => d.status === "configurable").length;
-const concepts = designs.length - configurable;
-const entry = getDesign("entry")!;
+const entry = getProduct("entry")!;
+const desk = getProduct("desk")!;
 
-/** A configurable design's standard version, rendered in the studio. */
-function Shot({
-  d,
-  sizes,
-  preload = false,
-}: {
-  d: Design;
-  sizes: string;
-  preload?: boolean;
-}) {
-  const r = recipeOf(d)!;
-  return (
-    <Image
-      src={studioSrc(r.id, defaultConfig(d)!)}
-      alt={`${d.name}, standard version`}
-      width={STUDIO.w}
-      height={STUDIO.h}
-      sizes={sizes}
-      preload={preload}
-    />
-  );
-}
+const spaces: Space[] = [
+  {
+    use: "entryway",
+    job: "Hang the bag, drop the keys, leave the shoes",
+    id: "entry",
+  },
+  { use: "work", job: "Tools and cables beside the desk you keep", id: "desk" },
+  {
+    use: "bedroom",
+    job: "Phone, glasses and a book within reach",
+    id: "bedside",
+  },
+].map((s) => {
+  const p = getProduct(s.id)!;
+  const u = uses.find((x) => x.id === s.use)!;
+  return {
+    use: s.use,
+    label: u.name,
+    job: s.job,
+    count: products.filter((x) => x.uses.includes(s.use as typeof u.id)).length,
+    scene: sceneSrc(p.id),
+    piece: {
+      id: p.id,
+      name: p.name,
+      status: p.status,
+      size: fullSizeLabel(p),
+      use: p.line,
+      studio: studioSrc(p),
+    },
+  };
+});
 
-const places: { label: string; use: UseId; design: string }[] = [
-  { label: "By the door", use: "entryway", design: "entry" },
-  { label: "Beside the bed", use: "bedroom", design: "bedside" },
-  { label: "Next to the desk", use: "work", design: "desk" },
-  { label: "In the kitchen", use: "kitchen", design: "kitchen" },
-  { label: "Under the TV", use: "living", design: "sideboard" },
-  { label: "Between two spaces", use: "dividing", design: "bookwall" },
+const otherSpaces = uses
+  .filter((u) => !["entryway", "work", "bedroom"].includes(u.id))
+  .map((u) => ({
+    use: u.id,
+    label: u.name,
+    count: products.filter((p) => p.uses.includes(u.id)).length,
+  }));
+
+const swap = packSwap("entry", "desk");
+const changeSteps: Step[] = [
+  {
+    title: "The frame",
+    text: "Two full-height sides, three face panels, a beam, a top and the widened base. This part stays.",
+    delta: `${swap.kept.length} parts kept in every pack`,
+    src: FRAME_SRC,
+    alt: "The bare function face frame on its widened steel base",
+    href: "/how-it-works#frame",
+    label: "How the frame works",
+  },
+  {
+    title: "Entry pack",
+    text: "Hooks, a key tray, an umbrella ring, a slanted shoe shelf and a narrow shelf.",
+    delta: `+ ${swap.removed.length} parts on the frame`,
+    src: studioSrc(entry),
+    alt: "The function face with the entry pack",
+    href: "/furniture/entry",
+    label: "See the entry pack",
+  },
+  {
+    title: "Desk-side pack",
+    text: "The same frame beside a desk: two full-depth shelves, a cable tray, a pen pot and a bookend.",
+    delta: `Takes off ${swap.removed.length}, adds ${swap.added.length}; the parts taken off are yours to keep`,
+    src: studioSrc(desk),
+    alt: "The function face with the desk-side pack",
+    href: "/furniture/desk",
+    label: "See the desk-side pack",
+  },
 ];
 
-const featured = ["entry", "kitchen", "bookwall"].map((id) => getDesign(id)!);
+const chapters = [
+  { id: "places", label: "Where" },
+  { id: "packs", label: "One frame, two packs" },
+  { id: "made", label: "Made of" },
+  { id: "soon", label: "Coming soon" },
+  { id: "rooms", label: "Arrangements" },
+  { id: "next", label: "Next step" },
+];
+
+function HeroPicture() {
+  const common = {
+    alt: "The function face with the entry pack beside a front door: a bag on a hook, keys in the tray, shoes on the slanted shelf",
+    sizes: "(max-width: 900px) 100vw, 60vw",
+  };
+  const {
+    props: { srcSet: wide },
+  } = getImageProps({
+    ...common,
+    src: HERO.wide.src,
+    width: HERO.wide.w,
+    height: HERO.wide.h,
+    quality: 85,
+  });
+  const {
+    props: { srcSet: phone, ...rest },
+  } = getImageProps({
+    ...common,
+    src: HERO.phone.src,
+    width: HERO.phone.w,
+    height: HERO.phone.h,
+    quality: 85,
+    preload: true,
+  });
+  return (
+    <picture>
+      <source media="(min-width: 901px)" srcSet={wide} />
+      <source media="(max-width: 900px)" srcSet={phone} />
+      {/* eslint-disable-next-line jsx-a11y/alt-text -- alt is in rest */}
+      <img {...rest} className={styles.heroImg} />
+    </picture>
+  );
+}
 
 export default function Home() {
   const jsonLd = {
@@ -67,196 +167,269 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* 1. One finished piece, at human scale */}
+      {/* 1. The complete object, at home */}
       <section className={styles.hero} aria-labelledby="hero-title">
-        <div className={styles.heroCopy}>
-          <p className="label">Birch plywood furniture · {market.country}</p>
-          <h1 id="hero-title">
-            One panel system, made into the piece your home needs.
+        <div className={styles.field}>
+          <p className={styles.kicker}>
+            Birch plywood furniture · {market.country}
+          </p>
+          <h1 id="hero-title" className={styles.statement}>
+            From an idea, to a home you like.
           </h1>
           <p className={styles.heroLede}>
-            By the door, beside the bed, next to the desk. Every piece arrives
-            complete. Change only what it supports, and keep the exact version
-            you choose.
+            By the door, beside the desk, next to the bed: complete furniture
+            from one family of birch plywood parts. See the finished piece
+            first, then choose what you need.
           </p>
           <div className={styles.ctas}>
-            <Link href="/explore" className="btn btn-primary">
-              Explore by need
+            <Link href="/furniture" className="btn btn-ink">
+              See the pieces
             </Link>
-            <Link href="/furniture" className="btn btn-secondary">
-              Browse furniture
+            <Link href="/explore" className="btn btn-secondary">
+              Start with what you love
             </Link>
           </div>
         </div>
         <figure className={styles.heroMedia}>
-          <Image
-            src="/renders/scene/entry-room.webp"
-            alt="The entry organiser beside a front door: hooks, a key tray and two pairs of shoes on its shelf, an empty chair next to it"
-            width={2400}
-            height={1500}
-            sizes="(max-width: 900px) 100vw, 66vw"
-            preload
-            className={styles.heroImg}
-          />
+          <HeroPicture />
           <figcaption className={styles.heroCaption}>
             <Link href="/furniture/entry" className={styles.heroPiece}>
               <strong>{entry.name}</strong>
-              <span className="spec">{sizeLabel(entry.size)}</span>
-              <StatusBadge status={entry.status} long />
-              <span aria-hidden="true">→</span>
+              <span className="spec">{fullSizeLabel(entry)}</span>
             </Link>
-            <span className={styles.heroNote}>
-              Rendered from our part model. Shoes and chair not included.
-            </span>
+            <span className="spec">Design render · {claims.price.label}</span>
           </figcaption>
+          <Link href="/furniture/desk" className={styles.inset}>
+            <Image
+              src={sceneSrc("desk")}
+              alt="The same frame with the desk-side pack, beside a desk"
+              width={SCENE.w}
+              height={SCENE.h}
+              sizes="(max-width: 900px) 40vw, 18vw"
+            />
+            <span>Same frame, beside a desk →</span>
+          </Link>
         </figure>
       </section>
 
-      {/* 2. Where would it help? */}
-      <section className={styles.places} aria-labelledby="places-title">
-        <div className={styles.placesHead}>
-          <h2 id="places-title">Where would it help?</h2>
-          <Link href="/explore" className="text-link">
-            More ways to start
-          </Link>
-        </div>
-        <ul role="list" className={styles.placeList}>
-          {places.map((p) => {
-            const d = getDesign(p.design)!;
-            return (
-              <li key={p.use}>
-                <Link href={`/explore?room=${p.use}`} className={styles.place}>
-                  <span className={styles.placeImg}>
-                    <Shot d={d} sizes="200px" />
-                  </span>
-                  <span className={styles.placeLabel}>{p.label}</span>
-                  <span className={styles.placePiece}>{d.name}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+      <ChapterRail chapters={chapters} />
 
-      {/* 3. Three pieces to start from */}
-      <section className={styles.featured} aria-labelledby="featured-title">
-        <div className={styles.sectionHead}>
-          <h2 id="featured-title">Three pieces to start from</h2>
-          <p className={styles.sub}>
-            Each is ready to configure: parts counted, drawings measured,
-            versions you can save and ask a quote for.
+      {/* 2. Where does it need to work? */}
+      <section
+        id="places"
+        className={styles.chapter}
+        aria-labelledby="places-t"
+      >
+        <div className={styles.head}>
+          <h2 id="places-t">Where does it need to work?</h2>
+          <p>
+            Three launch pieces, each for one place. Pick a place to see its
+            piece.
           </p>
         </div>
-        <div className={styles.featureGrid}>
-          {featured.map((d, i) => {
-            const r = recipeOf(d)!;
-            return (
-              <Link
-                key={d.id}
-                href={`/furniture/${d.id}`}
-                className={styles.feature}
-                data-big={i === 0 || undefined}
-              >
-                <span className={styles.featureImg}>
-                  <Shot
-                    d={d}
-                    sizes={
-                      i === 0
-                        ? "(max-width: 900px) 100vw, 50vw"
-                        : "(max-width: 900px) 100vw, 25vw"
-                    }
-                  />
-                </span>
-                <span className={styles.featureText}>
-                  <strong>{d.name}</strong>
-                  <span>{r.use}</span>
-                  <span className="spec">{sizeLabel(d.size)}</span>
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-        <Link href="/furniture" className={`text-link ${styles.allLink}`}>
-          All {configurable} configurable pieces
-        </Link>
+        <Spaces spaces={spaces} others={otherSpaces} />
       </section>
 
-      {/* 4. A real supported change */}
-      <section className={styles.change} aria-labelledby="change-title">
-        <div className={styles.sectionHead}>
-          <h2 id="change-title">A change, not a new piece</h2>
-          <p className={styles.sub}>
-            Pieces change only in ways their parts support. Try one: the camera
-            stays put, so you see exactly what moves.
-          </p>
+      {/* 3. Keep this. Change the rest. */}
+      <section id="packs" className={styles.band} aria-labelledby="packs-t">
+        <div className={styles.bandInner}>
+          <div className={styles.head}>
+            <h2 id="packs-t">Keep this. Change the rest.</h2>
+            <p>
+              The entry pack and the desk-side pack are one frame with a
+              different pack. If the piece moves from the door to the desk one
+              day, the frame stays; the pack changes, with new parts and one
+              assembly.
+            </p>
+          </div>
+          <ChangeSteps
+            steps={changeSteps}
+            size={STUDIO}
+            caption="Design render · one camera for every step"
+          />
         </div>
-        <ChangeDemo />
       </section>
 
-      {/* 5. The material */}
-      <section className={styles.material} aria-labelledby="material-title">
-        <figure className={styles.materialImg}>
+      {/* 4. What it's made of */}
+      <section id="made" className={styles.material} aria-labelledby="made-t">
+        <figure className={styles.macro}>
           <Image
-            src="/renders/scene/entry-detail.webp"
-            alt="Close view of a corner: the 18 mm plywood edge with its plies, birch veneer, the working face's hole grid and two steel hooks"
-            width={1500}
-            height={1500}
-            sizes="(max-width: 900px) 100vw, 50vw"
+            src={detailSrc("edge")}
+            alt="Close view of a top corner: white matte faces, the layered birch edge, a coat hook in the accent colour"
+            width={SQUARE.w}
+            height={SQUARE.h}
+            sizes="(max-width: 900px) 100vw, 55vw"
           />
         </figure>
         <div className={styles.materialText}>
-          <h2 id="material-title">Made from one panel</h2>
-          <hr className="ply-rule" />
-          <p>
-            Every piece is 18 mm birch plywood. The edge shows each ply; we
-            leave it visible instead of hiding it under tape.
-          </p>
-          <p>
-            The panel with the 40 mm hole grid is the working face. Hooks, a
-            tray and rails hang on it, which is how an accessory is added
-            without changing the piece.
-          </p>
-          <figure className={styles.drawing}>
-            <Elevation
-              recipe={recipes.entry}
-              config={defaultConfig(entry)!}
-              uid="home-mat"
-              title="Entry organiser, measured front"
-            />
-            <figcaption className="spec">
-              Measured drawing, nominal sizes
-            </figcaption>
-          </figure>
-          <Link href="/how-it-works" className="text-link">
-            How the system works
+          <h2 id="made-t">Plywood is the face.</h2>
+          <ul role="list" className={styles.factList}>
+            <li>
+              <strong>18 mm birch plywood</strong>
+              <span>
+                Large faces in a quiet white matte; the edges show the layers of
+                the birch.
+              </span>
+            </li>
+            <li>
+              <strong>Steel where it counts</strong>
+              <span>
+                The base, the legs and the hidden connectors. The tall pieces
+                stand on a widened base with a counterweight, and a wall strap
+                comes in the box.
+              </span>
+            </li>
+            <li>
+              <strong>One accent colour</strong>
+              <span>
+                Hooks, trays and add-ons, so new parts look meant. The final
+                colour is chosen with the samples.
+              </span>
+            </li>
+          </ul>
+          <Image
+            src={detailSrc("base")}
+            alt="The widened steel base with its levelling foot and counterweight plate"
+            width={SQUARE.w}
+            height={SQUARE.h}
+            sizes="200px"
+            className={styles.baseImg}
+          />
+          <Link href="/how-it-works#materials" className="text-link">
+            Materials and what&apos;s still being tested
           </Link>
         </div>
       </section>
 
-      {/* 6. What to expect, briefly */}
-      <section className={styles.facts} aria-label="What to expect">
-        <div>
-          <strong className={styles.factNum}>{configurable}</strong>
-          <p>pieces ready to configure, save and quote.</p>
-          <Link href="/furniture" className="text-link">
-            Browse them
-          </Link>
-        </div>
-        <div>
-          <strong className={styles.factNum}>Quote</strong>
+      <section className={styles.chapter} aria-labelledby="parts-t">
+        <div className={styles.head}>
+          <h2 id="parts-t">Every part, where it goes</h2>
           <p>
-            Price, lead time and delivery are confirmed for your exact version.
+            The entry pack, pulled apart. Point at a number to find the part.
+            Thirteen steps, by hand and with the L-key in the box.
           </p>
-          <Link href="/how-it-works#after" className="text-link">
-            How quoting works
+        </div>
+        <PartsPlate
+          src={partsSrc("entry")}
+          alt="The entry pack pulled apart into its parts"
+          items={plateRows("entry").map((r) => ({
+            partId: r.key,
+            name: r.name,
+            quantity: r.quantity,
+            spec: `${r.material} · ${r.size}`,
+            at: r.at,
+          }))}
+          note={claims.parts.detail}
+        />
+        <Link href="/furniture/entry#build" className="text-link">
+          See the 13 steps
+        </Link>
+      </section>
+
+      {/* 5. The breadth: second batch */}
+      <section id="soon" className={styles.chapter} aria-labelledby="soon-t">
+        <div className={styles.headRow}>
+          <div className={styles.head}>
+            <h2 id="soon-t">Coming soon</h2>
+            <p>
+              {comingSoon.length} more pieces follow the launch pieces, one by
+              one, each reusing a frame they prove. Explore them, keep the ones
+              you like and register interest. No prices or dates yet.
+            </p>
+          </div>
+          <Link href="/furniture?status=soon" className="text-link">
+            All {comingSoon.length}
           </Link>
         </div>
-        <div>
-          <strong className={styles.factNum}>{concepts}</strong>
-          <p>more designs in the ideas library, still being developed.</p>
-          <Link href="/furniture?status=concept" className="text-link">
-            See the ideas
-          </Link>
+        <Rail label="Pieces coming soon">
+          {comingSoon.map((p) => (
+            <li key={p.id} className={styles.soonCard}>
+              <Link href={`/furniture/${p.id}`} className={styles.soonLink}>
+                <span className={styles.soonImg}>
+                  <ProductImage product={p} sizes="240px" />
+                </span>
+                <StatusBadge status={p.status} />
+                <strong>{p.name}</strong>
+                <span className="spec">{fullSizeLabel(p)}</span>
+              </Link>
+            </li>
+          ))}
+        </Rail>
+        <p className={styles.small}>
+          Plus {packs.length} other uses that come with their piece (a coffee
+          corner, a record display, a video backdrop…), shown on each
+          piece&apos;s page.
+        </p>
+      </section>
+
+      {/* 6. Arrangements */}
+      <section id="rooms" className={styles.chapter} aria-labelledby="rooms-t">
+        <div className={styles.head}>
+          <h2 id="rooms-t">A corner, a room</h2>
+          <p>
+            Pieces can stand together: an L of shelves, a bed head with two
+            bedsides, two screens as one. These are arrangements, not products:
+            each piece is chosen on its own.
+          </p>
+        </div>
+        <ul role="list" className={styles.arrangements}>
+          {arrangements.slice(0, 6).map((a) => (
+            <li key={a.id}>
+              <span className={styles.arrImg}>
+                <ConceptImage
+                  id={a.id}
+                  kind="object"
+                  alt=""
+                  sizes="(max-width: 700px) 50vw, 300px"
+                />
+              </span>
+              <strong>{a.name}</strong>
+              <span className={styles.small}>
+                {a.members
+                  .map(
+                    (m) =>
+                      `${m.count} × ${getProduct(m.product)!.name.toLowerCase()}`,
+                  )
+                  .join(" + ")}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className={styles.small}>
+          {claims.conceptRenders.label}. {claims.conceptRenders.detail}
+        </p>
+      </section>
+
+      {/* 7. Next step */}
+      <section id="next" className={styles.closing} aria-labelledby="next-t">
+        <div className={styles.closingInner}>
+          <h2 id="next-t">Keep looking, or keep a version.</h2>
+          <div className={styles.paths}>
+            <div>
+              <h3>Continue exploring</h3>
+              <p>
+                Start from a place or the things you love; every result says why
+                it fits.
+              </p>
+              <Link href="/explore" className="btn btn-ink">
+                Start with what you love
+              </Link>
+            </div>
+            <div>
+              <h3>Keep a version</h3>
+              <p>
+                Choose a launch piece&apos;s pack and add-ons and keep it in
+                this browser. Email it to us when you like; nothing is sent
+                until you send it. Prices come once samples and quotes are done.
+              </p>
+              <Link
+                href={`/furniture/${launchPieces[0]!.id}`}
+                className="btn btn-secondary"
+              >
+                Choose a launch piece
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </>

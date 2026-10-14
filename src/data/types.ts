@@ -1,148 +1,169 @@
 /** Millimetres, width across the front x height x depth. */
 export type Size = { w: number; h: number; d: number };
 
-export type FamilyId = "pieces" | "walls" | "screens";
+/* ---------- the customer-facing catalogue ---------- */
+
+/**
+ * The six layers of the furniture record (家具变形与板件拼装全量记录 v2.0,
+ * decision D1). Only A and B are products on the site; C appears as packs
+ * on a parent product, D as arrangements of products. E (research) and F
+ * (parked) are not on the site at all (D11).
+ */
+export type ProductLayer = "A" | "B";
+
+/**
+ * - launch: a launch piece (layer A). It can be configured and saved; a
+ *   real price and "Add to bag" only arrive once its sample dossier is
+ *   complete.
+ * - soon: second batch (layer B). It can be explored and saved, and you
+ *   can register interest; no price, estimate or lead time is shown.
+ */
+export type ProductStatus = "launch" | "soon";
 
 export type UseId =
   | "entryway"
-  | "bedroom"
-  | "living"
-  | "kitchen"
   | "work"
-  | "children"
-  | "bath"
+  | "bedroom"
+  | "kitchen"
+  | "living"
   | "dividing";
 
-export type ActivityId =
-  | "hang"
-  | "set-down"
-  | "store"
-  | "display"
-  | "work"
-  | "divide"
-  | "sit"
-  | "move"
-  | "pass";
+/** Furniture identity, kept apart from rooms and properties (doc 13, ch. 04). */
+export type CategoryId = "organisers" | "storage" | "carts" | "dividers";
 
+/** Everyday things, for "Start with what you love". */
 export type ObjectId =
-  | "coats-bags"
+  | "bag-coat"
   | "keys-post"
   | "shoes"
+  | "umbrella"
+  | "headphones"
+  | "laptop"
+  | "cables"
   | "books"
   | "records"
-  | "headphones-cables"
-  | "laptop-printer"
-  | "clothes"
-  | "towels"
-  | "toys"
-  | "cups-coffee"
-  | "jars-tools"
+  | "camera"
+  | "phone-glasses"
+  | "cups"
+  | "jars"
   | "plants"
-  | "tv-devices"
-  | "phone-glasses";
+  | "tv-devices";
 
-export type HomeId = "flat" | "studio" | "family" | "loft" | "workshop";
+/** The skeletons (doc 12 v2.0, ch. 02). */
+export type SkeletonId = "f1200" | "low-block" | "cart" | "f800" | "partition";
 
-/**
- * What a visitor can do with a design.
- * - configurable: parts and drawings are worked out; it can be adjusted
- *   within its supported options, saved and put in a quote request.
- * - concept: a direction still being developed; it can be saved as an
- *   idea and asked about, never configured or quoted as a product.
- */
-export type DesignStatus = "configurable" | "concept";
+export type HeroId = "entry" | "desk" | "bedside";
 
-export type Design = {
+export type Product = {
   id: string;
-  /** Number in the furniture transformation record (家具变形与板件拼装全量记录). */
+  /** Number in the furniture record. */
   record: string;
+  layer: ProductLayer;
+  status: ProductStatus;
   name: string;
   /** One sentence: what it is for. */
   line: string;
-  family: FamilyId;
-  frame: string;
-  status: DesignStatus;
-  size: Size;
+  category: CategoryId;
+  skeleton: SkeletonId;
+  /** Overall nominal size; `baseD` when a base reaches deeper than the body. */
+  size: Size & { baseD?: number };
   uses: UseId[];
-  activities: ActivityId[];
   objects: ObjectId[];
-  home: HomeId;
-  /** Where it stands in its example home. */
-  room: string;
-  /** The parts recipe this design is built from, when one is worked out. */
+  /** Everyday situations it answers, in the visitor's words. */
+  situations: string[];
+  /** What to know before choosing it: open questions, tests, limits. */
+  notes: string[];
+  /** Launch pieces are built from the hero model (spec v0). */
+  hero?: HeroId;
+  /** Second-batch pieces are drawn from a parts recipe (early geometry). */
   recipe?: RecipeId;
-  /** A design that grows out of another one by adding parts. */
-  grownFrom?: { design: string; adds: string };
-  image: {
-    object: { w: number; h: number };
-    room: boolean;
-    before: boolean;
-  };
+  /** Shown in its room render but not included. */
+  scene: string;
 };
 
+/** Layer C: a recipe or accessory pack on a parent product. */
+export type Pack = {
+  id: string;
+  record: string;
+  name: string;
+  line: string;
+  parents: string[];
+  /** with-parent: follows the parent; testing: needs a test first. */
+  state: "with-parent" | "testing";
+  note: string;
+};
+
+/** Layer D: an arrangement of products, never a product of its own. */
+export type Arrangement = {
+  id: string;
+  record: string;
+  name: string;
+  line: string;
+  members: { product: string; count: number; note?: string }[];
+  note: string;
+};
+
+/* ---------- the launch-piece configuration ---------- */
+
+export type KitId =
+  | "K-E1"
+  | "K-E2"
+  | "K-E3"
+  | "K-E4"
+  | "K-E5"
+  | "K-E6"
+  | "K-E7"
+  | "K-E8"
+  | "K-D1"
+  | "K-D2"
+  | "K-D3"
+  | "K-D4"
+  | "K-D5"
+  | "K-B1"
+  | "K-B2"
+  | "K-B3"
+  | "K-B4"
+  | "K-B5";
+
+/** Add-on tiers (D9): sold first, after a test, research (never shown). */
+export type KitTier = "first" | "after-test" | "research";
+
+export type FaceType = "solid" | "fabric";
+
+/** One exact version of a launch piece. */
+export type Configuration = {
+  design: HeroId;
+  /** Add-on kits of the "sold first" tier, sorted. */
+  kits: KitId[];
+  /** Face type of the three panels (kit K-E5 when not solid). */
+  face: FaceType;
+  quantity: number;
+};
+
+/* ---------- render geometry for the second batch (early recipes) ---------- */
+
 export type RecipeId =
-  | "entry"
-  | "desk"
-  | "bedside"
   | "kitchen"
   | "work-cart"
-  | "sideboard"
-  | "bookcase"
-  | "workstation"
-  | "mobile-screen"
-  | "folding-screen"
-  | "island"
-  | "bench"
-  | "coat-rack";
+  | "low-cabinet"
+  | "device"
+  | "console"
+  | "coat-stand"
+  | "partition"
+  | "sofa-back"
+  | "bed-head"
+  | "mobile-screen";
 
-export type Shape =
-  | "organiser"
-  | "cabinet"
-  | "trolley"
-  | "shelf"
-  | "desk"
-  | "screen"
-  | "folding"
-  | "bench"
-  | "island";
+export type Shape = "organiser" | "cabinet" | "trolley" | "shelf" | "screen";
 
-export type AccessoryId =
-  | "coat-hook"
-  | "key-tray"
-  | "headphone-hook"
-  | "kitchen-rail"
-  | "clothes-rail";
-
-/** A parts recipe: the geometry the part model draws and counts. */
+/** A parts recipe: early geometry the renderer draws for a B-layer piece. */
 export type Recipe = {
   id: RecipeId;
-  /** full-height: one-piece sides; stacked: 40 cm tiers; folding; seating. */
-  structure: "full-height" | "stacked" | "folding" | "seating";
+  structure: "full-height" | "stacked";
   shape: Shape;
   size: Size;
   tiers: number;
   bays: number;
-  /** Customer copy. */
-  use: string;
-  description: string;
-  /** What to check in your space. */
-  space: string;
-  /** Doors can be added across the front. */
   doors: boolean;
-  /** The working face can be ordered in orange. */
-  orangeFace: boolean;
-  defaultAccessories: AccessoryId[];
-  optionalAccessories: AccessoryId[];
-};
-
-export type Finish = "natural" | "orange";
-export type Front = "open" | "doors";
-
-/** One exact version of a configurable design. */
-export type Configuration = {
-  design: string;
-  finish: Finish;
-  front: Front;
-  accessories: AccessoryId[];
-  quantity: number;
+  rail?: boolean;
 };

@@ -56,8 +56,8 @@ export function SiteHeader() {
             className={styles.saved}
             aria-current={current("/saved") ? "page" : undefined}
           >
-            <span>Saved designs</span>
-            <span className={styles.count} aria-label={`${count} saved`}>
+            <span>Kept versions</span>
+            <span className={styles.count} aria-label={`${count} kept`}>
               {count}
             </span>
           </Link>

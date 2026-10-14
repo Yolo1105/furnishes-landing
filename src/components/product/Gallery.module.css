@@ -1,62 +1,112 @@
 .gallery {
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .frame {
   position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 8 / 7;
+  margin: 0;
+  aspect-ratio: 5 / 4;
   border-radius: var(--radius);
   overflow: hidden;
-  background: linear-gradient(
-    to bottom,
-    var(--stage) 0 82%,
-    var(--sunken) 82% 100%
-  );
+  background: var(--stage);
 }
 
-.frame[data-view="room"],
-.frame[data-view="before"] {
-  aspect-ratio: 8 / 5;
-  background: var(--sunken);
-}
-
-.frame[data-view="drawing"] {
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-
-.object {
-  width: auto;
-  max-width: 70%;
-  max-height: 86%;
-  height: auto;
-  align-self: end;
-  margin-bottom: 7%;
-  animation: fade 240ms var(--ease);
-}
-
-.room {
+.img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  animation: fade 240ms var(--ease);
+  animation: fade 300ms var(--ease);
 }
 
-.drawing {
+.frame[data-fit="contain"] .img {
+  object-fit: contain;
+}
+
+.node {
   position: absolute;
   inset: 0;
-  padding: 6%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
+  padding: 8% 6% 12%;
+  background: var(--cream);
 }
 
-.drawing > svg {
-  width: 100%;
-  height: 100%;
+.caption {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  justify-self: start;
+  width: fit-content;
+  max-width: calc(100% - 20px);
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--cream) 94%, transparent);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.view {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.view:hover {
+  border-color: var(--brown);
+}
+
+.view[aria-pressed="true"] {
+  background: var(--orange-soft);
+  border-color: var(--orange-strong);
+}
+
+.view[aria-pressed="true"]::before {
+  content: "✓ " / "";
+}
+
+@media (max-width: 700px) {
+  /* keep the base of the piece in view: the caption goes underneath */
+  .frame {
+    overflow: visible;
+    aspect-ratio: auto;
+    background: none;
+  }
+
+  .img {
+    aspect-ratio: 5 / 4;
+    border-radius: var(--radius);
+    background: var(--stage);
+  }
+
+  .frame[data-fit="contain"] .img {
+    aspect-ratio: 4 / 5;
+  }
+
+  .node {
+    position: static;
+    border-radius: var(--radius);
+  }
+
+  .caption {
+    position: static;
+    display: block;
+    margin-top: 6px;
+    padding: 0;
+    background: none;
+  }
 }
 
 @keyframes fade {
@@ -65,91 +115,8 @@
   }
 }
 
-.compare {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.beforeLayer {
-  position: absolute;
-  inset: 0;
-  clip-path: inset(0 calc(100% - var(--split)) 0 0);
-}
-
-.beforeLayer::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: var(--split);
-  width: 2px;
-  background: var(--surface);
-}
-
-.tag {
-  position: absolute;
-  top: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 90%, transparent);
-  font-size: var(--step--1);
-  font-weight: 600;
-}
-
-.tagLeft {
-  left: 12px;
-}
-
-.tagRight {
-  right: 12px;
-}
-
-.slider {
-  display: grid;
-  gap: 4px;
-  font-size: var(--step--1);
-  color: var(--ink-2);
-}
-
-.slider input {
-  width: 100%;
-  accent-color: var(--accent);
-}
-
-.thumbs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.thumb {
-  min-height: 40px;
-  padding: 0 14px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background: var(--surface);
-  font-size: var(--step--1);
-  font-weight: 500;
-}
-
-.thumb:hover {
-  border-color: var(--ink);
-}
-
-.thumb[aria-pressed="true"] {
-  border: 2px solid var(--ink);
-  padding: 0 13px;
-  font-weight: 700;
-}
-
-@media (max-width: 600px) {
-  .frame {
-    aspect-ratio: 4 / 3;
-  }
-
-  .thumb {
-    min-height: 36px;
-    padding: 0 12px;
+@media (prefers-reduced-motion: reduce) {
+  .img {
+    animation: none;
   }
 }

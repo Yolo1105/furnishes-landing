@@ -12,8 +12,8 @@ export function SiteFooter() {
             <Logo />
           </p>
           <p className="muted">
-            Finished birch plywood furniture for homes in {market.country},
-            built from one family of panels and set up for where it stands.
+            Birch plywood furniture for homes in {market.country}: white matte
+            faces, birch edges, and one family of parts.
           </p>
         </div>
         <nav aria-label="Footer">
@@ -22,13 +22,13 @@ export function SiteFooter() {
               <Link href="/furniture">All furniture</Link>
             </li>
             <li>
-              <Link href="/explore">Explore by room or use</Link>
+              <Link href="/explore">Start with what you love</Link>
             </li>
             <li>
               <Link href="/how-it-works">How it works</Link>
             </li>
             <li>
-              <Link href="/saved">Saved designs</Link>
+              <Link href="/saved">Kept versions</Link>
             </li>
             <li>
               <Link href="/help">Help and questions</Link>
@@ -40,8 +40,8 @@ export function SiteFooter() {
             <a href={`mailto:${market.email}`}>{market.email}</a>
           </p>
           <p className="muted">
-            Images are 3D renders of designs, not product photographs. Prices,
-            lead times and delivery are confirmed with each quote.
+            Images are design renders, not photographs. Prices, timing and
+            delivery are not set yet; they come after samples and quotes.
           </p>
         </div>
       </div>

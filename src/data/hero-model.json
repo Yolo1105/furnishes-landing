@@ -1,0 +1,2312 @@
+{
+  "version": "v0 2026-10-14",
+  "coord": "x宽 左→右；y深 前→后；z高 地面↑；单位mm",
+  "configs": {
+    "entry": {
+      "title": "1.1 玄关包（F1200，加宽底座）",
+      "geo": {
+        "W": 600,
+        "D": 400,
+        "H": 1200,
+        "hb": 60,
+        "iw": 564,
+        "beam_d": 377,
+        "panel_front": 378,
+        "panel_back": 390,
+        "base_depth": 600
+      },
+      "parts": [
+        {
+          "id": "BASE",
+          "name": "加宽钢底座（含调节脚×4、配重槽）",
+          "kind": "metal",
+          "group": "金属",
+          "material": "粉末喷涂钢",
+          "size": [600, 600, 60],
+          "pos": [0, -200, 0],
+          "mass": 8,
+          "features": [
+            {
+              "type": "bolt_pattern",
+              "port": 6,
+              "xy": [
+                [60, 60],
+                [540, 60],
+                [60, 340],
+                [540, 340]
+              ],
+              "thread": "M6"
+            }
+          ],
+          "note": "D13：1.2米挂物件标配加宽底座"
+        },
+        {
+          "id": "CW",
+          "name": "配重板",
+          "kind": "metal",
+          "group": "金属",
+          "material": "钢",
+          "size": [520, 520, 12],
+          "pos": [40, -160, 10],
+          "mass": 10,
+          "features": [],
+          "note": "放入底座配重槽"
+        },
+        {
+          "id": "SL",
+          "name": "F1200整高竖板（左）",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [18, 400, 1200],
+          "pos": [0, 0, 60],
+          "mass": 5.88,
+          "features": [
+            {
+              "type": "groove",
+              "width": 13.0,
+              "depth": 8,
+              "y_from": 377.5,
+              "y_to": 390.5,
+              "z_from": 0,
+              "z_to": 1200,
+              "note": "通槽，自顶端滑入面板",
+              "face_x": 18
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 18,
+              "y": 37,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 18,
+              "y": 340,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "dowel_hole",
+              "dia": 8,
+              "depth": 15,
+              "end": "bottom",
+              "y_list": [80, 320]
+            },
+            {
+              "type": "connector_plate",
+              "end": "bottom",
+              "qty": 2,
+              "note": "预装连接片，M6向下锁入底座（A1）"
+            },
+            {
+              "type": "connector_plate",
+              "end": "top",
+              "qty": 2,
+              "note": "预装连接片，M6向上锁入顶盖底面嵌件（A6）"
+            },
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face_x": 18,
+              "y_list": [60, 317],
+              "z": 49.0,
+              "note": "底梁锁紧（A3）"
+            }
+          ],
+          "note": "",
+          "cut": [1200, 400, 18]
+        },
+        {
+          "id": "SR",
+          "name": "F1200整高竖板（右）",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [18, 400, 1200],
+          "pos": [582, 0, 60],
+          "mass": 5.88,
+          "features": [
+            {
+              "type": "groove",
+              "width": 13.0,
+              "depth": 8,
+              "y_from": 377.5,
+              "y_to": 390.5,
+              "z_from": 0,
+              "z_to": 1200,
+              "note": "通槽，自顶端滑入面板",
+              "face_x": 582
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 582,
+              "y": 37,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 582,
+              "y": 340,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "dowel_hole",
+              "dia": 8,
+              "depth": 15,
+              "end": "bottom",
+              "y_list": [80, 320]
+            },
+            {
+              "type": "connector_plate",
+              "end": "bottom",
+              "qty": 2,
+              "note": "预装连接片，M6向下锁入底座（A1）"
+            },
+            {
+              "type": "connector_plate",
+              "end": "top",
+              "qty": 2,
+              "note": "预装连接片，M6向上锁入顶盖底面嵌件（A6）"
+            },
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face_x": 582,
+              "y_list": [60, 317],
+              "z": 49.0,
+              "note": "底梁锁紧（A3）"
+            }
+          ],
+          "note": "",
+          "cut": [1200, 400, 18]
+        },
+        {
+          "id": "BEAM",
+          "name": "结构底梁",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [563.0, 377, 18],
+          "pos": [18.5, 0, 100],
+          "mass": 2.6,
+          "features": [
+            {
+              "type": "connector_plate",
+              "qty": 4,
+              "note": "底面预装，两端各2颗锁入竖板面嵌件"
+            }
+          ],
+          "note": "",
+          "cut": [563.0, 377, 18]
+        },
+        {
+          "id": "PNL1",
+          "name": "分层面板 1（下→上）",
+          "kind": "board",
+          "group": "面板",
+          "material": "桦木胶合板",
+          "size": [579.0, 12, 399.5],
+          "pos": [10.5, 378, 60.25],
+          "mass": 1.89,
+          "features": [
+            {
+              "type": "hidden_retainer",
+              "qty": 1,
+              "note": "隐藏防脱件（D6／A2首选方案）"
+            }
+          ],
+          "note": "",
+          "cut": [579.0, 399.5, 12]
+        },
+        {
+          "id": "PNL2",
+          "name": "分层面板 2（下→上）",
+          "kind": "board",
+          "group": "面板",
+          "material": "桦木胶合板",
+          "size": [579.0, 12, 399.5],
+          "pos": [10.5, 378, 460.25],
+          "mass": 1.89,
+          "features": [
+            {
+              "type": "hidden_retainer",
+              "qty": 1,
+              "note": "隐藏防脱件（D6／A2首选方案）"
+            }
+          ],
+          "note": "",
+          "cut": [579.0, 399.5, 12]
+        },
+        {
+          "id": "PNL3",
+          "name": "分层面板 3（下→上）",
+          "kind": "board",
+          "group": "面板",
+          "material": "桦木胶合板",
+          "size": [579.0, 12, 399.5],
+          "pos": [10.5, 378, 860.25],
+          "mass": 1.89,
+          "features": [
+            {
+              "type": "hidden_retainer",
+              "qty": 1,
+              "note": "隐藏防脱件（D6／A2首选方案）"
+            }
+          ],
+          "note": "",
+          "cut": [579.0, 399.5, 12]
+        },
+        {
+          "id": "TOP",
+          "name": "顶盖",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [600, 400, 18],
+          "pos": [0, 0, 1260],
+          "mass": 2.94,
+          "features": [
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face": "underside",
+              "qty": 4,
+              "note": "接竖板连接片"
+            },
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face": "top",
+              "port": 5,
+              "xy": [
+                [150, 360],
+                [450, 360]
+              ],
+              "note": "端口5：立板孔，带塞"
+            }
+          ],
+          "note": "",
+          "cut": [600, 400, 18]
+        },
+        {
+          "id": "SHOE",
+          "name": "鞋斜板（前低后高）",
+          "kind": "board",
+          "group": "层板",
+          "material": "桦木胶合板",
+          "size": [563.0, 289.78, 95.65],
+          "pos": [18.5, 10, 160],
+          "mass": 2.07,
+          "features": [],
+          "note": "落在前低后高两组层板销上；前沿挡条另计",
+          "cut": [563.0, 300, 18],
+          "rot": {
+            "axis": "x",
+            "deg": 15
+          }
+        },
+        {
+          "id": "NSH",
+          "name": "窄层板",
+          "kind": "board",
+          "group": "层板",
+          "material": "桦木胶合板",
+          "size": [563.0, 190, 18],
+          "pos": [18.5, 0, 742],
+          "mass": 1.31,
+          "features": [],
+          "note": "",
+          "cut": [563.0, 190, 18]
+        },
+        {
+          "id": "FACE",
+          "name": "挂载面（方案b：薄穿孔面）",
+          "kind": "board",
+          "group": "挂载面",
+          "material": "穿孔胶合板或粉末喷涂钢板",
+          "size": [562, 6, 360],
+          "pos": [19, 352, 860],
+          "mass": 0.83,
+          "features": [
+            {
+              "type": "spacer",
+              "qty": 4,
+              "length": 20,
+              "note": "锁入面板或竖板嵌件"
+            },
+            {
+              "type": "perforation",
+              "pattern": "自有孔形，待D6样件与FTO",
+              "id": "X20"
+            }
+          ],
+          "note": "",
+          "cut": [562, 360, 6]
+        },
+        {
+          "id": "HOOK1",
+          "name": "大衣钩 1",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "粉末喷涂钢",
+          "size": [30, 50, 60],
+          "pos": [98.0, 302, 1060],
+          "mass": 0.15,
+          "features": [],
+          "note": ""
+        },
+        {
+          "id": "HOOK2",
+          "name": "大衣钩 2",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "粉末喷涂钢",
+          "size": [30, 50, 60],
+          "pos": [285.0, 302, 1060],
+          "mass": 0.15,
+          "features": [],
+          "note": ""
+        },
+        {
+          "id": "HOOK3",
+          "name": "大衣钩 3",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "粉末喷涂钢",
+          "size": [30, 50, 60],
+          "pos": [472.0, 302, 1060],
+          "mass": 0.15,
+          "features": [],
+          "note": ""
+        },
+        {
+          "id": "KEY",
+          "name": "钥匙托",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "胶合板＋钢挂件",
+          "size": [140, 70, 40],
+          "pos": [58, 282, 940],
+          "mass": 0.3,
+          "features": [],
+          "note": ""
+        },
+        {
+          "id": "UMB",
+          "name": "伞架（挂环）",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "粉末喷涂钢",
+          "size": [60, 60, 30],
+          "pos": [70, 292, 870],
+          "mass": 0.2,
+          "features": [],
+          "note": ""
+        }
+      ],
+      "ports": [
+        {
+          "id": 1,
+          "name": "层板销孔列",
+          "where": "两侧竖板内侧",
+          "spec": "Ø5／32节距／前后两排"
+        },
+        {
+          "id": 3,
+          "name": "镜／显示器重托嵌件对",
+          "where": "右竖板外侧面",
+          "x": 600,
+          "y": [100, 300],
+          "z": 900,
+          "spec": "M6面嵌件×2，带隐藏盖"
+        },
+        {
+          "id": 4,
+          "name": "衣杆／挂杆嵌件对",
+          "where": "两侧竖板内侧",
+          "y": 200.0,
+          "z": 1140,
+          "spec": "M6面嵌件×2"
+        },
+        {
+          "id": 6,
+          "name": "底座通用螺栓孔型",
+          "where": "底座顶面",
+          "spec": "4×M6",
+          "xy": [
+            [60, 60],
+            [540, 60],
+            [60, 340],
+            [540, 340]
+          ]
+        },
+        {
+          "id": 8,
+          "name": "门铰链底座孔位",
+          "where": "两侧竖板内侧下层",
+          "spec": "35杯铰链底座孔，预装【假设X32】"
+        },
+        {
+          "id": 11,
+          "name": "桌板托架嵌件对",
+          "where": "右竖板外侧面",
+          "x": 600,
+          "y": [80, 320],
+          "z": 635,
+          "spec": "M6面嵌件×2；书桌旁版本出厂预装【假设X33】"
+        },
+        {
+          "id": 5,
+          "name": "顶面立板孔",
+          "where": "顶盖",
+          "spec": "M6×2，带塞"
+        },
+        {
+          "id": 2,
+          "name": "挂载区",
+          "where": "上层",
+          "z": [860, 1220],
+          "spec": "方案b；方案a备选"
+        }
+      ],
+      "steps": [
+        {
+          "id": 1,
+          "title": "放底座并调平，放入配重",
+          "action": "A0",
+          "parts": ["BASE", "CW"],
+          "from_offset": [0, 0, 300],
+          "fasteners": [],
+          "tool": "随附L扳手（调节脚）",
+          "people": 1,
+          "check": "底座水平泡居中；配重板落入槽内",
+          "precondition": "清出约1.2×1.6米工作区"
+        },
+        {
+          "id": 2,
+          "title": "立左竖板：定位销对孔，连接片锁入底座",
+          "action": "A1",
+          "parts": ["SL"],
+          "from_offset": [-300, 0, 200],
+          "fasteners": [
+            {
+              "type": "M6手拧两用头",
+              "qty": 2,
+              "at": "左竖板底端连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "竖板不扶也能立住",
+          "precondition": ""
+        },
+        {
+          "id": 3,
+          "title": "立右竖板",
+          "action": "A1",
+          "parts": ["SR"],
+          "from_offset": [300, 0, 200],
+          "fasteners": [
+            {
+              "type": "M6手拧两用头",
+              "qty": 2,
+              "at": "右竖板底端连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "两竖板平行，内侧槽口相对",
+          "precondition": ""
+        },
+        {
+          "id": 4,
+          "title": "装结构底梁：放在支承销上，两端锁紧",
+          "action": "A3",
+          "parts": ["BEAM"],
+          "from_offset": [0, -400, 0],
+          "fasteners": [
+            {
+              "type": "M6手拧",
+              "qty": 4,
+              "at": "底梁两端底面连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "推动竖板顶端，框体不晃",
+          "precondition": ""
+        },
+        {
+          "id": 5,
+          "title": "放鞋斜板：落在前低后高两组层板销上",
+          "action": "A4",
+          "parts": ["SHOE"],
+          "from_offset": [0, -500, 0],
+          "fasteners": [
+            {
+              "type": "层板销",
+              "qty": 4,
+              "at": "前后两排"
+            }
+          ],
+          "tool": "无",
+          "people": 1,
+          "check": "前沿挡条朝上，板面不翘",
+          "precondition": ""
+        },
+        {
+          "id": 6,
+          "title": "面板1：从顶端滑入两侧后槽，落到底",
+          "action": "A2",
+          "parts": ["PNL1"],
+          "from_offset": [0, 0, 1400],
+          "fasteners": [],
+          "tool": "无",
+          "people": 2,
+          "check": "面板落底有“嗒”声；一人扶竖板顶端",
+          "precondition": "顶盖尚未安装"
+        },
+        {
+          "id": 7,
+          "title": "面板2：同样滑入，压在面板1上",
+          "action": "A2",
+          "parts": ["PNL2"],
+          "from_offset": [0, 0, 1400],
+          "fasteners": [],
+          "tool": "无",
+          "people": 2,
+          "check": "接缝等宽",
+          "precondition": ""
+        },
+        {
+          "id": 8,
+          "title": "面板3：滑入",
+          "action": "A2",
+          "parts": ["PNL3"],
+          "from_offset": [0, 0, 1400],
+          "fasteners": [
+            {
+              "type": "隐藏防脱件",
+              "qty": 3,
+              "at": "每块面板一处"
+            }
+          ],
+          "tool": "无",
+          "people": 2,
+          "check": "三块面板齐平，无高低差",
+          "precondition": ""
+        },
+        {
+          "id": 9,
+          "title": "装顶盖：压住面板，竖板顶端连接片向上锁入",
+          "action": "A6",
+          "parts": ["TOP"],
+          "from_offset": [0, 0, 400],
+          "fasteners": [
+            {
+              "type": "M6手拧",
+              "qty": 4,
+              "at": "两竖板顶端连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 2,
+          "check": "顶盖与竖板外沿齐平；整件不晃",
+          "precondition": ""
+        },
+        {
+          "id": 10,
+          "title": "放窄层板",
+          "action": "A4",
+          "parts": ["NSH"],
+          "from_offset": [0, -500, 0],
+          "fasteners": [
+            {
+              "type": "层板销",
+              "qty": 4
+            }
+          ],
+          "tool": "无",
+          "people": 1,
+          "check": "层板落销到底",
+          "precondition": ""
+        },
+        {
+          "id": 11,
+          "title": "装挂载面：间隔件锁入，薄穿孔面挂上",
+          "action": "A13*",
+          "parts": ["FACE"],
+          "from_offset": [0, -400, 0],
+          "fasteners": [
+            {
+              "type": "间隔件＋M6",
+              "qty": 4
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "挂载面与面板间留约20空隙",
+          "precondition": ""
+        },
+        {
+          "id": 12,
+          "title": "挂配件：大衣钩、钥匙托、伞架",
+          "action": "A13",
+          "parts": ["HOOK1", "HOOK2", "HOOK3", "KEY", "UMB"],
+          "from_offset": [0, -300, 0],
+          "fasteners": [],
+          "tool": "无",
+          "people": 1,
+          "check": "挂件锁定扣到位，轻拉不脱",
+          "precondition": ""
+        },
+        {
+          "id": 13,
+          "title": "最后检查；需要时安装附送防倾固定件",
+          "action": "检查",
+          "parts": [],
+          "from_offset": [0, 0, 0],
+          "fasteners": [
+            {
+              "type": "墙面固定带",
+              "qty": 1,
+              "at": "顶盖后沿（可选）"
+            }
+          ],
+          "tool": "螺丝刀（仅固定件）",
+          "people": 1,
+          "check": "按说明的挂物范围使用",
+          "precondition": ""
+        }
+      ]
+    },
+    "desk": {
+      "title": "1.2 书桌旁包（F1200，加宽底座，含铝轨）",
+      "geo": {
+        "W": 600,
+        "D": 400,
+        "H": 1200,
+        "hb": 60,
+        "iw": 564,
+        "beam_d": 377,
+        "panel_front": 378,
+        "panel_back": 390,
+        "base_depth": 600
+      },
+      "parts": [
+        {
+          "id": "BASE",
+          "name": "加宽钢底座（含调节脚×4、配重槽）",
+          "kind": "metal",
+          "group": "金属",
+          "material": "粉末喷涂钢",
+          "size": [600, 600, 60],
+          "pos": [0, -200, 0],
+          "mass": 8,
+          "features": [
+            {
+              "type": "bolt_pattern",
+              "port": 6,
+              "xy": [
+                [60, 60],
+                [540, 60],
+                [60, 340],
+                [540, 340]
+              ],
+              "thread": "M6"
+            }
+          ],
+          "note": "D13：1.2米挂物件标配加宽底座"
+        },
+        {
+          "id": "CW",
+          "name": "配重板",
+          "kind": "metal",
+          "group": "金属",
+          "material": "钢",
+          "size": [520, 520, 12],
+          "pos": [40, -160, 10],
+          "mass": 10,
+          "features": [],
+          "note": "放入底座配重槽"
+        },
+        {
+          "id": "SL",
+          "name": "F1200整高竖板（左）",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [18, 400, 1200],
+          "pos": [0, 0, 60],
+          "mass": 5.88,
+          "features": [
+            {
+              "type": "groove",
+              "width": 13.0,
+              "depth": 8,
+              "y_from": 377.5,
+              "y_to": 390.5,
+              "z_from": 0,
+              "z_to": 1200,
+              "note": "通槽，自顶端滑入面板",
+              "face_x": 18
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 18,
+              "y": 37,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 18,
+              "y": 340,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "dowel_hole",
+              "dia": 8,
+              "depth": 15,
+              "end": "bottom",
+              "y_list": [80, 320]
+            },
+            {
+              "type": "connector_plate",
+              "end": "bottom",
+              "qty": 2,
+              "note": "预装连接片，M6向下锁入底座（A1）"
+            },
+            {
+              "type": "connector_plate",
+              "end": "top",
+              "qty": 2,
+              "note": "预装连接片，M6向上锁入顶盖底面嵌件（A6）"
+            },
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face_x": 18,
+              "y_list": [60, 317],
+              "z": 49.0,
+              "note": "底梁锁紧（A3）"
+            }
+          ],
+          "note": "",
+          "cut": [1200, 400, 18]
+        },
+        {
+          "id": "SR",
+          "name": "F1200整高竖板（右）",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [18, 400, 1200],
+          "pos": [582, 0, 60],
+          "mass": 5.88,
+          "features": [
+            {
+              "type": "groove",
+              "width": 13.0,
+              "depth": 8,
+              "y_from": 377.5,
+              "y_to": 390.5,
+              "z_from": 0,
+              "z_to": 1200,
+              "note": "通槽，自顶端滑入面板",
+              "face_x": 582
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 582,
+              "y": 37,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 582,
+              "y": 340,
+              "z_list": [
+                64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
+                480, 512, 544, 576, 608, 640, 672, 704, 736, 768, 800, 832, 864,
+                896, 928, 960, 992, 1024, 1056, 1088, 1120
+              ]
+            },
+            {
+              "type": "dowel_hole",
+              "dia": 8,
+              "depth": 15,
+              "end": "bottom",
+              "y_list": [80, 320]
+            },
+            {
+              "type": "connector_plate",
+              "end": "bottom",
+              "qty": 2,
+              "note": "预装连接片，M6向下锁入底座（A1）"
+            },
+            {
+              "type": "connector_plate",
+              "end": "top",
+              "qty": 2,
+              "note": "预装连接片，M6向上锁入顶盖底面嵌件（A6）"
+            },
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face_x": 582,
+              "y_list": [60, 317],
+              "z": 49.0,
+              "note": "底梁锁紧（A3）"
+            }
+          ],
+          "note": "",
+          "cut": [1200, 400, 18]
+        },
+        {
+          "id": "BEAM",
+          "name": "结构底梁",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [563.0, 377, 18],
+          "pos": [18.5, 0, 100],
+          "mass": 2.6,
+          "features": [
+            {
+              "type": "connector_plate",
+              "qty": 4,
+              "note": "底面预装，两端各2颗锁入竖板面嵌件"
+            }
+          ],
+          "note": "",
+          "cut": [563.0, 377, 18]
+        },
+        {
+          "id": "PNL1",
+          "name": "分层面板 1（下→上）",
+          "kind": "board",
+          "group": "面板",
+          "material": "桦木胶合板",
+          "size": [579.0, 12, 399.5],
+          "pos": [10.5, 378, 60.25],
+          "mass": 1.89,
+          "features": [
+            {
+              "type": "hidden_retainer",
+              "qty": 1,
+              "note": "隐藏防脱件（D6／A2首选方案）"
+            }
+          ],
+          "note": "",
+          "cut": [579.0, 399.5, 12]
+        },
+        {
+          "id": "PNL2",
+          "name": "分层面板 2（下→上）",
+          "kind": "board",
+          "group": "面板",
+          "material": "桦木胶合板",
+          "size": [579.0, 12, 399.5],
+          "pos": [10.5, 378, 460.25],
+          "mass": 1.89,
+          "features": [
+            {
+              "type": "hidden_retainer",
+              "qty": 1,
+              "note": "隐藏防脱件（D6／A2首选方案）"
+            }
+          ],
+          "note": "",
+          "cut": [579.0, 399.5, 12]
+        },
+        {
+          "id": "PNL3",
+          "name": "分层面板 3（下→上）",
+          "kind": "board",
+          "group": "面板",
+          "material": "桦木胶合板",
+          "size": [579.0, 12, 399.5],
+          "pos": [10.5, 378, 860.25],
+          "mass": 1.89,
+          "features": [
+            {
+              "type": "hidden_retainer",
+              "qty": 1,
+              "note": "隐藏防脱件（D6／A2首选方案）"
+            }
+          ],
+          "note": "",
+          "cut": [579.0, 399.5, 12]
+        },
+        {
+          "id": "TOP",
+          "name": "顶盖",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [600, 400, 18],
+          "pos": [0, 0, 1260],
+          "mass": 2.94,
+          "features": [
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face": "underside",
+              "qty": 4,
+              "note": "接竖板连接片"
+            },
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face": "top",
+              "port": 5,
+              "xy": [
+                [150, 360],
+                [450, 360]
+              ],
+              "note": "端口5：立板孔，带塞"
+            }
+          ],
+          "note": "",
+          "cut": [600, 400, 18]
+        },
+        {
+          "id": "SH1",
+          "name": "全深层板 1",
+          "kind": "board",
+          "group": "层板",
+          "material": "桦木胶合板",
+          "size": [563.0, 377, 18],
+          "pos": [18.5, 0, 782],
+          "mass": 2.6,
+          "features": [],
+          "note": "",
+          "cut": [563.0, 377, 18]
+        },
+        {
+          "id": "SH2",
+          "name": "全深层板 2",
+          "kind": "board",
+          "group": "层板",
+          "material": "桦木胶合板",
+          "size": [563.0, 377, 18],
+          "pos": [18.5, 0, 1062],
+          "mass": 2.6,
+          "features": [],
+          "note": "",
+          "cut": [563.0, 377, 18]
+        },
+        {
+          "id": "RAIL",
+          "name": "铝轨（可选）",
+          "kind": "metal",
+          "group": "金属",
+          "material": "阳极氧化铝",
+          "size": [540, 12, 30],
+          "pos": [30.0, 366, 960],
+          "mass": 0.4,
+          "features": [
+            {
+              "type": "port",
+              "port": 7
+            }
+          ],
+          "note": ""
+        },
+        {
+          "id": "CBL",
+          "name": "线槽",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "钢",
+          "size": [400, 60, 40],
+          "pos": [78, 0, 742],
+          "mass": 0.4,
+          "features": [],
+          "note": ""
+        },
+        {
+          "id": "PEN",
+          "name": "笔筒",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "钢",
+          "size": [70, 70, 100],
+          "pos": [462, 40, 800],
+          "mass": 0.2,
+          "features": [],
+          "note": ""
+        },
+        {
+          "id": "BOOKEND",
+          "name": "书立",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "钢",
+          "size": [20, 150, 160],
+          "pos": [58, 60, 1080],
+          "mass": 0.3,
+          "features": [],
+          "note": ""
+        }
+      ],
+      "ports": [
+        {
+          "id": 1,
+          "name": "层板销孔列",
+          "where": "两侧竖板内侧",
+          "spec": "Ø5／32节距／前后两排"
+        },
+        {
+          "id": 3,
+          "name": "镜／显示器重托嵌件对",
+          "where": "右竖板外侧面",
+          "x": 600,
+          "y": [100, 300],
+          "z": 900,
+          "spec": "M6面嵌件×2，带隐藏盖"
+        },
+        {
+          "id": 4,
+          "name": "衣杆／挂杆嵌件对",
+          "where": "两侧竖板内侧",
+          "y": 200.0,
+          "z": 1140,
+          "spec": "M6面嵌件×2"
+        },
+        {
+          "id": 6,
+          "name": "底座通用螺栓孔型",
+          "where": "底座顶面",
+          "spec": "4×M6",
+          "xy": [
+            [60, 60],
+            [540, 60],
+            [60, 340],
+            [540, 340]
+          ]
+        },
+        {
+          "id": 8,
+          "name": "门铰链底座孔位",
+          "where": "两侧竖板内侧下层",
+          "spec": "35杯铰链底座孔，预装【假设X32】"
+        },
+        {
+          "id": 11,
+          "name": "桌板托架嵌件对",
+          "where": "右竖板外侧面",
+          "x": 600,
+          "y": [80, 320],
+          "z": 635,
+          "spec": "M6面嵌件×2；书桌旁版本出厂预装【假设X33】"
+        },
+        {
+          "id": 5,
+          "name": "顶面立板孔",
+          "where": "顶盖",
+          "spec": "M6×2，带塞"
+        },
+        {
+          "id": 7,
+          "name": "铝轨槽位",
+          "where": "面板前，书桌旁版本",
+          "z": 960,
+          "spec": "两端支架锁入竖板内侧嵌件"
+        }
+      ],
+      "steps": [
+        {
+          "id": 1,
+          "title": "放底座并调平，放入配重",
+          "action": "A0",
+          "parts": ["BASE", "CW"],
+          "from_offset": [0, 0, 300],
+          "fasteners": [],
+          "tool": "随附L扳手（调节脚）",
+          "people": 1,
+          "check": "底座水平泡居中；配重板落入槽内",
+          "precondition": "清出约1.2×1.6米工作区"
+        },
+        {
+          "id": 2,
+          "title": "立左竖板：定位销对孔，连接片锁入底座",
+          "action": "A1",
+          "parts": ["SL"],
+          "from_offset": [-300, 0, 200],
+          "fasteners": [
+            {
+              "type": "M6手拧两用头",
+              "qty": 2,
+              "at": "左竖板底端连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "竖板不扶也能立住",
+          "precondition": ""
+        },
+        {
+          "id": 3,
+          "title": "立右竖板",
+          "action": "A1",
+          "parts": ["SR"],
+          "from_offset": [300, 0, 200],
+          "fasteners": [
+            {
+              "type": "M6手拧两用头",
+              "qty": 2,
+              "at": "右竖板底端连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "两竖板平行，内侧槽口相对",
+          "precondition": ""
+        },
+        {
+          "id": 4,
+          "title": "装结构底梁：放在支承销上，两端锁紧",
+          "action": "A3",
+          "parts": ["BEAM"],
+          "from_offset": [0, -400, 0],
+          "fasteners": [
+            {
+              "type": "M6手拧",
+              "qty": 4,
+              "at": "底梁两端底面连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "推动竖板顶端，框体不晃",
+          "precondition": ""
+        },
+        {
+          "id": 5,
+          "title": "面板1：从顶端滑入两侧后槽，落到底",
+          "action": "A2",
+          "parts": ["PNL1"],
+          "from_offset": [0, 0, 1400],
+          "fasteners": [],
+          "tool": "无",
+          "people": 2,
+          "check": "面板落底有“嗒”声；一人扶竖板顶端",
+          "precondition": "顶盖尚未安装"
+        },
+        {
+          "id": 6,
+          "title": "面板2：同样滑入，压在面板1上",
+          "action": "A2",
+          "parts": ["PNL2"],
+          "from_offset": [0, 0, 1400],
+          "fasteners": [],
+          "tool": "无",
+          "people": 2,
+          "check": "接缝等宽",
+          "precondition": ""
+        },
+        {
+          "id": 7,
+          "title": "面板3：滑入",
+          "action": "A2",
+          "parts": ["PNL3"],
+          "from_offset": [0, 0, 1400],
+          "fasteners": [
+            {
+              "type": "隐藏防脱件",
+              "qty": 3,
+              "at": "每块面板一处"
+            }
+          ],
+          "tool": "无",
+          "people": 2,
+          "check": "三块面板齐平，无高低差",
+          "precondition": ""
+        },
+        {
+          "id": 8,
+          "title": "装顶盖：压住面板，竖板顶端连接片向上锁入",
+          "action": "A6",
+          "parts": ["TOP"],
+          "from_offset": [0, 0, 400],
+          "fasteners": [
+            {
+              "type": "M6手拧",
+              "qty": 4,
+              "at": "两竖板顶端连接片"
+            }
+          ],
+          "tool": "手拧",
+          "people": 2,
+          "check": "顶盖与竖板外沿齐平；整件不晃",
+          "precondition": ""
+        },
+        {
+          "id": 9,
+          "title": "放两块全深层板",
+          "action": "A4",
+          "parts": ["SH1", "SH2"],
+          "from_offset": [0, -500, 0],
+          "fasteners": [
+            {
+              "type": "层板销",
+              "qty": 8
+            }
+          ],
+          "tool": "无",
+          "people": 1,
+          "check": "层板水平、落销到底",
+          "precondition": ""
+        },
+        {
+          "id": 10,
+          "title": "装铝轨（可选）：两端支架锁入竖板内侧",
+          "action": "A13*",
+          "parts": ["RAIL"],
+          "from_offset": [0, -400, 0],
+          "fasteners": [
+            {
+              "type": "M6",
+              "qty": 2
+            }
+          ],
+          "tool": "随附L扳手",
+          "people": 1,
+          "check": "铝轨水平",
+          "precondition": ""
+        },
+        {
+          "id": 11,
+          "title": "装线槽、笔筒、书立",
+          "action": "A13",
+          "parts": ["CBL", "PEN", "BOOKEND"],
+          "from_offset": [0, -300, 0],
+          "fasteners": [],
+          "tool": "无",
+          "people": 1,
+          "check": "线可从线槽进入",
+          "precondition": ""
+        },
+        {
+          "id": 12,
+          "title": "最后检查；需要时安装附送防倾固定件",
+          "action": "检查",
+          "parts": [],
+          "from_offset": [0, 0, 0],
+          "fasteners": [
+            {
+              "type": "墙面固定带",
+              "qty": 1,
+              "at": "顶盖后沿（可选）"
+            }
+          ],
+          "tool": "螺丝刀（仅固定件）",
+          "people": 1,
+          "check": "按说明的挂物范围使用",
+          "precondition": ""
+        }
+      ],
+      "kit_preview": {
+        "K-D1": [
+          {
+            "id": "DESK",
+            "name": "桌板 1200×600",
+            "kind": "board",
+            "group": "层板",
+            "material": "桦木胶合板",
+            "size": [1200, 600, 25],
+            "pos": [600, 0, 695],
+            "mass": 12.24,
+            "features": [
+              {
+                "type": "stiffener",
+                "note": "30×15 钢方管×1，桌板底面通长"
+              }
+            ],
+            "note": "",
+            "cut": [1200, 600, 25]
+          },
+          {
+            "id": "BRK",
+            "name": "重托架×2（锁入端口11）",
+            "kind": "metal",
+            "group": "金属",
+            "material": "钢",
+            "size": [40, 300, 120],
+            "pos": [600, 50, 575],
+            "mass": 1.2,
+            "features": [],
+            "note": ""
+          },
+          {
+            "id": "LEG",
+            "name": "钢制全高桌腿总成",
+            "kind": "metal",
+            "group": "金属",
+            "material": "粉末喷涂钢",
+            "size": [40, 560, 695],
+            "pos": [1740, 20, 0],
+            "mass": 4.0,
+            "features": [],
+            "note": ""
+          },
+          {
+            "id": "STF",
+            "name": "桌板底部加强方管",
+            "kind": "metal",
+            "group": "金属",
+            "material": "钢",
+            "size": [1100, 30, 15],
+            "pos": [650, 285.0, 680],
+            "mass": 1.5,
+            "features": [],
+            "note": ""
+          }
+        ]
+      }
+    },
+    "bedside": {
+      "title": "1.3 床边块（低位块一层）",
+      "geo": {
+        "W": 600,
+        "D": 400,
+        "H": 400,
+        "hb": 150,
+        "iw": 564,
+        "beam_d": 377,
+        "panel_front": 378,
+        "base_depth": 400
+      },
+      "parts": [
+        {
+          "id": "LEGS",
+          "name": "钢脚架（约150高，含调节脚）",
+          "kind": "metal",
+          "group": "金属",
+          "material": "粉末喷涂钢",
+          "size": [600, 400, 150],
+          "pos": [0, 0, 0],
+          "mass": 3.0,
+          "features": [
+            {
+              "type": "bolt_pattern",
+              "port": 6,
+              "xy": [
+                [60, 60],
+                [540, 60],
+                [60, 340],
+                [540, 340]
+              ],
+              "thread": "M6"
+            }
+          ],
+          "note": ""
+        },
+        {
+          "id": "SL1",
+          "name": "S400竖板（左，第1层）",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [18, 400, 400],
+          "pos": [0, 0, 150],
+          "mass": 1.96,
+          "features": [
+            {
+              "type": "groove",
+              "width": 13.0,
+              "depth": 8,
+              "face_x": 18,
+              "y_from": 377.5,
+              "y_to": 390.5,
+              "z_from": 0,
+              "z_to": 400
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 18,
+              "y": 37,
+              "z_list": [64, 96, 128, 160, 192, 224, 256, 288, 320]
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 18,
+              "y": 340,
+              "z_list": [64, 96, 128, 160, 192, 224, 256, 288, 320]
+            }
+          ],
+          "note": "",
+          "cut": [400, 400, 18]
+        },
+        {
+          "id": "SR1",
+          "name": "S400竖板（右，第1层）",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [18, 400, 400],
+          "pos": [582, 0, 150],
+          "mass": 1.96,
+          "features": [
+            {
+              "type": "groove",
+              "width": 13.0,
+              "depth": 8,
+              "face_x": 582,
+              "y_from": 377.5,
+              "y_to": 390.5,
+              "z_from": 0,
+              "z_to": 400
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 582,
+              "y": 37,
+              "z_list": [64, 96, 128, 160, 192, 224, 256, 288, 320]
+            },
+            {
+              "type": "hole",
+              "dia": 5,
+              "depth": 10,
+              "face_x": 582,
+              "y": 340,
+              "z_list": [64, 96, 128, 160, 192, 224, 256, 288, 320]
+            }
+          ],
+          "note": "",
+          "cut": [400, 400, 18]
+        },
+        {
+          "id": "PNL1",
+          "name": "面板（第1层）",
+          "kind": "board",
+          "group": "面板",
+          "material": "桦木胶合板",
+          "size": [579.0, 12, 399.5],
+          "pos": [10.5, 378, 150.25],
+          "mass": 1.89,
+          "features": [],
+          "note": "",
+          "cut": [579.0, 399.5, 12]
+        },
+        {
+          "id": "BEAM",
+          "name": "结构底梁（兼底板）",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [563.0, 377, 18],
+          "pos": [18.5, 0, 150],
+          "mass": 2.6,
+          "features": [],
+          "note": "",
+          "cut": [563.0, 377, 18]
+        },
+        {
+          "id": "TOPB",
+          "name": "台面",
+          "kind": "board",
+          "group": "结构板",
+          "material": "桦木胶合板",
+          "size": [600, 400, 18],
+          "pos": [0, 0, 550],
+          "mass": 2.94,
+          "features": [
+            {
+              "type": "insert",
+              "thread": "M6",
+              "face": "underside",
+              "qty": 4
+            }
+          ],
+          "note": "",
+          "cut": [600, 400, 18]
+        },
+        {
+          "id": "TRAY",
+          "name": "浅托盘（充电线槽）",
+          "kind": "accessory",
+          "group": "配件",
+          "material": "胶合板",
+          "size": [300, 200, 25],
+          "pos": [150, 60, 568],
+          "mass": 0.4,
+          "features": [],
+          "note": ""
+        }
+      ],
+      "ports": [
+        {
+          "id": 1,
+          "name": "层板销孔列",
+          "where": "两侧竖板内侧"
+        },
+        {
+          "id": 6,
+          "name": "底座通用螺栓孔型",
+          "where": "脚架"
+        },
+        {
+          "id": 9,
+          "name": "台面底面嵌件",
+          "where": "台面"
+        },
+        {
+          "id": 10,
+          "name": "叠层跨接板位",
+          "where": "竖板顶端",
+          "spec": "D14"
+        }
+      ],
+      "steps": [
+        {
+          "id": 1,
+          "title": "放钢脚架并调平",
+          "action": "A0",
+          "parts": ["LEGS"],
+          "from_offset": [0, 0, 250],
+          "fasteners": [],
+          "tool": "随附L扳手",
+          "people": 1,
+          "check": "四脚落地不晃",
+          "precondition": ""
+        },
+        {
+          "id": 2,
+          "title": "立左竖板，锁入脚架",
+          "action": "A1",
+          "parts": ["SL1"],
+          "from_offset": [-300, 0, 150],
+          "fasteners": [
+            {
+              "type": "M6手拧两用头",
+              "qty": 2
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "竖板直立",
+          "precondition": ""
+        },
+        {
+          "id": 3,
+          "title": "立右竖板",
+          "action": "A1",
+          "parts": ["SR1"],
+          "from_offset": [300, 0, 150],
+          "fasteners": [
+            {
+              "type": "M6手拧两用头",
+              "qty": 2
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "槽口相对",
+          "precondition": ""
+        },
+        {
+          "id": 4,
+          "title": "装结构底梁（兼底板）",
+          "action": "A3",
+          "parts": ["BEAM"],
+          "from_offset": [0, -400, 0],
+          "fasteners": [
+            {
+              "type": "M6手拧",
+              "qty": 4
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "框体不晃",
+          "precondition": ""
+        },
+        {
+          "id": 5,
+          "title": "面板从顶端滑入后槽",
+          "action": "A2",
+          "parts": ["PNL1"],
+          "from_offset": [0, 0, 600],
+          "fasteners": [
+            {
+              "type": "隐藏防脱件",
+              "qty": 1
+            }
+          ],
+          "tool": "无",
+          "people": 1,
+          "check": "面板落底",
+          "precondition": ""
+        },
+        {
+          "id": 6,
+          "title": "装台面",
+          "action": "A9",
+          "parts": ["TOPB"],
+          "from_offset": [0, 0, 300],
+          "fasteners": [
+            {
+              "type": "M6手拧",
+              "qty": 4
+            }
+          ],
+          "tool": "手拧",
+          "people": 1,
+          "check": "台面齐平",
+          "precondition": ""
+        },
+        {
+          "id": 7,
+          "title": "放浅托盘",
+          "action": "A13",
+          "parts": ["TRAY"],
+          "from_offset": [0, 0, 200],
+          "fasteners": [],
+          "tool": "无",
+          "people": 1,
+          "check": "充电线可从后部出线",
+          "precondition": ""
+        }
+      ]
+    }
+  },
+  "kits": [
+    {
+      "id": "K-E1",
+      "name": "换成书桌旁包",
+      "applies": "entry",
+      "tier": "先卖",
+      "ports": [1, 7],
+      "add": ["全深层板×2", "书桌旁配件包"],
+      "remove": ["鞋斜板", "窄层板", "挂载面", "玄关配件包"],
+      "leftover": "撤下件登记去向（可留作日后换回）",
+      "steps": "A13拆配件 → A4取下层板 → A4放全深层板×2 → A13装配件",
+      "legacy": "1.1 变书桌旁 ✓"
+    },
+    {
+      "id": "K-E2",
+      "name": "并排一段（双人玄关）",
+      "applies": "entry",
+      "tier": "先卖",
+      "ports": [6],
+      "add": ["完整F1200功能面一套", "段间联结螺栓×4"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "另一段按原步骤装好 → A7两竖板贴合锁紧",
+      "legacy": "1.1 双人玄关 ✓"
+    },
+    {
+      "id": "K-E3",
+      "name": "下层门",
+      "applies": "entry",
+      "tier": "先卖",
+      "ports": [8],
+      "add": ["门板×1（预装卡入铰链）"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "A14卡入铰链底座 → 调门缝",
+      "legacy": "K.8 门×1遮鞋"
+    },
+    {
+      "id": "K-E4",
+      "name": "抽屉模块",
+      "applies": "entry,desk",
+      "tier": "先卖",
+      "ports": [1],
+      "add": ["抽屉模块×1"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "A15落销 → 推入",
+      "legacy": "K.8 抽屉模块"
+    },
+    {
+      "id": "K-E5",
+      "name": "换面型（实面／织物）",
+      "applies": "entry,desk",
+      "tier": "先卖",
+      "ports": [],
+      "add": ["面板×1–3（新面型）"],
+      "remove": ["原面板"],
+      "leftover": "原面板登记去向",
+      "steps": "A6松开顶盖 → A2抽出面板 → A2滑入新面板 → A6锁回顶盖",
+      "legacy": "1.1 对床那面不露孔／1.2 变视频背景（由翻面改写）"
+    },
+    {
+      "id": "K-E6",
+      "name": "挂镜套件",
+      "applies": "entry",
+      "tier": "测试后",
+      "ports": [3],
+      "add": ["安全镜＋重托×2"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "重托锁入端口3 → 挂镜 → 防脱",
+      "legacy": "K.8 挂镜重托"
+    },
+    {
+      "id": "K-E7",
+      "name": "换鞋坐凳",
+      "applies": "entry",
+      "tier": "测试后",
+      "ports": [],
+      "add": ["低位块一套＋厚坐板＋坐垫"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "低位块按床边块步骤装好 → 放在功能面旁 → A9坐板",
+      "legacy": "1.1 换鞋凳 △（承人测试）"
+    },
+    {
+      "id": "K-E8",
+      "name": "脚轮底座（变移动屏3.1）",
+      "applies": "entry,desk",
+      "tier": "测试后",
+      "ports": [6],
+      "add": ["刹车脚轮底座＋配重"],
+      "remove": ["加宽底座"],
+      "leftover": "加宽底座",
+      "steps": "卸载 → 两人放倒 → A12换底座 → 立起锁轮",
+      "legacy": "1.1 变带轮玄关车 △（动态稳定测试）"
+    },
+    {
+      "id": "K-D1",
+      "name": "桌板套件（变带桌工作区）",
+      "applies": "desk",
+      "tier": "先卖",
+      "ports": [11],
+      "add": ["桌板1200×600×25", "重托架×2", "钢制全高桌腿", "底部加强方管"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "A11重托架锁入端口11 → 放桌板 → 远端立钢腿 → 锁紧",
+      "legacy": "1.2 变一张桌 ✓（腿改钢腿）"
+    },
+    {
+      "id": "K-D2",
+      "name": "铝轨",
+      "applies": "desk",
+      "tier": "先卖",
+      "ports": [7],
+      "add": ["铝轨＋支架×2"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "支架锁入竖板内侧 → 装轨",
+      "legacy": "新增（D5）"
+    },
+    {
+      "id": "K-D3",
+      "name": "显示器支架",
+      "applies": "desk",
+      "tier": "测试后",
+      "ports": [3],
+      "add": ["显示器重托＋第三方支臂"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "重托锁入端口3 → 装支臂；须先装桌板套件或联结第二段",
+      "legacy": "K.8 显示器重托"
+    },
+    {
+      "id": "K-D4",
+      "name": "换成玄关包",
+      "applies": "desk",
+      "tier": "先卖",
+      "ports": [1, 2],
+      "add": ["鞋斜板", "窄层板", "挂载面", "玄关配件包"],
+      "remove": ["全深层板×2", "书桌旁配件包"],
+      "leftover": "撤下件登记去向",
+      "steps": "K-E1的逆过程",
+      "legacy": "1.2 变玄关 ✓"
+    },
+    {
+      "id": "K-D5",
+      "name": "下翻站立台",
+      "applies": "desk",
+      "tier": "研究",
+      "ports": [],
+      "add": ["下翻台面＋铰链＋支腿"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "待4.1节点验证后定义",
+      "legacy": "1.2 变站立台 △"
+    },
+    {
+      "id": "K-B1",
+      "name": "叠一层（800床头柜）",
+      "applies": "bedside",
+      "tier": "测试后",
+      "ports": [10],
+      "add": ["S400竖板×2（带跨接板）", "面板×1"],
+      "remove": [],
+      "leftover": "无（台面移到新顶部）",
+      "steps": "A9松开台面 → A5上层竖板跨接锁入 → A2滑入面板 → A9台面回顶",
+      "legacy": "1.3 变800床头柜（D14允许）"
+    },
+    {
+      "id": "K-B2",
+      "name": "叠两层（书桌旁小柜）",
+      "applies": "bedside",
+      "tier": "测试后",
+      "ports": [10],
+      "add": ["S400竖板×4（带跨接板）", "面板×2", "防倾固定件"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "同K-B1两次；3层时安装固定件",
+      "legacy": "1.3 变书桌旁（D14允许，≤3层）"
+    },
+    {
+      "id": "K-B3",
+      "name": "脚轮底座（沙发边桌）",
+      "applies": "bedside",
+      "tier": "先卖",
+      "ports": [6],
+      "add": ["刹车脚轮底座"],
+      "remove": ["钢脚架"],
+      "leftover": "钢脚架",
+      "steps": "A12换底座",
+      "legacy": "1.3 变沙发边桌 ✓"
+    },
+    {
+      "id": "K-B4",
+      "name": "并排成矮柜一格",
+      "applies": "bedside",
+      "tier": "先卖",
+      "ports": [],
+      "add": ["联结螺栓×4"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "两块贴合 → A7锁紧",
+      "legacy": "1.3 变矮柜一格 ✓"
+    },
+    {
+      "id": "K-B5",
+      "name": "抽屉或门",
+      "applies": "bedside",
+      "tier": "先卖",
+      "ports": [1],
+      "add": ["抽屉模块或门板"],
+      "remove": [],
+      "leftover": "无",
+      "steps": "A15／A14",
+      "legacy": "K.8 抽屉、门"
+    }
+  ],
+  "retired_paths": [
+    {
+      "path": "1.1 降到800矮台",
+      "reason": "F整高竖板不能拆层（D3）",
+      "status": "历史"
+    },
+    {
+      "path": "1.1 变隔断的一段",
+      "reason": "需要S叠层（D3）",
+      "status": "历史"
+    },
+    {
+      "path": "1.2 变床边块",
+      "reason": "F不能拆层",
+      "status": "历史"
+    },
+    {
+      "path": "1.2 叠成书架",
+      "reason": "需要S叠层或换整块竖板",
+      "status": "历史"
+    },
+    {
+      "path": "1.3 变厨房车",
+      "reason": "S叠层可行，但厨房件与卧室件互换有卫生问题",
+      "status": "历史"
+    }
+  ],
+  "actions": {
+    "A0": "调平并建立稳定底座",
+    "A1": "底部定位与连接",
+    "A2": "装面板并锁定",
+    "A3": "固定结构横板",
+    "A4": "安装普通层板",
+    "A5": "竖向加高",
+    "A6": "安装完整顶板",
+    "A7": "同向并联",
+    "A8": "转角组合",
+    "A9": "桌板与跨桥",
+    "A10": "桌上立脚",
+    "A11": "重载工作面",
+    "A12": "更换底座或脚轮",
+    "A13": "轻载静态挂装",
+    "A14": "装门",
+    "A15": "装抽屉模块",
+    "A16": "装下翻工作台",
+    "A17": "装折叠屏"
+  },
+  "params": {
+    "global": {
+      "T_board": {
+        "value": 18,
+        "source": "原文",
+        "note": "18为首样候选，15为对照；改为15时全部开料尺寸由脚本重算"
+      },
+      "T_panel": {
+        "value": 12,
+        "source": "假设",
+        "id": "X01",
+        "note": "分层面板厚度原文未给；取12以便入槽并保留竖板强度"
+      },
+      "T_face": {
+        "value": 6,
+        "source": "假设",
+        "id": "X02",
+        "note": "D6方案b 薄穿孔挂载面厚度（4–6）"
+      },
+      "groove_depth": {
+        "value": 8,
+        "source": "假设",
+        "id": "X03",
+        "note": "竖板内侧面板槽深"
+      },
+      "groove_clear": {
+        "value": 0.5,
+        "source": "假设",
+        "id": "X04",
+        "note": "槽宽 = T_panel + 2×此值"
+      },
+      "groove_back_inset": {
+        "value": 10,
+        "source": "假设",
+        "id": "X05",
+        "note": "面板后表面到竖板后沿的距离（后位槽）"
+      },
+      "fit_clear": {
+        "value": 1.0,
+        "source": "假设",
+        "id": "X06",
+        "note": "层板、底梁在两竖板间的总间隙"
+      },
+      "panel_vert_clear": {
+        "value": 0.5,
+        "source": "假设",
+        "id": "X07",
+        "note": "每块面板高度方向留隙"
+      },
+      "pin_dia": {
+        "value": 5,
+        "source": "原文",
+        "note": "System 32 层板销孔"
+      },
+      "pin_pitch": {
+        "value": 32,
+        "source": "原文"
+      },
+      "pin_front_setback": {
+        "value": 37,
+        "source": "原文"
+      },
+      "pin_back_setback": {
+        "value": 37,
+        "source": "假设",
+        "id": "X08",
+        "note": "后排孔距层板后沿；原文只给前沿37"
+      },
+      "pin_z_margin": {
+        "value": 64,
+        "source": "假设",
+        "id": "X09",
+        "note": "孔列距竖板上下端的最小距离"
+      },
+      "edge_radius": {
+        "value": 2,
+        "source": "原文",
+        "note": "H29 可触边缘 R2 候选"
+      },
+      "ply_density": {
+        "value": 680,
+        "source": "假设",
+        "id": "X10",
+        "note": "桦木胶合板 kg/m³；18毫米约12.2 kg/m²，与原文12.5 kg/m²一致"
+      },
+      "face_finish": {
+        "value": "白色层压饰面桦木胶合板（与白漆样板对比）",
+        "source": "决定",
+        "id": "D15"
+      }
+    },
+    "frame_F1200": {
+      "W": {
+        "value": 600,
+        "source": "原文"
+      },
+      "H_side": {
+        "value": 1200,
+        "source": "原文",
+        "note": "竖板高度；整件总高 = 底座 + 竖板 + 顶盖，见检查报告"
+      },
+      "D": {
+        "value": 400,
+        "source": "原文",
+        "note": "D4：不固定时≥400；靠墙固定时可做约300（D13）"
+      },
+      "D_alt_anchored": {
+        "value": 300,
+        "source": "决定",
+        "id": "D13",
+        "note": "仅在附防倾固定件时允许"
+      },
+      "beam_z": {
+        "value": 40,
+        "source": "假设",
+        "id": "X11",
+        "note": "结构底梁下表面距竖板底端"
+      },
+      "top_overhang": {
+        "value": 0,
+        "source": "假设",
+        "id": "X12",
+        "note": "顶盖与竖板外沿齐平"
+      }
+    },
+    "base_wide": {
+      "depth": {
+        "value": 600,
+        "source": "决定",
+        "id": "D13"
+      },
+      "height": {
+        "value": 60,
+        "source": "假设",
+        "id": "X13",
+        "note": "粉末喷涂钢制雪橇底座含调节脚的总高"
+      },
+      "back_flush": {
+        "value": true,
+        "source": "假设",
+        "id": "X14",
+        "note": "底座后沿与主体后沿齐平，向前伸出 depth−D，可贴墙"
+      },
+      "mass": {
+        "value": 8,
+        "source": "假设",
+        "id": "X15"
+      },
+      "counterweight": {
+        "value": 10,
+        "source": "决定",
+        "id": "D13",
+        "note": "配重板质量为假设值 X16"
+      },
+      "bolt_pattern": {
+        "value": [
+          [60, 60],
+          [540, 60],
+          [60, 340],
+          [540, 340]
+        ],
+        "source": "假设",
+        "id": "X17",
+        "note": "端口6：通用螺栓孔型（相对主体原点的x,y）；脚垫、脚轮、加宽底座共用"
+      },
+      "anti_tip_kit": {
+        "value": "随货附送：墙面固定带×1＋膨胀螺丝组",
+        "source": "决定",
+        "id": "D13"
+      }
+    },
+    "entry_pack": {
+      "shoe_board": {
+        "value": {
+          "w": 562,
+          "d": 300,
+          "t": 18,
+          "angle_deg": 15,
+          "front_edge_z": 160
+        },
+        "source": "假设",
+        "id": "X18",
+        "note": "鞋斜板原文无尺寸"
+      },
+      "narrow_shelf_z": {
+        "value": 760,
+        "source": "假设",
+        "id": "X19",
+        "note": "窄层板上表面距地（钥匙、手机台）"
+      },
+      "hanging_face": {
+        "value": {
+          "option": "b",
+          "z_from": 860,
+          "z_to": 1220,
+          "spacer": 20
+        },
+        "source": "决定",
+        "id": "D6",
+        "note": "方案b范围与间隔为假设 X20"
+      },
+      "hooks": {
+        "value": {
+          "count": 3,
+          "z": 1120
+        },
+        "source": "假设",
+        "id": "X21"
+      },
+      "key_tray_z": {
+        "value": 980,
+        "source": "假设",
+        "id": "X22"
+      },
+      "umbrella_x": {
+        "value": 70,
+        "source": "假设",
+        "id": "X23"
+      }
+    },
+    "desk_pack": {
+      "shelf_z": {
+        "value": [800, 1080],
+        "source": "假设",
+        "id": "X24",
+        "note": "两块全深层板上表面距地"
+      },
+      "rail": {
+        "value": {
+          "optional": true,
+          "z": 960,
+          "length": 540
+        },
+        "source": "决定",
+        "id": "D5",
+        "note": "铝轨高度与长度为假设 X25"
+      },
+      "monitor_port_z": {
+        "value": 900,
+        "source": "假设",
+        "id": "X26",
+        "note": "端口3在书桌侧竖板外侧面"
+      }
+    },
+    "desk_kit": {
+      "top": {
+        "value": {
+          "l": 1200,
+          "w": 600,
+          "t": 25
+        },
+        "source": "原文",
+        "note": "原文1200×600；厚度25为假设 X27，另加钢加强件"
+      },
+      "top_z": {
+        "value": 720,
+        "source": "原文",
+        "note": "桌面高度目标约720"
+      },
+      "stiffener": {
+        "value": "30×15 钢方管×1，桌板底面通长",
+        "source": "决定",
+        "id": "D5"
+      },
+      "leg": {
+        "value": "钢制全高桌腿总成×1（远端）",
+        "source": "决定",
+        "id": "D5"
+      }
+    },
+    "frame_lowblock": {
+      "W": {
+        "value": 600,
+        "source": "原文"
+      },
+      "H_side": {
+        "value": 400,
+        "source": "原文",
+        "note": "S400"
+      },
+      "D": {
+        "value": 400,
+        "source": "原文"
+      },
+      "legs": {
+        "value": 150,
+        "source": "原文",
+        "note": "约150高钢脚；总高 150+400+18 = 568"
+      },
+      "stack_max_tiers": {
+        "value": 3,
+        "source": "决定",
+        "id": "D14",
+        "note": "叠到3层（约1368含脚）时附防倾固定件"
+      }
+    },
+    "stability": {
+      "pull_height": {
+        "value": 1100,
+        "source": "假设",
+        "id": "X28"
+      },
+      "hang_load": {
+        "value": 10,
+        "source": "假设",
+        "id": "X29",
+        "note": "前挂衣物包袋 kg"
+      },
+      "hang_offset": {
+        "value": 80,
+        "source": "假设",
+        "id": "X30",
+        "note": "挂物重心在面板前方的距离"
+      },
+      "min_pull_N": {
+        "value": 100,
+        "source": "假设",
+        "id": "X31",
+        "note": "规划阶段的最低临界拉力目标；正式标准与测试后替换"
+      }
+    }
+  }
+}

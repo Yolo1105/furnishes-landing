@@ -116,7 +116,7 @@
   }
 
   .saved::before {
-    content: "Saved";
+    content: "Kept";
     margin-left: 6px;
   }
 
