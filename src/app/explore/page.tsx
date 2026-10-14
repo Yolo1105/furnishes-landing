@@ -39,7 +39,12 @@ function toggle<T extends string>(list: T[], v: T): T[] {
   return list.includes(v) ? list.filter((x) => x !== v) : [...list, v];
 }
 
-const STEPS = ["Where?", "What do you want to do there?", "What needs a place?", "How wide is the space?"];
+const STEPS = [
+  "Where?",
+  "What do you want to do there?",
+  "What needs a place?",
+  "How wide is the space?",
+];
 
 function href(s: ExploreState, step?: number) {
   const q = exploreParams(s);
@@ -51,10 +56,14 @@ function href(s: ExploreState, step?: number) {
 function describe(s: ExploreState) {
   return [
     ...s.rooms.map((r) => uses.find((u) => u.id === r)!.name),
-    ...s.doing.map((a) => activities.find((x) => x.id === a)!.name.toLowerCase()),
+    ...s.doing.map((a) =>
+      activities.find((x) => x.id === a)!.name.toLowerCase(),
+    ),
     ...s.things.map((o) => objects.find((x) => x.id === o)!.name.toLowerCase()),
     ...(s.width ? [widthBands[s.width].label.toLowerCase()] : []),
-    ...(s.situation ? [`“${situations.find((x) => x.product === s.situation)?.text ?? ""}”`] : []),
+    ...(s.situation
+      ? [`“${situations.find((x) => x.product === s.situation)?.text ?? ""}”`]
+      : []),
   ].join(", ");
 }
 
@@ -96,24 +105,48 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
               </p>
               <div className={styles.guideNav}>
                 {step > 1 && (
-                  <Link href={href(s, step - 1)} className="btn btn-quiet" scroll={false} replace>
+                  <Link
+                    href={href(s, step - 1)}
+                    className="btn btn-quiet"
+                    scroll={false}
+                    replace
+                  >
                     ← Back
                   </Link>
                 )}
                 {step < STEPS.length ? (
-                  <Link href={href(s, step + 1)} className="btn btn-quiet" scroll={false} replace>
+                  <Link
+                    href={href(s, step + 1)}
+                    className="btn btn-quiet"
+                    scroll={false}
+                    replace
+                  >
                     Skip / next →
                   </Link>
                 ) : null}
-                <Link href={href(s)} className="text-link" scroll={false} replace>
-                  {step < STEPS.length ? "Show every choice" : "Done: see every choice"}
+                <Link
+                  href={href(s)}
+                  className="text-link"
+                  scroll={false}
+                  replace
+                >
+                  {step < STEPS.length
+                    ? "Show every choice"
+                    : "Done: see every choice"}
                 </Link>
               </div>
             </div>
           ) : (
-            <Link href={href(s, 1)} className={styles.guideStart} scroll={false} replace>
+            <Link
+              href={href(s, 1)}
+              className={styles.guideStart}
+              scroll={false}
+              replace
+            >
               <strong>Guide me</strong>
-              <span>Four quick questions, one at a time. Skip any of them.</span>
+              <span>
+                Four quick questions, one at a time. Skip any of them.
+              </span>
             </Link>
           )}
 
@@ -128,13 +161,22 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
                   return (
                     <li key={u.id}>
                       <Link
-                        href={href({ ...s, rooms: toggle(s.rooms, u.id as UseId) }, step || undefined)}
+                        href={href(
+                          { ...s, rooms: toggle(s.rooms, u.id as UseId) },
+                          step || undefined,
+                        )}
                         className={styles.place}
                         aria-current={on ? "true" : undefined}
                         scroll={false}
                         replace
                       >
-                        <Image src={sceneSrc(COVER[u.id])} alt="" width={SCENE.w} height={SCENE.h} sizes="(max-width: 700px) 45vw, 180px" />
+                        <Image
+                          src={sceneSrc(COVER[u.id])}
+                          alt=""
+                          width={SCENE.w}
+                          height={SCENE.h}
+                          sizes="(max-width: 700px) 45vw, 180px"
+                        />
                         <span className={styles.placeName}>
                           {on ? "✓ " : ""}
                           {u.name}
@@ -156,7 +198,10 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
                 {activities.map((a) => (
                   <li key={a.id}>
                     <Link
-                      href={href({ ...s, doing: toggle(s.doing, a.id as ActivityId) }, step || undefined)}
+                      href={href(
+                        { ...s, doing: toggle(s.doing, a.id as ActivityId) },
+                        step || undefined,
+                      )}
                       className={styles.chip}
                       aria-current={s.doing.includes(a.id) ? "true" : undefined}
                       scroll={false}
@@ -179,9 +224,14 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
                 {objects.map((o) => (
                   <li key={o.id}>
                     <Link
-                      href={href({ ...s, things: toggle(s.things, o.id as ObjectId) }, step || undefined)}
+                      href={href(
+                        { ...s, things: toggle(s.things, o.id as ObjectId) },
+                        step || undefined,
+                      )}
                       className={styles.chip}
-                      aria-current={s.things.includes(o.id) ? "true" : undefined}
+                      aria-current={
+                        s.things.includes(o.id) ? "true" : undefined
+                      }
                       scroll={false}
                       replace
                     >
@@ -199,19 +249,24 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
                 How wide is the space?
               </h2>
               <ul role="list" className={styles.chips}>
-                {(Object.keys(widthBands) as (keyof typeof widthBands)[]).map((w) => (
-                  <li key={w}>
-                    <Link
-                      href={href({ ...s, width: s.width === w ? null : w }, step || undefined)}
-                      className={styles.chip}
-                      aria-current={s.width === w ? "true" : undefined}
-                      scroll={false}
-                      replace
-                    >
-                      {widthBands[w].label}
-                    </Link>
-                  </li>
-                ))}
+                {(Object.keys(widthBands) as (keyof typeof widthBands)[]).map(
+                  (w) => (
+                    <li key={w}>
+                      <Link
+                        href={href(
+                          { ...s, width: s.width === w ? null : w },
+                          step || undefined,
+                        )}
+                        className={styles.chip}
+                        aria-current={s.width === w ? "true" : undefined}
+                        scroll={false}
+                        replace
+                      >
+                        {widthBands[w].label}
+                      </Link>
+                    </li>
+                  ),
+                )}
               </ul>
             </section>
           )}
@@ -225,9 +280,14 @@ export default async function ExplorePage(props: PageProps<"/explore">) {
                 {situations.map((x) => (
                   <li key={x.text}>
                     <Link
-                      href={href({ ...emptyExplore, situation: s.situation === x.product ? null : x.product })}
+                      href={href({
+                        ...emptyExplore,
+                        situation: s.situation === x.product ? null : x.product,
+                      })}
                       className={styles.situation}
-                      aria-current={s.situation === x.product ? "true" : undefined}
+                      aria-current={
+                        s.situation === x.product ? "true" : undefined
+                      }
                       scroll={false}
                       replace
                     >

@@ -92,12 +92,13 @@ function Entry({
         </h2>
         <p className={styles.summary}>
           {e.config
-            ? configSummary(e.config)
+            ? `${configSummary(e.config)}.`
             : "Coming soon: kept as an idea. Register interest from its page."}
           {pic && pic.missing.length > 0 ? (
             <span className={styles.pending}>
               {" "}
-              Picture pending for {pic.missing.join(", ").toLowerCase()}.
+              Picture pending: {pic.missing.join(", ").toLowerCase()} not drawn
+              yet.
             </span>
           ) : null}
         </p>

@@ -510,10 +510,21 @@
     max-height: none;
   }
 
+  .stage {
+    grid-row: span 2;
+    align-self: start;
+  }
+
   .pending,
   .caption {
     grid-column: 2;
+    grid-row: 2;
+    align-self: start;
     font-size: 0.75rem;
+  }
+
+  .pending {
+    padding: 4px 8px;
   }
 
   .sentence {

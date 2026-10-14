@@ -178,16 +178,19 @@ export function Customizer({
     finish: `${faceName(config.face)} in white matte · birch edges`,
     review: isStandard
       ? "The standard version"
-      : `${delta.added.length + delta.removed.length} changes from the standard version`,
+      : `${delta.added.length + delta.removed.length === 1 ? "1 change" : `${delta.added.length + delta.removed.length} changes`} from the standard version`,
   };
   const at = open ? GROUPS.indexOf(open) : -1;
   const next = at >= 0 && at < GROUPS.length - 1 ? GROUPS[at + 1]! : null;
   const go = (g: Group) => {
     setOpen(g);
     requestAnimationFrame(() =>
-      document
-        .getElementById(`g-${g}`)
-        ?.scrollIntoView({ block: "nearest", behavior: "smooth" }),
+      document.getElementById(`g-${g}`)?.scrollIntoView({
+        block: "nearest",
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+      }),
     );
   };
 

@@ -86,6 +86,7 @@
   }
 
   .img {
+    height: auto;
     aspect-ratio: 5 / 4;
     border-radius: var(--radius);
     background: var(--stage);

@@ -129,6 +129,10 @@
   color: var(--cream);
 }
 
+.modes a[aria-current="page"] :global(.spec) {
+  color: var(--orange-soft);
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
@@ -276,7 +280,10 @@
 
 .entry {
   display: grid;
-  grid-template-columns: 3.2rem 72px minmax(0, 3fr) 7.5rem 4.5rem 90px minmax(0, 1.6fr);
+  grid-template-columns: 3.2rem 72px minmax(0, 3fr) 7.5rem 4.5rem 90px minmax(
+      0,
+      1.6fr
+    );
   align-items: center;
   gap: 14px;
   padding: 8px 4px;

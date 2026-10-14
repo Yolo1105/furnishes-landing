@@ -1,9 +1,13 @@
 # Furnishes
 
-The customer website for Furnishes: finished birch plywood furniture for homes in
-Singapore, built from one family of panels. A visitor can browse every design or
-explore by room, activity, object or situation, open a piece, customize only what
-it supports, save the exact version and prepare a quote request.
+The customer website for Furnishes: furniture for homes in Singapore built from
+one family of boards, with white matte faces, birch edges and accent-coloured
+accessories. A visitor can browse every design, explore by room, activity,
+object, width or situation, open a piece, configure the three launch pieces
+within what they support, keep exact versions in the browser and email them for
+a quote.
+
+The design decisions behind the pages are in [`docs/DESIGN.md`](docs/DESIGN.md).
 
 ## Run it
 
@@ -20,87 +24,84 @@ Search engines are blocked until `NEXT_PUBLIC_ALLOW_INDEXING=1` is set at build
 time. Set `NEXT_PUBLIC_SITE_URL` for absolute links in metadata and quote emails
 (default `https://furnish-es.com`).
 
-## Product images
+## The catalogue
 
-Product images are rendered from the same part model as the drawings and
-parts lists, so a picture always shows the version it is labelled with.
+Follows the decision record of 2026-10-13/14 (D1 to D16) and the hero model
+spec v0 (`docs/source/hero-spec-v0/`):
 
-```bash
-pnpm render              # everything (about 15 minutes in software WebGL)
-pnpm render scene/       # only the room view and close-ups
-pnpm render entry-       # only the entry organiser
-```
+- **Launch pieces** (layer A, 3): the function face with the entry pack, the
+  function face with the desk-side pack, and the bedside block. These are the
+  only pieces that can be configured, kept as versions and quoted.
+- **Coming soon** (layer B, 11): second-batch pieces with their own page and
+  "register interest". No price, no estimate.
+- **Other uses** (layer C, 14): a pack on a parent piece (a coffee corner, a
+  record wall…). Shown on the parent's page, never as products.
+- **Arrangements** (layer D, 14): pieces standing together (an L, a bed head
+  with two bedsides…). Shown as plans and earlier concept renders, never as
+  products.
+- Layers E and F (18 records) are not on the site (D11).
 
-- `tools/render/scene.ts` builds each piece from `src/lib/parts.ts`: birch
-  veneer faces, 13-ply edges, the working face's 40 mm hole grid, steel hooks
-  and rails. It runs in headless Chromium via `tools/render/render.mjs`.
-- `public/renders/studio/<recipe>-<finish><front>-<accessories>.webp`: every
-  supported version of every configurable recipe, three-quarter view on the
-  chalk backdrop (`--stage`). Names come from `src/lib/renders.ts`; a test
-  fails if any version is missing.
-- `public/renders/scene/`: the entry organiser at eye level beside a door, a
-  close-up of its edge and working face, and a straight front view.
-- Textures, lighting and props are CC0 (see `tools/render/assets/LICENSES.md`).
-  The chair, plant and shoes are scene dressing, not products.
-
-The older renders in `public/renders/{object,room,before}` (from the
-furnishes-house prototype) are still used for concepts.
+All 42 visible records are listed at `/furniture?view=all`.
 
 ## Pages
 
-| Route                       | What it does                                                                                                                             |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                         | Landing: a finished piece in a room, Browse and Explore, room starting points, a live "one piece, your version" demo, how choosing works |
-| `/furniture`                | Every design, grouped by room; filters for room, type, status, width and search, all in the URL                                          |
-| `/furniture/[id]`           | Product detail: gallery (object, room, before/after, measured drawing), decision column, size check, parts list, steps, same-frame uses  |
-| `/furniture/[id]/customize` | Customize a configurable piece: Fit, Function, Finish, Review; live drawing, undo/redo, the version kept in the URL                      |
-| `/explore`                  | Start from a room, an activity, things that need a place, or a situation; results say why they fit; Back restores the choices            |
-| `/saved`                    | Saved designs (independent snapshots in this browser): edit, duplicate, remove, quantity, and an email quote-request draft               |
-| `/how-it-works`, `/help`    | The system in plain words, what is not confirmed yet, FAQ, and "ask about a room"                                                        |
+| Route                       | What it does                                                                                                                                             |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                         | Opening scene, rooms, one frame with two packs, materials, parts, pieces/walls/screens, coming soon, arrangements as plans, a measured fit, next steps   |
+| `/furniture`                | By family, by room, or all 42 designs; filters for room, type, status, width and search, all in the URL                                                  |
+| `/furniture/[id]`           | Gallery (corner, piece, room, close up, base, measured) beside the decision column; pack swap, add-ons, other uses, arrangements, build steps, fit check |
+| `/furniture/[id]/customize` | Launch pieces only: Fit, Function, Finish, Review; one stable picture, undo/redo, the version and open group kept in the URL                             |
+| `/explore`                  | Start from a room, an activity, things, a width or a situation, or follow the four-step guide; results say why they fit; Back restores the choices       |
+| `/saved`                    | Kept versions (independent snapshots in this browser): edit, duplicate, remove, quantity, and an email quote request                                     |
+| `/how-it-works`, `/help`    | The system in plain words, what is not confirmed yet, FAQ, and "ask about a room"                                                                        |
 
 ## Where things live
 
-- `src/data/designs.ts`: all 64 designs (60 records in the transformation record)
-  with status, nominal size, rooms, activities, objects and images, plus the 53
-  everyday situations. Generated once from the furnishes-house prototype, then
-  maintained by hand.
-- `src/data/recipes.ts`: the 13 parts recipes and the accessories.
+- `src/data/products.ts`: the 14 products (A and B), 14 other uses and 14
+  arrangements, in English.
+- `src/data/hero.ts` and `src/data/hero-model.json`: the launch pieces' parts,
+  steps, ports and kits from the hero model spec v0.
 - `src/data/claims.ts`: every statement that depends on an unconfirmed fact
-  (price, lead time, delivery, assembly, fixing, fit, renders, saving, email
-  drafts). Change wording or status here, not in pages.
-- `src/data/market.ts`: Singapore, SGD, contact email, and `prices` (empty on
-  purpose until real prices exist).
-- `src/lib/parts.ts`: the part model. One configured recipe becomes positioned
-  parts; the parts list, steps, kept/added/removed comparison and the SVG
-  drawing (`src/components/Elevation.tsx`) all come from it.
-- `src/lib/config.ts`: the configuration type's URL encoding and validation.
-  Unsupported options in a link are dropped and explained, never swapped.
-- `src/lib/explore.ts`: Explore matching and listing filters.
-- `src/lib/saved.ts`: saved designs and quote-draft records in localStorage.
-- `public/renders/`: object (`object/`), room (`room/`) and before (`before/`)
-  renders for every design, copied from furnishes-house.
+  (price, timing, delivery, assembly, stability, fit, renders, accent colour,
+  hanging face, saving). Change wording or status here, not in pages.
+- `src/data/vocabulary.ts`: objects, activities and the three families.
+- `src/lib/config.ts`: a launch piece's configuration and its URL encoding.
+  Kits that can't be chosen today are dropped from a link and explained.
+- `src/lib/version.ts`: what a version is made of, what changes, and its floor
+  space.
+- `src/lib/explore.ts`: Explore matching and the listing filters.
+- `src/lib/records.ts`: the 42 visible records for the full index.
+- `src/lib/saved.ts`: kept versions and quote drafts in localStorage.
 
-## Status of designs
+## Product images
 
-- **Ready to configure** (11): parts and drawings are worked out. They can be
-  customized within their options, saved and put in a quote request.
-- **Concept** (53): shown with a clear label. They can be saved as ideas and
-  asked about, never configured or quoted.
+Product images are rendered from the same model as the drawings and parts
+lists, so a picture shows the version it is labelled with, or says what it
+can't show yet.
+
+```bash
+pnpm render              # everything (software WebGL; slow)
+pnpm render hero/        # only the launch pieces in the studio
+pnpm render scene/       # only the room views
+```
+
+`tools/render/` builds each piece in three.js inside headless Chromium:
+`hero/` (launch pieces and drawn kits), `studio/` (coming-soon pieces),
+`scene/` (each piece in a room), `steps/`, `parts/` and `detail/`. The older
+`object/` and `room/` renders are earlier concepts, used only for other uses and
+arrangements and labelled as such. Textures, lighting and props are CC0 (see
+`tools/render/assets/LICENSES.md`).
 
 ## Not connected yet
 
-These are shown as honest states on the site, and need real data before they
-become claims:
+Shown as honest states on the site, and need real data before they become
+claims:
 
-- Prices in SGD (add to `prices` in `src/data/market.ts`), lead times, delivery
-  areas, assembly service, returns and warranty.
-- Which designs are actually manufactured, and their final dimensions, panels
-  and connectors (sizes and parts are nominal values from the records).
-- Wall fixing, load ratings, and anything about seating, children or wet rooms.
+- Prices in SGD, timing, delivery areas, assembly service, returns, warranty.
+- The accent colour and the hanging face (both still being chosen on samples).
+- Tip-over and strength tests; add-ons marked "In testing" wait on them.
+- Pictures of add-ons that aren't drawn in the spec (doors, drawers, a second
+  segment, fabric faces): the configurator marks the picture as pending.
 - A service that receives quote requests. Today the site opens an email draft to
   hello@furnish-es.com; it cannot confirm that anything was sent.
-- Accounts and cross-device saving (saved designs live in one browser).
-- Payment and orders.
-- Photography: all images are 3D renders of designs, labelled as such.
-- Transformations between designs: part counts are computed from the drawings,
-  but no conversion kit is offered, so they are shown as concepts.
+- Accounts and cross-device saving (kept versions live in one browser).
