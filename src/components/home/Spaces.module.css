@@ -70,12 +70,12 @@
   gap: 2px;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .tileRoom {
   font-weight: 700;
-  font-stretch: 80%;
+  font-stretch: 100%;
   font-size: var(--step-1);
   line-height: 1.1;
 }
@@ -93,7 +93,7 @@
   grid-area: feature;
   display: grid;
   gap: 0;
-  background: var(--cream);
+  background: var(--surface);
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -126,7 +126,7 @@
 .featureName {
   font-size: var(--step-3);
   font-weight: 700;
-  font-stretch: 78%;
+  font-stretch: 100%;
   line-height: 1.02;
 }
 
@@ -233,13 +233,13 @@
     grid-row: auto;
   }
 
-  .feature {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-    align-items: center;
+  /* stacked: the picture, then its words, never one over the other */
+  .featureImg {
+    aspect-ratio: 5 / 4;
   }
 
-  .featureImg {
-    height: 100%;
+  .featureImg img {
+    object-fit: contain;
   }
 }
 

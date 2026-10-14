@@ -68,7 +68,7 @@
   right: 6px;
   padding: 5px 8px;
   border-radius: var(--radius-sm);
-  background: var(--cream);
+  background: var(--surface);
   font-weight: 650;
   font-size: var(--step--1);
   line-height: 1.2;
@@ -198,7 +198,7 @@
   width: 100%;
   padding: 12px 14px;
   border-left: 3px solid var(--orange-strong);
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .guideNav {

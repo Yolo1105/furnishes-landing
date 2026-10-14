@@ -12,8 +12,8 @@ export function SiteFooter() {
             <Logo />
           </p>
           <p className="muted">
-            Birch plywood furniture for homes in {market.country}: white matte
-            faces, birch edges, and one family of parts.
+            Furniture for homes in {market.country}: white matte faces, birch
+            edges, and one family of parts.
           </p>
         </div>
         <nav aria-label="Footer">

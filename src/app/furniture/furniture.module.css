@@ -47,7 +47,7 @@
   padding: 0 12px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .row {
@@ -58,7 +58,7 @@
 
 .rowLabel {
   flex-basis: 100%;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.8125rem;
   color: var(--ink-2);
 }
@@ -159,7 +159,7 @@
   gap: 0;
   border-radius: var(--radius);
   overflow: hidden;
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .familyImg {
@@ -176,7 +176,7 @@
 }
 
 .familyText h2 {
-  font-size: var(--step-5);
+  font-size: var(--step-4);
 }
 
 .familyText p:not(:global(.spec)) {
@@ -234,7 +234,7 @@
 }
 
 .kind {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   color: var(--ink-2);
 }
@@ -292,11 +292,11 @@
 }
 
 .entry:hover {
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .no {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.875rem;
 }
 
@@ -345,7 +345,7 @@
 }
 
 .entrySize {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   color: var(--ink-2);
 }
@@ -356,7 +356,7 @@
   justify-items: start;
   padding: 24px;
   border-radius: var(--radius);
-  background: var(--cream);
+  background: var(--surface);
 }
 
 @media (max-width: 900px) {
@@ -369,7 +369,7 @@
     position: static;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
-    background: var(--cream);
+    background: var(--surface);
   }
 
   .filterToggle {

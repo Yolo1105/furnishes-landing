@@ -70,8 +70,8 @@ export default function HowItWorks() {
         <h2 id="materials">Materials</h2>
         <div className={styles.body}>
           <p>
-            18 mm birch plywood is the face of Furnishes. Large faces are a
-            quiet white matte; the edges show the layers of the birch. White
+            The boards are 18 mm thick. Large faces are a quiet white matte; the
+            edges are left visible and show the layers of the birch. White
             laminate and white paint are being compared on sample panels for
             wear, humidity and colour.
           </p>

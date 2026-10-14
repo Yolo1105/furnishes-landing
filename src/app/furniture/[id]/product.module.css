@@ -8,7 +8,7 @@
 }
 
 .crumbs {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.8125rem;
   color: var(--ink-2);
 }
@@ -37,7 +37,7 @@
 }
 
 .title {
-  font-size: var(--step-5);
+  font-size: var(--step-4);
 }
 
 .line {
@@ -61,7 +61,7 @@
 }
 
 .facts dt {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.8125rem;
   color: var(--ink-2);
   padding-top: 2px;
@@ -86,7 +86,7 @@
 .notice {
   padding: 12px 14px;
   border-left: 3px solid var(--orange-strong);
-  background: var(--cream);
+  background: var(--surface);
   font-size: var(--step--1);
 }
 
@@ -125,7 +125,7 @@
 .situations li {
   font-size: var(--step-3);
   font-weight: 700;
-  font-stretch: 80%;
+  font-stretch: 100%;
   line-height: 1.1;
   color: var(--ink);
 }
@@ -135,7 +135,7 @@
   gap: 10px;
   padding: 18px 20px;
   border-radius: var(--radius);
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .notes h3 {
@@ -185,7 +185,7 @@
   gap: 6px;
   padding: 0 0 12px;
   border-radius: var(--radius);
-  background: var(--cream);
+  background: var(--surface);
   overflow: hidden;
 }
 
@@ -201,7 +201,7 @@
 
 .swap h3 {
   font-size: var(--step-2);
-  font-stretch: 80%;
+  font-stretch: 100%;
   font-weight: 700;
 }
 
@@ -224,7 +224,7 @@
   padding: 14px 16px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .kits li[data-testing] {
@@ -238,7 +238,7 @@
 }
 
 .kitTier {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   color: var(--ink-2);
 }
@@ -302,7 +302,7 @@
 
 .arrangements h3 {
   font-size: var(--step-2);
-  font-stretch: 80%;
+  font-stretch: 100%;
   font-weight: 700;
 }
 
@@ -340,7 +340,7 @@
   gap: 8px;
   padding: 16px;
   border-radius: var(--radius);
-  background: var(--cream);
+  background: var(--surface);
 }
 
 @media (max-width: 900px) {

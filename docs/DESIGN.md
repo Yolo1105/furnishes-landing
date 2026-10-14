@@ -28,8 +28,18 @@ catalogue decisions won (see the last section).
 
 The original landing palette, used as is: paper `#ffeddf`, cream `#fff6e9`,
 brown `#6e1810`, orange `#e7551a`, strong `#e83200`, mid `#ff9c18`, soft
-`#f6c485`, on-orange `#fbf0dc`. The product renders sit on their own stage
-colour `#f7e5d2`, calibrated in the renderer.
+`#f6c485`, on-orange `#fbf0dc`.
+
+Proportions matter more than the colours (revised after review, 2026-10-14:
+the first pass used the palette as wallpaper and the furniture got lost):
+
+- Cream is the page. Cards are a lighter cream (`#fffbf5`).
+- Peach appears once on the home page (the pack-swap band), in the footer and
+  on hover; nowhere else.
+- Orange is an accent: main buttons, selected states, and the one closing
+  field. No gradients.
+- The product renders sit on a warm stone stage, `#e0d7cc`, calibrated in the
+  renderer, so white matte pieces stand out from the page.
 
 Contrast rules (all in `src/app/globals.css`):
 
@@ -43,10 +53,12 @@ Contrast rules (all in `src/app/globals.css`):
 
 ## Type
 
-- **Archivo** (variable, width axis): condensed bold (80% width) for headings
-  and group titles, normal width for reading text and controls.
-- **Space Mono**: sizes, counts, step numbers, captions and labels: anything
-  that is a measurement or a record, never a sentence of advice.
+- **Archivo** at its normal width throughout: headings at weight 650 with
+  tight tracking, reading text and controls at 400 to 600. (Condensed headings
+  were dropped in the review: they made the site read like a technical
+  poster.)
+- **Space Mono** only for dimensions (`.spec`). Labels, captions and step
+  numbers are set in Archivo.
 
 ## Images
 
@@ -62,11 +74,12 @@ Contrast rules (all in `src/app/globals.css`):
 
 ## Pages
 
-- **Home**: opening scene → where (rooms) → one frame, two packs (the swap,
-  step by step) → made of (material macro) → every part (exploded plate) →
-  pieces, walls, screens (plans and counts) → coming soon → arrangements (plan
-  atlas) → measure once (elevation) → next step (explore, keep a version, ask
-  or quote, the full index).
+- **Home**, six chapters: opening scene (caption under the picture, never on
+  it) → where (rooms) → one frame, two packs (the swap, step by step) → white
+  faces, birch edges (materials) → coming soon → next step (explore, keep a
+  version, ask or quote, the full index). The parts list, plans,
+  arrangements and measured drawings live on the catalogue and product
+  pages, not here.
 - **Catalogue**: three modes in the URL, `?view=family|room|all`. The full
   index lists every record with its kind, family, plan and size; filters stay
   in the URL.

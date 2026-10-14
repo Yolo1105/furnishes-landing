@@ -29,7 +29,7 @@
   display: grid;
   place-items: center;
   padding: 8% 6% 12%;
-  background: var(--cream);
+  background: var(--surface);
 }
 
 .caption {
@@ -43,7 +43,7 @@
   padding: 5px 9px;
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--cream) 94%, transparent);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
   line-height: 1.4;
 }

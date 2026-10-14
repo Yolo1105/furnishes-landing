@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s · Furnishes",
   },
   description:
-    "Birch plywood furniture for Singapore homes. Choose a finished piece, adjust what it supports, save the exact version and ask for a quote.",
+    "Furniture for Singapore homes: white matte faces, birch edges. Choose a finished piece, adjust what it supports, save the exact version and ask for a quote.",
   openGraph: {
     siteName: market.siteName,
     locale: "en_SG",

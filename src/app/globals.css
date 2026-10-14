@@ -1,15 +1,18 @@
 /*
   Furnishes visual system.
   The house palette from the original landing (furnishes_prod,
-  src/features/landing/landing.module.css): peach paper, cream reading
-  surfaces, brown ink, and orange as the structural signature.
+  src/features/landing/landing.module.css), in calm proportions: cream is
+  the page, peach is an occasional band, brown is the ink, and orange is an
+  accent (main actions, selection, one closing field), never wallpaper.
   Contrast (WCAG 2.2):
   - brown #6e1810 on peach 10.2:1, on cream 10.9:1; --ink-3 at least 5.8:1;
   - cream on strong orange #e83200 is 4.0:1, so orange buttons set their
     label as large text (19px, 700), which needs 3:1;
   - small orange text uses --accent-text (#a82400, 6.3:1 on peach);
   - selected states: soft orange fill with brown text (7.3:1).
-  --stage is the backdrop the product renders are made on (tools/render).
+  --stage is the backdrop the product renders are made on (tools/render);
+  a warm stone, so white matte pieces stand out from it.
+  Space Mono is for dimensions only (.spec); labels are set in Archivo.
 */
 
 :root {
@@ -38,11 +41,11 @@
   );
 
   /* surfaces */
-  --canvas: var(--paper);
-  --surface: var(--cream);
-  --sunken: #fbe3cf;
-  --stage: #f7e5d2;
-  --band: var(--orange-soft);
+  --canvas: var(--cream);
+  --surface: #fffbf5;
+  --sunken: var(--paper);
+  --stage: #e0d7cc;
+  --band: var(--paper);
 
   /* type */
   --ink: var(--brown);
@@ -82,9 +85,9 @@
   --step-1: 1.1875rem;
   --step-2: 1.4375rem;
   --step-3: clamp(1.625rem, 1.25rem + 1.3vw, 2.25rem);
-  --step-4: clamp(2.125rem, 1.5rem + 2.3vw, 3.25rem);
-  --step-5: clamp(2.625rem, 1.6rem + 3.6vw, 4.75rem);
-  --step-6: clamp(3rem, 1.6rem + 5.2vw, 6.5rem);
+  --step-4: clamp(1.875rem, 1.4rem + 1.8vw, 2.75rem);
+  --step-5: clamp(2.25rem, 1.4rem + 2.9vw, 4rem);
+  --step-6: clamp(2.5rem, 1.4rem + 4vw, 5.25rem);
 
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1360px;
@@ -149,15 +152,14 @@ ol[role="list"] {
   padding: 0;
 }
 
-/* display: Archivo condensed, for short human statements */
+/* display: Archivo at its normal width, set tight */
 h1,
 h2,
 .display {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-stretch: 74%;
-  letter-spacing: -0.012em;
-  line-height: 0.98;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
   text-wrap: balance;
 }
 
@@ -224,7 +226,8 @@ button {
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-weight: 600;
   font-size: 0.8125rem;
   color: var(--ink-2);
 }
@@ -418,7 +421,8 @@ button.text-link {
 
 /* measured facts and statuses: Space Mono, sentence case */
 .label {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-weight: 600;
   font-size: 0.8125rem;
   color: var(--ink-2);
 }

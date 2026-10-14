@@ -39,8 +39,8 @@
   bottom: 10px;
   padding: 4px 8px;
   border-radius: var(--radius-sm);
-  background: var(--cream);
-  font-family: var(--font-mono);
+  background: var(--surface);
+  font-family: var(--font-sans);
   font-size: 0.75rem;
 }
 
@@ -76,14 +76,14 @@
 
 .num {
   grid-row: span 2;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 0.875rem;
   padding-top: 3px;
 }
 
 .stepTitle {
   font-weight: 700;
-  font-stretch: 80%;
+  font-stretch: 100%;
   font-size: var(--step-2);
   line-height: 1.1;
 }

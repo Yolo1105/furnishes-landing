@@ -47,7 +47,7 @@ All 42 visible records are listed at `/furniture?view=all`.
 
 | Route                       | What it does                                                                                                                                             |
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/`                         | Opening scene, rooms, one frame with two packs, materials, parts, pieces/walls/screens, coming soon, arrangements as plans, a measured fit, next steps   |
+| `/`                         | Opening scene, rooms, one frame with two packs, materials, coming soon, next steps (explore, keep a version, ask or quote, the full index)               |
 | `/furniture`                | By family, by room, or all 42 designs; filters for room, type, status, width and search, all in the URL                                                  |
 | `/furniture/[id]`           | Gallery (corner, piece, room, close up, base, measured) beside the decision column; pack swap, add-ons, other uses, arrangements, build steps, fit check |
 | `/furniture/[id]/customize` | Launch pieces only: Fit, Function, Finish, Review; one stable picture, undo/redo, the version and open group kept in the URL                             |

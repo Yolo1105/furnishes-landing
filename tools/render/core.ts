@@ -13,7 +13,7 @@ import { N8AOPass } from "n8ao";
 
 export const A = "/assets/";
 /** The page's product stage colour (--stage in globals.css). */
-export const STAGE = "#f7e5d2";
+export const STAGE = "#e0d7cc";
 export const M = 0.001; // mm to metres
 
 const tl = new THREE.TextureLoader();
