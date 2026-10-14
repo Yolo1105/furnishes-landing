@@ -1,0 +1,20 @@
+.plan {
+  display: block;
+  overflow: visible;
+}
+
+.plan rect {
+  vector-effect: non-scaling-stroke;
+  stroke: var(--brown);
+  stroke-width: 1.5;
+}
+
+.plan rect[data-k="seg"] {
+  fill: var(--orange-soft);
+}
+
+.plan rect[data-k="top"],
+.plan rect[data-k="base"] {
+  fill: none;
+  stroke-dasharray: 3 3;
+}

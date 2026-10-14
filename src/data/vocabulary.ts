@@ -1,4 +1,4 @@
-import type { ObjectId } from "./types";
+import type { ActivityId, FamilyId, ObjectId } from "./types";
 
 /**
  * Everyday things for "Start with what you love" (doc 13 v1.1, ch. 02).
@@ -31,3 +31,40 @@ export const objects: { id: ObjectId; name: string; fits: string }[] = [
   { id: "plants", name: "Plants", fits: "a top for a plant" },
   { id: "tv-devices", name: "Router and devices", fits: "a place for devices" },
 ];
+
+export const activities: {
+  id: ActivityId;
+  name: string;
+  fits: string;
+}[] = [
+  { id: "hang", name: "Hang things up", fits: "has hooks or a rail" },
+  {
+    id: "set-down",
+    name: "Set things down",
+    fits: "has a top or a tray at hand",
+  },
+  { id: "store", name: "Put things away", fits: "keeps things out of sight" },
+  { id: "display", name: "Show things", fits: "has shelves to show things" },
+  {
+    id: "work",
+    name: "Work or make",
+    fits: "keeps tools at hand while you work",
+  },
+  { id: "divide", name: "Divide a room", fits: "draws a line in a room" },
+  { id: "move", name: "Move it around", fits: "rolls to where it's needed" },
+];
+
+export const families: Record<FamilyId, { name: string; line: string }> = {
+  pieces: {
+    name: "Pieces",
+    line: "Single pieces against a wall: by the door, beside the desk or the bed, in the kitchen.",
+  },
+  walls: {
+    name: "Walls",
+    line: "Segments that stand in the room: a line of shelves between two uses, both sides working.",
+  },
+  screens: {
+    name: "Screens",
+    line: "The function face on casters: a backdrop on one side, a working face on the other.",
+  },
+};

@@ -167,3 +167,68 @@
     gap: 10px;
   }
 }
+
+/* the optional guide */
+.guideStart {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--orange-soft);
+  text-decoration: none;
+}
+
+.guideStart strong {
+  font-size: var(--step-1);
+}
+
+.guideStart span {
+  font-size: var(--step--1);
+  color: var(--ink-2);
+}
+
+.guideStart:hover strong {
+  text-decoration: underline;
+}
+
+.guide {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 14px;
+  border-left: 3px solid var(--orange-strong);
+  background: var(--cream);
+}
+
+.guideNav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.situations {
+  display: grid;
+  gap: 4px;
+}
+
+.situation {
+  display: block;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.situation:hover {
+  background: var(--sunken);
+}
+
+.situation[aria-current="true"] {
+  background: var(--orange-soft);
+}
+
+.situation[aria-current="true"]::before {
+  content: "✓ " / "";
+}

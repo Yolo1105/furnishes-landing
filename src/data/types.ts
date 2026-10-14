@@ -28,6 +28,19 @@ export type UseId =
   | "living"
   | "dividing";
 
+/** The three families of the furniture record: pieces (1.x), walls (2.x), screens (3.x). */
+export type FamilyId = "pieces" | "walls" | "screens";
+
+/** Things you do with a piece, for Explore. */
+export type ActivityId =
+  | "hang"
+  | "set-down"
+  | "store"
+  | "display"
+  | "work"
+  | "divide"
+  | "move";
+
 /** Furniture identity, kept apart from rooms and properties (doc 13, ch. 04). */
 export type CategoryId = "organisers" | "storage" | "carts" | "dividers";
 
@@ -64,6 +77,8 @@ export type Product = {
   /** One sentence: what it is for. */
   line: string;
   category: CategoryId;
+  family: FamilyId;
+  activities: ActivityId[];
   skeleton: SkeletonId;
   /** Overall nominal size; `baseD` when a base reaches deeper than the body. */
   size: Size & { baseD?: number };

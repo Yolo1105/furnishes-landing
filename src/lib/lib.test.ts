@@ -4,6 +4,7 @@ import { arrangements, packs, products } from "@/data/products";
 import { arrangementsWith, getProduct, packsFor } from "./catalog";
 import { configParams, configSummary, parseConfig, swapPack } from "./config";
 import {
+  emptyExplore,
   explore,
   filterProducts,
   parseFilters,
@@ -254,15 +255,23 @@ describe("version parts", () => {
 
 describe("explore and filters", () => {
   it("matches across kinds, launch pieces first, nothing cut", () => {
-    const m = explore({ rooms: ["entryway"], things: ["bag-coat"] });
+    const m = explore({ ...emptyExplore, rooms: ["entryway"], things: ["bag-coat"] });
     expect(m.map((x) => x.product.id)).toEqual(["entry", "coat-stand"]);
     expect(m.every((x) => x.exact)).toBe(true);
   });
 
   it("falls back to the closest when nothing fits both", () => {
-    const m = explore({ rooms: ["kitchen"], things: ["records"] });
+    const m = explore({ ...emptyExplore, rooms: ["kitchen"], things: ["records"] });
     expect(m.length).toBeGreaterThan(0);
     expect(m[0]!.exact).toBe(false);
+  });
+
+  it("starts from activities, width and situations", () => {
+    const m = explore({ ...emptyExplore, doing: ["move"], width: "narrow" });
+    expect(m.map((x) => x.product.id)).toEqual(["kitchen", "work-cart", "mobile-screen"]);
+    const s = explore({ ...emptyExplore, situation: "bedside" });
+    expect(s[0]!.product.id).toBe("bedside");
+    expect(s[0]!.reasons).toContain("Made for this situation");
   });
 
   it("writes one plain sentence of reasons", () => {

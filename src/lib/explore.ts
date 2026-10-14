@@ -1,12 +1,13 @@
 import { products } from "@/data/products";
 import type {
+  ActivityId,
   CategoryId,
   ObjectId,
   Product,
   ProductStatus,
   UseId,
 } from "@/data/types";
-import { objects } from "@/data/vocabulary";
+import { activities, objects } from "@/data/vocabulary";
 import { bySiteOrder, categories, uses } from "./catalog";
 
 type Params = URLSearchParams | Record<string, string | string[] | undefined>;
@@ -27,27 +28,60 @@ function list<T extends string>(
 const USE_IDS = new Set(uses.map((u) => u.id));
 const OBJ_IDS = new Set(objects.map((o) => o.id));
 const CAT_IDS = new Set(categories.map((c) => c.id));
+const ACT_IDS = new Set(activities.map((a) => a.id));
+const PRODUCT_IDS = new Set(products.map((p) => p.id));
+type Width = "narrow" | "medium" | "wide";
 
 /* ---------- Explore: rooms and things ---------- */
 
-export type ExploreState = { rooms: UseId[]; things: ObjectId[] };
+export type ExploreState = {
+  rooms: UseId[];
+  doing: ActivityId[];
+  things: ObjectId[];
+  width: Width | null;
+  /** a concrete situation, by the product it comes from */
+  situation: string | null;
+};
+
+export const emptyExplore: ExploreState = {
+  rooms: [],
+  doing: [],
+  things: [],
+  width: null,
+  situation: null,
+};
 
 export function parseExplore(p: Params): ExploreState {
+  const width = get(p, "width");
+  const situation = get(p, "situation");
   return {
     rooms: list(get(p, "room"), USE_IDS),
+    doing: list(get(p, "do"), ACT_IDS),
     things: list(get(p, "things"), OBJ_IDS),
+    width: width === "narrow" || width === "medium" || width === "wide" ? width : null,
+    situation: situation && PRODUCT_IDS.has(situation) ? situation : null,
   };
 }
 
 export function exploreParams(s: ExploreState): URLSearchParams {
   const q = new URLSearchParams();
   if (s.rooms.length) q.set("room", s.rooms.join(","));
+  if (s.doing.length) q.set("do", s.doing.join(","));
   if (s.things.length) q.set("things", s.things.join(","));
+  if (s.width) q.set("width", s.width);
+  if (s.situation) q.set("situation", s.situation);
   return q;
 }
 
 export const hasAnswers = (s: ExploreState) =>
-  s.rooms.length + s.things.length > 0;
+  s.rooms.length + s.doing.length + s.things.length > 0 ||
+  s.width !== null ||
+  s.situation !== null;
+
+/** Everyday situations, each from the product that answers it. */
+export const situations = products.flatMap((p) =>
+  p.situations.map((text) => ({ product: p.id, text })),
+);
 
 export type Match = {
   product: Product;
@@ -62,11 +96,41 @@ export type Match = {
  * are returned and marked. Launch pieces first; nothing is cut silently.
  */
 export function explore(s: ExploreState): Match[] {
+  const from = s.situation ? products.find((p) => p.id === s.situation) : undefined;
   const scored = products.map((p) => {
     const reasons: string[] = [];
     let kinds = 0;
     let hit = 0;
     let score = 0;
+    if (from) {
+      kinds++;
+      if (p.id === from.id) {
+        hit++;
+        score += 6;
+        reasons.push("Made for this situation");
+      } else if (p.uses.some((u) => from.uses.includes(u))) {
+        hit++;
+        score += 1;
+        reasons.push("For the same place");
+      }
+    }
+    if (s.width) {
+      kinds++;
+      if (widthBands[s.width].test(p.size.w)) {
+        hit++;
+        score += 1;
+        reasons.push(`${Math.round(p.size.w / 10)} cm wide`);
+      }
+    }
+    if (s.doing.length) {
+      kinds++;
+      const a = s.doing.filter((x) => p.activities.includes(x));
+      if (a.length) {
+        hit++;
+        score += 2 * a.length;
+        reasons.push(...a.map((x) => activities.find((y) => y.id === x)!.fits));
+      }
+    }
     if (s.rooms.length) {
       kinds++;
       const r = s.rooms.filter((u) => p.uses.includes(u));
