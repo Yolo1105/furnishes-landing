@@ -1,3 +1,4 @@
+import type { KitId } from "@/data/types";
 import { describe, expect, it } from "vitest";
 import { heroParts, heroSteps, kits, packSwap } from "@/data/hero";
 import { arrangements, packs, products } from "@/data/products";
@@ -10,7 +11,7 @@ import {
   parseFilters,
   reasonSentence,
 } from "./explore";
-import { changes, partRows } from "./version";
+import { changes, footprint, partRows } from "./version";
 
 /** Records in layers E (research) and F (parked): never on the site (D11). */
 const HIDDEN = [
@@ -255,20 +256,32 @@ describe("version parts", () => {
 
 describe("explore and filters", () => {
   it("matches across kinds, launch pieces first, nothing cut", () => {
-    const m = explore({ ...emptyExplore, rooms: ["entryway"], things: ["bag-coat"] });
+    const m = explore({
+      ...emptyExplore,
+      rooms: ["entryway"],
+      things: ["bag-coat"],
+    });
     expect(m.map((x) => x.product.id)).toEqual(["entry", "coat-stand"]);
     expect(m.every((x) => x.exact)).toBe(true);
   });
 
   it("falls back to the closest when nothing fits both", () => {
-    const m = explore({ ...emptyExplore, rooms: ["kitchen"], things: ["records"] });
+    const m = explore({
+      ...emptyExplore,
+      rooms: ["kitchen"],
+      things: ["records"],
+    });
     expect(m.length).toBeGreaterThan(0);
     expect(m[0]!.exact).toBe(false);
   });
 
   it("starts from activities, width and situations", () => {
     const m = explore({ ...emptyExplore, doing: ["move"], width: "narrow" });
-    expect(m.map((x) => x.product.id)).toEqual(["kitchen", "work-cart", "mobile-screen"]);
+    expect(m.map((x) => x.product.id)).toEqual([
+      "kitchen",
+      "work-cart",
+      "mobile-screen",
+    ]);
     const s = explore({ ...emptyExplore, situation: "bedside" });
     expect(s[0]!.product.id).toBe("bedside");
     expect(s[0]!.reasons).toContain("Made for this situation");
@@ -292,5 +305,23 @@ describe("explore and filters", () => {
         (p) => p.id,
       ),
     ).toContain("coat-stand");
+  });
+});
+
+describe("footprint", () => {
+  it("takes the widened base's depth and grows with the desk top and a second segment", () => {
+    const base = { kits: [] as KitId[], face: "solid" as const, quantity: 1 };
+    expect(footprint({ ...base, design: "entry" })).toEqual({ w: 600, d: 600 });
+    expect(footprint({ ...base, design: "desk", kits: ["K-D1"] })).toEqual({
+      w: 1800,
+      d: 800,
+    });
+    expect(footprint({ ...base, design: "entry", kits: ["K-E2"] }).w).toBe(
+      1200,
+    );
+    expect(footprint({ ...base, design: "bedside", kits: ["K-B4"] })).toEqual({
+      w: 1200,
+      d: 400,
+    });
   });
 });

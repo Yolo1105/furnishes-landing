@@ -28,7 +28,10 @@ export type DesignRecord = {
   product?: Product;
 };
 
-const sizes = conceptSizes as unknown as Record<"object", Record<string, [number, number]>>;
+const sizes = conceptSizes as unknown as Record<
+  "object",
+  Record<string, [number, number]>
+>;
 const concept = (id: string) => {
   const [w, h] = sizes.object[id] ?? [800, 800];
   return { src: `/renders/object/${id}.webp`, w, h, concept: true };

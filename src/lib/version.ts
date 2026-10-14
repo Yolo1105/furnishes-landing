@@ -64,3 +64,23 @@ export function changes(c: Configuration): {
 
 export const partTotal = (rows: Row[]) =>
   rows.reduce((n, r) => n + r.quantity, 0);
+
+/**
+ * The floor space one version takes, in mm, from the drawn model: the
+ * widened base sets the depth (D13), the desk top kit widens and deepens
+ * it, and a second segment or a joined block doubles the width.
+ */
+export function footprint(c: Configuration): { w: number; d: number } {
+  const parts = [
+    ...heroParts(c.design).filter((p) => p.id !== "RAIL"),
+    ...(c.kits.includes("K-D1") ? kitParts("K-D1") : []),
+  ];
+  const span = (i: 0 | 1) =>
+    Math.max(...parts.map((p) => p.pos[i] + p.size[i])) -
+    Math.min(...parts.map((p) => p.pos[i]));
+  const unit = Math.max(
+    ...heroParts(c.design).map((p) => p.pos[0] + p.size[0]),
+  );
+  const doubled = c.kits.includes("K-E2") || c.kits.includes("K-B4");
+  return { w: span(0) + (doubled ? unit : 0), d: span(1) };
+}

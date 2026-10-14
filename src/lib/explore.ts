@@ -58,7 +58,10 @@ export function parseExplore(p: Params): ExploreState {
     rooms: list(get(p, "room"), USE_IDS),
     doing: list(get(p, "do"), ACT_IDS),
     things: list(get(p, "things"), OBJ_IDS),
-    width: width === "narrow" || width === "medium" || width === "wide" ? width : null,
+    width:
+      width === "narrow" || width === "medium" || width === "wide"
+        ? width
+        : null,
     situation: situation && PRODUCT_IDS.has(situation) ? situation : null,
   };
 }
@@ -96,7 +99,9 @@ export type Match = {
  * are returned and marked. Launch pieces first; nothing is cut silently.
  */
 export function explore(s: ExploreState): Match[] {
-  const from = s.situation ? products.find((p) => p.id === s.situation) : undefined;
+  const from = s.situation
+    ? products.find((p) => p.id === s.situation)
+    : undefined;
   const scored = products.map((p) => {
     const reasons: string[] = [];
     let kinds = 0;

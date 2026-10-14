@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { getProduct } from "@/lib/catalog";
 import { parseConfig } from "@/lib/config";
 import { Customizer } from "./Customizer";
+import { parseGroup } from "./groups";
 
 export async function generateMetadata(
   props: PageProps<"/furniture/[id]/customize">,
@@ -28,10 +29,12 @@ export default async function CustomizePage(
   const sp = await props.searchParams;
   const { config, issues } = parseConfig(product.id, sp);
   const saved = typeof sp.saved === "string" ? sp.saved : null;
+  const group = parseGroup(sp.open);
   return (
     <Customizer
       designId={product.id}
       initial={config!}
+      initialGroup={group}
       issues={issues}
       savedId={saved}
     />
